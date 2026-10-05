@@ -1,0 +1,72 @@
+name: Validate OKF bundle
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate OKF conformance and links
+        run: |
+          shopt -s failglob
+          for bundle in v[0-9]*/; do
+            echo "::group::validate ${bundle%/}"
+            python3 tools/validate.py "${bundle%/}"
+            echo "::endgroup::"
+          done
+      - name: Check machine-readable files parse
+        run: |
+          shopt -s failglob
+          python3 -c "import json;json.load(open('manifest.json'))"
+          for f in v[0-9]*/manifest.json v[0-9]*/references/endpoint-catalog.json v[0-9]*/references/openapi/*.json; do
+            python3 -c "import json,sys;json.load(open(sys.argv[1]))" "$f"
+          done
+      - name: Root manifest is in sync with the version directories
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          m = json.load(open("manifest.json"))
+          listed = {v["version"] for v in m["versions"]}
+          on_disk = {d for d in os.listdir(".")
+                     if d[:1] == "v" and d[1:2].isdigit() and os.path.isdir(d)}
+          if listed != on_disk:
+              sys.exit(f"root manifest versions {sorted(listed)} != directories {sorted(on_disk)}")
+          for v in m["versions"]:
+              for k in ("path", "manifest", "index", "endpoint_catalog_json"):
+                  p = v.get(k)
+                  if not p or not os.path.exists(p):
+                      sys.exit(f"{v['version']}.{k} -> missing {p}")
+              sub = json.load(open(v["manifest"]))
+              if sub["version"] != v["bundle_version"] or sub["api"]["version"] != v["api_version"]:
+                  sys.exit(f"{v['version']}: root manifest disagrees with {v['manifest']}")
+          if m["latest"] not in listed:
+              sys.exit(f"latest={m['latest']} is not a listed version")
+          by_version = {v["version"]: v for v in m["versions"]}
+          if m["latest_path"] != by_version[m["latest"]]["path"]:
+              sys.exit(f"latest_path={m['latest_path']} != {m['latest']}.path")
+          vocab = set(m["status_vocabulary"])
+          for v in m["versions"]:
+              if v["status"] not in vocab:
+                  sys.exit(f"{v['version']}: status {v['status']!r} not in {sorted(vocab)}")
+              # A superseded version must say what replaced it and when it goes away, so a
+              # consumer can plan a migration without reading the changelog.
+              if v["status"] in ("deprecated", "sunset"):
+                  for k in ("deprecated_on", "superseded_by"):
+                      if not v.get(k):
+                          sys.exit(f"{v['version']}: status={v['status']} requires {k}")
+                  if v["superseded_by"] not in listed:
+                      sys.exit(f"{v['version']}.superseded_by={v['superseded_by']} is not a listed version")
+              elif v.get("deprecated_on") or v.get("superseded_by"):
+                  sys.exit(f"{v['version']}: deprecated_on/superseded_by set but status={v['status']}")
+          if by_version[m["latest"]]["status"] in ("deprecated", "sunset"):
+              sys.exit(f"latest={m['latest']} must not be {by_version[m['latest']]['status']}")
+          print("ok:", sorted(listed), "latest:", m["latest"])
+          PY

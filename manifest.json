@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "bundle": "zoho-analytics-okf",
+  "title": "Zoho Analytics REST API - Open Knowledge Format bundles",
+  "description": "Version index for the Zoho Analytics REST API OKF bundles. One entry per API version; each entry points at that version's OKF bundle root and manifest.",
+  "okf_spec": "https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md",
+  "raw_base": "https://raw.githubusercontent.com/zoho/analytics-okf/main/",
+  "latest": "v2.0",
+  "latest_path": "v2.0",
+  "resolution": "Resolve `latest` against `versions[].version` to find the recommended bundle, or join `raw_base` with `latest_path`. Do not hard-code a version directory: `latest` moves when a newer API version ships, while every published version directory stays where it is, forever.",
+  "status_vocabulary": {
+    "beta": "Published for early access. Content may change without a major bundle version bump.",
+    "stable": "Ready for production use and actively maintained.",
+    "deprecated": "Still served and still correct, but superseded. Migrate to `superseded_by` before `sunset_on`.",
+    "sunset": "No longer maintained. Retained for link stability and history only."
+  },
+  "versions": [
+    {
+      "version": "v2.0",
+      "api_version": "v2",
+      "bundle_version": "1.1.0",
+      "okf_version": "0.2",
+      "status": "stable",
+      "deprecated_on": null,
+      "sunset_on": null,
+      "superseded_by": null,
+      "path": "v2.0",
+      "manifest": "v2.0/manifest.json",
+      "index": "v2.0/index.md",
+      "entry": "v2.0/llms.txt",
+      "endpoint_catalog_json": "v2.0/references/endpoint-catalog.json",
+      "api_reference": "https://www.zoho.com/analytics/api/v2/"
+    }
+  ],
+  "note": "A new API version is added as an additional entry with its own top-level directory; no existing entry or path changes. When that happens, `latest` and `latest_path` move to the new version, and the superseded entry gains `status: deprecated`, a `deprecated_on` date, a `sunset_on` date and a `superseded_by` pointer."
+}

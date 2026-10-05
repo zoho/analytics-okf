@@ -1,0 +1,36 @@
+# Zoho Analytics REST API - OKF bundles
+
+> Version index for the Zoho Analytics REST API Open Knowledge Format bundles. Each API version ships as a self-contained OKF v0.2 bundle in its own top-level directory of this repository. Start with the version you need; every version has its own llms.txt carrying the full link list for that version.
+
+Unless the caller has pinned a version, use the newest stable one. It is named by `latest` in
+[manifest.json](https://raw.githubusercontent.com/zoho/analytics-okf/main/manifest.json),
+which is the only file in this repository whose meaning changes when a new API version ships. Every
+published version directory keeps its path forever, so a URL you have already resolved stays valid.
+Today `latest` is **v2.0**; a newer version will appear as a sibling directory and a new entry, and
+nothing under `/v2.0/` will move.
+
+One-off exception: the directory published as `/v2/` was renamed to `/v2.0/`. Rewrite any URL pinned
+to `/v2/`. No directory moves from `/v2.0/` onward.
+
+## Available versions
+
+- [v2.0 (latest, stable)](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/llms.txt): 168 endpoints across 10 domains and 33 groups, 278 error codes, 31 OAuth scopes, 8 workflow playbooks. Base URL https://analyticsapi.zoho.com, path prefix /restapi/v2, OAuth 2.0 with the Zoho-oauthtoken scheme.
+
+## Machine-readable version index
+
+- [manifest.json](https://raw.githubusercontent.com/zoho/analytics-okf/main/manifest.json): every available version with its status, path, lifecycle dates and bundle manifest, plus `latest`. Read this instead of hard-coding a version directory.
+
+## Quick links (v2.0)
+
+- [Bundle index](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/index.md): the full table of contents.
+- [Overview](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/overview.md): what the API is, the object model, and the five conventions every call shares.
+- [How to use this bundle](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/how-to-use-this-bundle.md): directory layout, the api frontmatter contract, navigation rules for agents and generators.
+- [Endpoint catalog](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/endpoint-catalog.md): all 168 endpoints with method, path, operation ID, group, scope and success status.
+- [Endpoint catalog (JSON)](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/references/endpoint-catalog.json): every endpoint, machine-readable.
+- [Bundle manifest](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/manifest.json): bundle version, OKF version, counts and entry points.
+
+## Optional
+
+- [Changelog](https://raw.githubusercontent.com/zoho/analytics-okf/main/CHANGELOG.md): bundle version history across all API versions.
+- [v2.0 update log](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/log.md): the OKF log for the v2.0 bundle.
+- [Licence](https://raw.githubusercontent.com/zoho/analytics-okf/main/LICENSE.md)

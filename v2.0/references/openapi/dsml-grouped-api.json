@@ -22,7 +22,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Create AutoML Analysis",
         "summary": "Create AutoML Analysis",
         "description": "Creates a new AutoML analysis within the workspace. An analysis is defined by the training table, the target column, the input features and the set of algorithms to be trained. The prediction type chosen determines which algorithms can be configured - regression, classification or clustering.",
         "operationId": "createAutoMLAnalysis",
@@ -33,31 +32,6 @@
             ]
           }
         ],
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "regression": {
-              "name": "Regression Algorithms",
-              "description": "<p>Applicable when <strong>predictionType</strong> is set to <strong>REGRESSION</strong>.</p>"
-            },
-            "classification": {
-              "name": "Classification Algorithms",
-              "description": "<p>Applicable when <strong>predictionType</strong> is set to <strong>CLASSIFICATION</strong>.</p>"
-            },
-            "clustering": {
-              "name": "Clustering Algorithms",
-              "description": "<p>Applicable when <strong>predictionType</strong> is set to <strong>CLUSTERING</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul>\n<li>The algorithm keys sent inside <b>algorithms</b> must belong to the group that matches the selected <b>predictionType</b>.</li>\n<li>More than one algorithm can be configured in a single request. A model is built for each algorithm that is configured.</li>\n<li><b>targetColumn</b> applies to the <b>REGRESSION</b> and <b>CLASSIFICATION</b> prediction types only.</li>\n</ul>\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "$ref": "#/components/parameters/org-id"
@@ -88,11 +62,8 @@
               },
               "examples": {
                 "regressionAnalysis": {
-                  "description": "Regression analysis",
-                  "summary": "Creates an analysis that predicts a continuous numeric value, training a Random Forest and a Ridge regression model on the same set of features.",
-                  "x-zenesis-usecase-tag": [
-                    "regression"
-                  ],
+                  "description": "Creates an analysis that predicts a continuous numeric value, training a Random Forest and a Ridge regression model on the same set of features.",
+                  "summary": "Regression analysis",
                   "value": {
                     "CONFIG": {
                       "name": "Revenue_Forecast",
@@ -120,11 +91,8 @@
                   }
                 },
                 "classificationAnalysis": {
-                  "description": "Classification analysis",
-                  "summary": "Creates an analysis that predicts a discrete class label, training a Decision Tree and a Random Forest classifier in a single request.",
-                  "x-zenesis-usecase-tag": [
-                    "classification"
-                  ],
+                  "description": "Creates an analysis that predicts a discrete class label, training a Decision Tree and a Random Forest classifier in a single request.",
+                  "summary": "Classification analysis",
                   "value": {
                     "CONFIG": {
                       "name": "Analysis-1",
@@ -152,11 +120,8 @@
                   }
                 },
                 "clusteringAnalysis": {
-                  "description": "Clustering analysis",
-                  "summary": "Creates an unsupervised analysis that groups similar records, so no targetColumn is sent and the larger 16 GB server option is requested.",
-                  "x-zenesis-usecase-tag": [
-                    "clustering"
-                  ],
+                  "description": "Creates an unsupervised analysis that groups similar records, so no targetColumn is sent and the larger 16 GB server option is requested.",
+                  "summary": "Clustering analysis",
                   "value": {
                     "CONFIG": {
                       "name": "Customer_Segments",
@@ -193,8 +158,8 @@
                 },
                 "examples": {
                   "analysisCreated": {
-                    "description": "Analysis created",
-                    "summary": "The AutoML analysis was created and its unique ID is returned in the data object.",
+                    "description": "The AutoML analysis was created and its unique ID is returned in the data object.",
+                    "summary": "Analysis created",
                     "value": {
                       "status": "success",
                       "summary": "Create autoML analysis",
@@ -207,7 +172,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -219,7 +184,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Get AutoML Analysis In Workspace",
         "summary": "Get AutoML Analysis In Workspace",
         "description": "Returns the list of AutoML analyses available in the specified workspace. Use the Get AutoML Analysis Details API with a returned analysis ID to fetch the models trained under it.",
         "operationId": "getAutoMLAnalysisInWorkspace",
@@ -248,8 +212,8 @@
                 },
                 "examples": {
                   "publishedAndDraft": {
-                    "description": "Published and draft",
-                    "summary": "Two analyses in the same workspace, one already trained and one still a draft, distinguished by the isDraft flag.",
+                    "description": "Two analyses in the same workspace, one already trained and one still a draft, distinguished by the isDraft flag.",
+                    "summary": "Published and draft",
                     "value": {
                       "status": "success",
                       "summary": "Get autoML analysis in workspace",
@@ -276,8 +240,8 @@
                     }
                   },
                   "noAnalysis": {
-                    "description": "No analyses",
-                    "summary": "The workspace has no AutoML analyses, so an empty array is returned instead of an error.",
+                    "description": "The workspace has no AutoML analyses, so an empty array is returned instead of an error.",
+                    "summary": "No analyses",
                     "value": {
                       "status": "success",
                       "summary": "Get autoML analysis in workspace",
@@ -290,7 +254,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -304,7 +268,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Run AutoML Analysis",
         "summary": "Run AutoML Analysis",
         "description": "Executes an AutoML analysis deployment on demand. The predictions are generated using the model bound to the deployment, and the results are written to the output table that was configured when the deployment was created.",
         "operationId": "runAutoMLAnalysis",
@@ -333,7 +296,7 @@
           "204": {
             "description": "AutoML analysis deployment executed successfully. No content is returned."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -347,7 +310,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Delete AutoML Analysis",
         "summary": "Delete AutoML Analysis",
         "description": "Deletes the specified AutoML analysis from the workspace. The analysis ID can be obtained using the Get AutoML Analysis In Workspace API.",
         "operationId": "deleteAutoMLAnalysis",
@@ -373,7 +335,7 @@
           "204": {
             "description": "AutoML analysis deleted successfully. No content is returned."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -385,7 +347,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Get AutoML Analysis Details",
         "summary": "Get AutoML Analysis Details",
         "description": "Retrieves the detailed information of a specific AutoML analysis, including the training table, the target column, the input features and every model trained under the analysis with its score and hyperparameters.",
         "operationId": "getAutoMLAnalysisDetails",
@@ -396,14 +357,6 @@
             ]
           }
         ],
-        "x-zenesis-sections": {
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul>\n<li>One model is returned for each algorithm that was configured when the analysis was created.</li>\n<li>The hyperparameter values inside <b>algorithm</b> are returned as strings.</li>\n<li><b>stack</b> is the human-readable form of the <b>serverOption</b> that was sent when the analysis was created.</li>\n</ul>\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "$ref": "#/components/parameters/org-id"
@@ -425,8 +378,8 @@
                 },
                 "examples": {
                   "singleModel": {
-                    "description": "Single model",
-                    "summary": "An analysis created with one algorithm, returning the single trained model along with its score and hyperparameters.",
+                    "description": "An analysis created with one algorithm, returning the single trained model along with its score and hyperparameters.",
+                    "summary": "Single model",
                     "value": {
                       "status": "success",
                       "summary": "Get autoML analysis details",
@@ -468,8 +421,8 @@
                     }
                   },
                   "multipleModels": {
-                    "description": "Multiple models",
-                    "summary": "An analysis created with two algorithms, returning one model per algorithm, of which only the better scoring one has been deployed.",
+                    "description": "An analysis created with two algorithms, returning one model per algorithm, of which only the better scoring one has been deployed.",
+                    "summary": "Multiple models",
                     "value": {
                       "status": "success",
                       "summary": "Get autoML analysis details",
@@ -529,7 +482,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -543,7 +496,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Get AutoML Analysis In Org",
         "summary": "Get AutoML Analysis In Org",
         "description": "Returns all the AutoML analyses available in the organization. Each entry also carries the workspace it belongs to, so the analysis can be looked up in detail using the Get AutoML Analysis Details API.",
         "operationId": "getAutoMLAnalysisInOrg",
@@ -569,8 +521,8 @@
                 },
                 "examples": {
                   "analysisAcrossWorkspaces": {
-                    "description": "Multiple workspaces",
-                    "summary": "Two analyses are returned, each carrying the ID and the name of the workspace it belongs to.",
+                    "description": "Two analyses are returned, each carrying the ID and the name of the workspace it belongs to.",
+                    "summary": "Multiple workspaces",
                     "value": {
                       "status": "success",
                       "summary": "Get autoML analysis in organization",
@@ -601,8 +553,8 @@
                     }
                   },
                   "noAnalysis": {
-                    "description": "No analyses",
-                    "summary": "The organization has no AutoML analyses, so an empty array is returned instead of an error.",
+                    "description": "The organization has no AutoML analyses, so an empty array is returned instead of an error.",
+                    "summary": "No analyses",
                     "value": {
                       "status": "success",
                       "summary": "Get autoML analysis in organization",
@@ -615,7 +567,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -629,7 +581,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Delete AutoML Analysis Model",
         "summary": "Delete AutoML Analysis Model",
         "description": "Deletes a specific model from an AutoML analysis. The model ID can be obtained using the Get AutoML Analysis Details API.",
         "operationId": "deleteAutoMLAnalysisModel",
@@ -658,7 +609,7 @@
           "204": {
             "description": "AutoML analysis model deleted successfully. No content is returned."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -672,7 +623,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Get Deployments For A Model",
         "summary": "Get Deployments For A Model",
         "description": "Returns the deployment details configured for an AutoML analysis model, including the input and output tables, the schedule status and the time at which the deployment last ran.",
         "operationId": "getDeploymentsForModel",
@@ -707,8 +657,8 @@
                 },
                 "examples": {
                   "truncateAddDeployment": {
-                    "description": "Truncate-add deployment",
-                    "summary": "A deployment that replaces the contents of the output table on every run, showing the time at which it last ran.",
+                    "description": "A deployment that replaces the contents of the output table on every run, showing the time at which it last ran.",
+                    "summary": "Truncate-add deployment",
                     "value": {
                       "status": "success",
                       "summary": "Get deployments for a model",
@@ -735,8 +685,8 @@
                     }
                   },
                   "appendDeployment": {
-                    "description": "Append deployment",
-                    "summary": "A deployment that adds each run's predictions to the output table as new records, running on the larger 16 GB server option.",
+                    "description": "A deployment that adds each run's predictions to the output table as new records, running on the larger 16 GB server option.",
+                    "summary": "Append deployment",
                     "value": {
                       "status": "success",
                       "summary": "Get deployments for a model",
@@ -765,7 +715,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -777,7 +727,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Create AutoML Analysis Deployment",
         "summary": "Create AutoML Analysis Deployment",
         "description": "Creates a deployment for an AutoML analysis model. A deployment binds a trained model to an input table and an output table, and defines the schedule on which predictions are generated and written back.",
         "operationId": "createAutoMLAnalysisDeployment",
@@ -788,14 +737,6 @@
             ]
           }
         ],
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul>\n<li><b>matchingColumns</b> is mandatory only when <b>importType</b> is set to <b>UPDATEADD</b>. It is ignored for the other import types.</li>\n<li>The <b>scheduleDetails</b> attributes that apply depend on the value of <b>calendarFrequency</b>.</li>\n<li>Set <b>calendarFrequency</b> to <b>none</b> to create a deployment that is not run on a recurring schedule, and trigger it using the Run AutoML Analysis API.</li>\n</ul>\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "$ref": "#/components/parameters/org-id"
@@ -832,8 +773,8 @@
               },
               "examples": {
                 "hourlyAppend": {
-                  "description": "Hourly append",
-                  "summary": "Runs the deployment once every three hours and adds each run's predictions to the output table as new records.",
+                  "description": "Runs the deployment once every three hours and adds each run's predictions to the output table as new records.",
+                  "summary": "Hourly append",
                   "value": {
                     "CONFIG": {
                       "inputTableId": 35130000001055717,
@@ -854,8 +795,8 @@
                   }
                 },
                 "weeklyUpdateAdd": {
-                  "description": "Weekly upsert",
-                  "summary": "Runs the deployment every Monday at 06:30 and upserts the predictions, matching the existing records on Region and Product.",
+                  "description": "Runs the deployment every Monday at 06:30 and upserts the predictions, matching the existing records on Region and Product.",
+                  "summary": "Weekly upsert",
                   "value": {
                     "CONFIG": {
                       "inputTableId": 35130000001055717,
@@ -883,8 +824,8 @@
                   }
                 },
                 "onDemandTruncateAdd": {
-                  "description": "On-demand refresh",
-                  "summary": "Creates a deployment with no recurring schedule that is triggered using the Run AutoML Analysis API, replacing the output table contents on every run.",
+                  "description": "Creates a deployment with no recurring schedule that is triggered using the Run AutoML Analysis API, replacing the output table contents on every run.",
+                  "summary": "On-demand refresh",
                   "value": {
                     "CONFIG": {
                       "inputTableId": 35130000001055717,
@@ -916,8 +857,8 @@
                 },
                 "examples": {
                   "scheduledDeployment": {
-                    "description": "Scheduled deployment",
-                    "summary": "The deployment was created against an existing output table, and the IDs of both the output table and the deployment are returned.",
+                    "description": "The deployment was created against an existing output table, and the IDs of both the output table and the deployment are returned.",
+                    "summary": "Scheduled deployment",
                     "value": {
                       "status": "success",
                       "summary": "Create autoML analysis deployment",
@@ -930,8 +871,8 @@
                     }
                   },
                   "onDemandDeployment": {
-                    "description": "On-demand deployment",
-                    "summary": "The deployment was created without a recurring schedule; use the returned deploymentId with the Run AutoML Analysis API to execute it.",
+                    "description": "The deployment was created without a recurring schedule; use the returned deploymentId with the Run AutoML Analysis API to execute it.",
+                    "summary": "On-demand deployment",
                     "value": {
                       "status": "success",
                       "summary": "Create autoML analysis deployment",
@@ -947,7 +888,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -961,7 +902,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "Delete AutoML Analysis Model Deployment",
         "summary": "Delete AutoML Analysis Model Deployment",
         "description": "Deletes an AutoML analysis deployment. The deployment stops running on its schedule, and the output table it was writing to is retained. The deployment ID can be obtained using the Get Deployments For A Model API.",
         "operationId": "deleteAutoMLAnalysisModelDeployment",
@@ -990,7 +930,7 @@
           "204": {
             "description": "AutoML analysis deployment deleted successfully. No content is returned."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1004,7 +944,6 @@
         "tags": [
           "AutoML Analysis"
         ],
-        "x-zenesis-title": "AutoML What If Analysis",
         "summary": "AutoML What If Analysis",
         "description": "Generates a prediction using a trained AutoML model. A hypothetical value is supplied for each feature that the model was trained on, and the model returns the value it predicts for the target column.",
         "operationId": "autoMLWhatIfAnalysis",
@@ -1015,14 +954,6 @@
             ]
           }
         ],
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul>\n<li>Each key inside <b>features</b> must be the name of a feature column used when the model was trained.</li>\n<li>The prediction is generated in memory and is not written to any table.</li>\n</ul>\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "$ref": "#/components/parameters/org-id"
@@ -1059,8 +990,8 @@
               },
               "examples": {
                 "regressionInputs": {
-                  "description": "Regression inputs",
-                  "summary": "Supplies one hypothetical value per feature to a regression model, which returns a continuous numeric prediction.",
+                  "description": "Supplies one hypothetical value per feature to a regression model, which returns a continuous numeric prediction.",
+                  "summary": "Regression inputs",
                   "value": {
                     "CONFIG": {
                       "features": {
@@ -1072,8 +1003,8 @@
                   }
                 },
                 "classificationInputs": {
-                  "description": "Classification inputs",
-                  "summary": "Supplies one hypothetical value per feature to a classification model, which returns the predicted class label.",
+                  "description": "Supplies one hypothetical value per feature to a classification model, which returns the predicted class label.",
+                  "summary": "Classification inputs",
                   "value": {
                     "CONFIG": {
                       "features": {
@@ -1098,8 +1029,8 @@
                 },
                 "examples": {
                   "numericPrediction": {
-                    "description": "Numeric prediction",
-                    "summary": "Returned by a regression model, where the predicted value is a continuous number for the target column.",
+                    "description": "Returned by a regression model, where the predicted value is a continuous number for the target column.",
+                    "summary": "Numeric prediction",
                     "value": {
                       "status": "success",
                       "summary": "AutoML what if analysis",
@@ -1110,8 +1041,8 @@
                     }
                   },
                   "classPrediction": {
-                    "description": "Class prediction",
-                    "summary": "Returned by a classification model, where the predicted value is one of the class labels seen in the target column.",
+                    "description": "Returned by a classification model, where the predicted value is one of the class labels seen in the target column.",
+                    "summary": "Class prediction",
                     "value": {
                       "status": "success",
                       "summary": "AutoML what if analysis",
@@ -1125,7 +1056,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1212,6 +1143,15 @@
         },
         "required": [
           "features"
+        ],
+        "examples": [
+          {
+            "features": {
+              "Region": "East",
+              "Quarter": "Q2",
+              "Cost": "450"
+            }
+          }
         ]
       },
       "WhatIfFeatures": {
@@ -1251,7 +1191,17 @@
           "data": {
             "$ref": "#/components/schemas/AutoMLWhatIfAnalysisResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "AutoML what if analysis",
+            "data": {
+              "predictions": "1000",
+              "targetColumn": "Sales"
+            }
+          }
+        ]
       },
       "AutoMLWhatIfAnalysisResponseData": {
         "type": "object",
@@ -1318,10 +1268,15 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
-              "8 GB",
-              "16 GB",
-              "32 GB"
+            "x-enumDescriptions": {
+              "1": "8 GB",
+              "2": "16 GB",
+              "3": "32 GB"
+            },
+            "x-enum-varnames": [
+              "8_GB",
+              "16_GB",
+              "32_GB"
             ]
           }
         },
@@ -1336,7 +1291,6 @@
         "oneOf": [
           {
             "title": "Regression Algorithms",
-            "x-zenesis-usecase-tag": "regression",
             "type": "object",
             "description": "Applicable when predictionType is REGRESSION.",
             "properties": {
@@ -1347,7 +1301,6 @@
           },
           {
             "title": "Classification Algorithms",
-            "x-zenesis-usecase-tag": "classification",
             "type": "object",
             "description": "Applicable when predictionType is CLASSIFICATION.",
             "properties": {
@@ -1358,12 +1311,36 @@
           },
           {
             "title": "Clustering Algorithms",
-            "x-zenesis-usecase-tag": "clustering",
             "type": "object",
             "description": "Applicable when predictionType is CLUSTERING.",
             "properties": {
               "algorithms": {
                 "$ref": "#/components/schemas/ClusteringAlgorithms"
+              }
+            }
+          }
+        ],
+        "examples": [
+          {
+            "name": "Revenue_Forecast",
+            "description": "Predicts revenue from the regional sales table.",
+            "trainingTableId": 35130000001055717,
+            "targetColumn": "Revenue",
+            "predictionType": "REGRESSION",
+            "features": [
+              "Cost",
+              "Region",
+              "Product"
+            ],
+            "serverOption": 1,
+            "algorithms": {
+              "randomForestRegression": {
+                "minimumSampleSplit": 2,
+                "maximumDepth": 20,
+                "numberOfTrees": 25
+              },
+              "ridgeRegression": {
+                "shrinkage": 1
               }
             }
           }
@@ -2095,10 +2072,15 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
-              "8 GB",
-              "16 GB",
-              "32 GB"
+            "x-enumDescriptions": {
+              "1": "8 GB",
+              "2": "16 GB",
+              "3": "32 GB"
+            },
+            "x-enum-varnames": [
+              "8_GB",
+              "16_GB",
+              "32_GB"
             ]
           },
           "timezone": {
@@ -2129,6 +2111,24 @@
           "predictionColumn",
           "serverOption",
           "importType"
+        ],
+        "examples": [
+          {
+            "inputTableId": 35130000001055717,
+            "outputTable": "SalesDep",
+            "scheduleDetails": {
+              "calendarFrequency": "hourly",
+              "interval": 3
+            },
+            "outputColumns": [
+              "Revenue",
+              "Region"
+            ],
+            "predictionColumn": "predicted",
+            "serverOption": 1,
+            "timezone": "Asia/Kolkata",
+            "importType": "APPEND"
+          }
         ]
       },
       "DeploymentScheduleDetails": {
@@ -2179,14 +2179,23 @@
               6,
               7
             ],
-            "x-zenesis-enums-desc": [
-              "Sunday",
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday"
+            "x-enumDescriptions": {
+              "1": "Sunday",
+              "2": "Monday",
+              "3": "Tuesday",
+              "4": "Wednesday",
+              "5": "Thursday",
+              "6": "Friday",
+              "7": "Saturday"
+            },
+            "x-enum-varnames": [
+              "SUNDAY",
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY"
             ]
           },
           "monthDay": {
@@ -2290,7 +2299,19 @@
           "data": {
             "$ref": "#/components/schemas/CreateAutoMLAnalysisDeploymentResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create autoML analysis deployment",
+            "data": {
+              "deployments": {
+                "outputTableId": "466206000000198129",
+                "deploymentId": "466206000000198176"
+              }
+            }
+          }
+        ]
       },
       "CreateAutoMLAnalysisDeploymentResponseData": {
         "type": "object",
@@ -2351,7 +2372,16 @@
           "data": {
             "$ref": "#/components/schemas/CreateAutoMLAnalysisResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create autoML analysis",
+            "data": {
+              "id": "466206000000178110"
+            }
+          }
+        ]
       },
       "CreateAutoMLAnalysisResponseData": {
         "type": "object",
@@ -2389,7 +2419,48 @@
           "data": {
             "$ref": "#/components/schemas/GetAutoMLAnalysisDetailsResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get autoML analysis details",
+            "data": {
+              "analysis": {
+                "id": "466206000000198120",
+                "name": "Analysis-1",
+                "predictionType": "Classification",
+                "trainingTable": "Sales",
+                "trainingTableId": "466206000000061002",
+                "targetColumn": "Product",
+                "features": [
+                  "Region",
+                  "Product Category",
+                  "Sales"
+                ],
+                "stack": "8 GB",
+                "status": "Success",
+                "models": [
+                  {
+                    "id": "466206000000198124",
+                    "name": "Random Forest Classification",
+                    "scoreParamName": "Classification Accuracy",
+                    "score": "38.95",
+                    "trainingStatus": "Completed",
+                    "lastTrainingTime": "28 Jan 2026 20:31:24",
+                    "algorithm": {
+                      "randomForestClassification": {
+                        "minimumSampleSplit": "2",
+                        "maximumDepth": "6",
+                        "numberOfTrees": "25"
+                      }
+                    },
+                    "isDeployed": false
+                  }
+                ]
+              }
+            }
+          }
+        ]
       },
       "GetAutoMLAnalysisDetailsResponseData": {
         "type": "object",
@@ -2399,7 +2470,44 @@
           "analysis": {
             "$ref": "#/components/schemas/AutoMLAnalysisDetails"
           }
-        }
+        },
+        "examples": [
+          {
+            "analysis": {
+              "id": "466206000000198120",
+              "name": "Analysis-1",
+              "predictionType": "Classification",
+              "trainingTable": "Sales",
+              "trainingTableId": "466206000000061002",
+              "targetColumn": "Product",
+              "features": [
+                "Region",
+                "Product Category",
+                "Sales"
+              ],
+              "stack": "8 GB",
+              "status": "Success",
+              "models": [
+                {
+                  "id": "466206000000198124",
+                  "name": "Random Forest Classification",
+                  "scoreParamName": "Classification Accuracy",
+                  "score": "38.95",
+                  "trainingStatus": "Completed",
+                  "lastTrainingTime": "28 Jan 2026 20:31:24",
+                  "algorithm": {
+                    "randomForestClassification": {
+                      "minimumSampleSplit": "2",
+                      "maximumDepth": "6",
+                      "numberOfTrees": "25"
+                    }
+                  },
+                  "isDeployed": false
+                }
+              ]
+            }
+          }
+        ]
       },
       "AutoMLAnalysisDetails": {
         "type": "object",
@@ -2452,7 +2560,42 @@
           "models": {
             "$ref": "#/components/schemas/AutoMLModelList"
           }
-        }
+        },
+        "examples": [
+          {
+            "id": "466206000000198120",
+            "name": "Analysis-1",
+            "predictionType": "Classification",
+            "trainingTable": "Sales",
+            "trainingTableId": "466206000000061002",
+            "targetColumn": "Product",
+            "features": [
+              "Region",
+              "Product Category",
+              "Sales"
+            ],
+            "stack": "8 GB",
+            "status": "Success",
+            "models": [
+              {
+                "id": "466206000000198124",
+                "name": "Random Forest Classification",
+                "scoreParamName": "Classification Accuracy",
+                "score": "38.95",
+                "trainingStatus": "Completed",
+                "lastTrainingTime": "28 Jan 2026 20:31:24",
+                "algorithm": {
+                  "randomForestClassification": {
+                    "minimumSampleSplit": "2",
+                    "maximumDepth": "6",
+                    "numberOfTrees": "25"
+                  }
+                },
+                "isDeployed": false
+              }
+            ]
+          }
+        ]
       },
       "AutoMLModelList": {
         "type": "array",
@@ -2592,7 +2735,33 @@
           "data": {
             "$ref": "#/components/schemas/GetAutoMLAnalysisInWorkspaceResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get autoML analysis in workspace",
+            "data": {
+              "analysis": [
+                {
+                  "id": "466206000000061115",
+                  "name": "New Analysis-1",
+                  "predictionType": "Classification",
+                  "trainingTable": "Sales",
+                  "trainingTableId": "466206000000061002",
+                  "isDraft": false
+                },
+                {
+                  "id": "466206000000073001",
+                  "name": "Sales Analysis",
+                  "predictionType": "Regression",
+                  "trainingTable": "Sales",
+                  "trainingTableId": "466206000000061002",
+                  "isDraft": true
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetAutoMLAnalysisInWorkspaceResponseData": {
         "type": "object",
@@ -2602,7 +2771,29 @@
           "analysis": {
             "$ref": "#/components/schemas/WorkspaceAnalysisList"
           }
-        }
+        },
+        "examples": [
+          {
+            "analysis": [
+              {
+                "id": "466206000000061115",
+                "name": "New Analysis-1",
+                "predictionType": "Classification",
+                "trainingTable": "Sales",
+                "trainingTableId": "466206000000061002",
+                "isDraft": false
+              },
+              {
+                "id": "466206000000073001",
+                "name": "Sales Analysis",
+                "predictionType": "Regression",
+                "trainingTable": "Sales",
+                "trainingTableId": "466206000000061002",
+                "isDraft": true
+              }
+            ]
+          }
+        ]
       },
       "WorkspaceAnalysisList": {
         "type": "array",
@@ -2694,7 +2885,37 @@
           "data": {
             "$ref": "#/components/schemas/GetAutoMLAnalysisInOrgResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get autoML analysis in organization",
+            "data": {
+              "analysis": [
+                {
+                  "id": "466206000000061115",
+                  "name": "New Analysis-1",
+                  "predictionType": "Classification",
+                  "trainingTable": "Sales",
+                  "trainingTableId": "466206000000061002",
+                  "isDraft": false,
+                  "workspaceId": "466206000000061012",
+                  "workspaceName": "AML Analysis"
+                },
+                {
+                  "id": "466206000000073001",
+                  "name": "Sales Analysis",
+                  "predictionType": "Classification",
+                  "trainingTable": "Olympics",
+                  "trainingTableId": "466206000000021004",
+                  "isDraft": false,
+                  "workspaceId": "466206000000081014",
+                  "workspaceName": "Olympic Records"
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetAutoMLAnalysisInOrgResponseData": {
         "type": "object",
@@ -2704,7 +2925,33 @@
           "analysis": {
             "$ref": "#/components/schemas/OrgAnalysisList"
           }
-        }
+        },
+        "examples": [
+          {
+            "analysis": [
+              {
+                "id": "466206000000061115",
+                "name": "New Analysis-1",
+                "predictionType": "Classification",
+                "trainingTable": "Sales",
+                "trainingTableId": "466206000000061002",
+                "isDraft": false,
+                "workspaceId": "466206000000061012",
+                "workspaceName": "AML Analysis"
+              },
+              {
+                "id": "466206000000073001",
+                "name": "Sales Analysis",
+                "predictionType": "Classification",
+                "trainingTable": "Olympics",
+                "trainingTableId": "466206000000021004",
+                "isDraft": false,
+                "workspaceId": "466206000000081014",
+                "workspaceName": "Olympic Records"
+              }
+            ]
+          }
+        ]
       },
       "OrgAnalysisList": {
         "type": "array",
@@ -2808,7 +3055,33 @@
           "data": {
             "$ref": "#/components/schemas/GetDeploymentsForModelResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get deployments for a model",
+            "data": {
+              "deployments": {
+                "deploymentId": "466206000000094143",
+                "analysisId": "466206000000073001",
+                "inputTable": "Sales",
+                "inputTableId": "466206000000061002",
+                "outputTable": "Temp",
+                "outputTableId": "466206000000094076",
+                "status": "success",
+                "lastDeploymentTime": "06 Jan 2026 18:47:22",
+                "outputColumns": [
+                  "Region",
+                  "Product Category",
+                  "Sales"
+                ],
+                "predictionColumn": "Sales_Pred",
+                "stack": "8 GB",
+                "importType": "truncateadd"
+              }
+            }
+          }
+        ]
       },
       "GetDeploymentsForModelResponseData": {
         "type": "object",
@@ -2818,7 +3091,29 @@
           "deployments": {
             "$ref": "#/components/schemas/ModelDeploymentDetails"
           }
-        }
+        },
+        "examples": [
+          {
+            "deployments": {
+              "deploymentId": "466206000000094143",
+              "analysisId": "466206000000073001",
+              "inputTable": "Sales",
+              "inputTableId": "466206000000061002",
+              "outputTable": "Temp",
+              "outputTableId": "466206000000094076",
+              "status": "success",
+              "lastDeploymentTime": "06 Jan 2026 18:47:22",
+              "outputColumns": [
+                "Region",
+                "Product Category",
+                "Sales"
+              ],
+              "predictionColumn": "Sales_Pred",
+              "stack": "8 GB",
+              "importType": "truncateadd"
+            }
+          }
+        ]
       },
       "ModelDeploymentDetails": {
         "type": "object",
@@ -2875,7 +3170,27 @@
             "type": "string",
             "description": "Specifies how the prediction results are imported into the output table. NOTE: the response returns this value in lower case, whereas the Create AutoML Analysis Deployment API expects it in upper case."
           }
-        }
+        },
+        "examples": [
+          {
+            "deploymentId": "466206000000094143",
+            "analysisId": "466206000000073001",
+            "inputTable": "Sales",
+            "inputTableId": "466206000000061002",
+            "outputTable": "Temp",
+            "outputTableId": "466206000000094076",
+            "status": "success",
+            "lastDeploymentTime": "06 Jan 2026 18:47:22",
+            "outputColumns": [
+              "Region",
+              "Product Category",
+              "Sales"
+            ],
+            "predictionColumn": "Sales_Pred",
+            "stack": "8 GB",
+            "importType": "truncateadd"
+          }
+        ]
       }
     }
   }

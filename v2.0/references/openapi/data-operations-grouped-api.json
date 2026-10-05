@@ -84,8 +84,8 @@
               },
               "examples": {
                 "addRow": {
-                  "description": "Add a row",
-                  "summary": "Writes a single row using the column name and value pairs sent in columns.",
+                  "description": "Writes a single row using the column name and value pairs sent in columns.",
+                  "summary": "Add a row",
                   "value": {
                     "CONFIG": {
                       "columns": {
@@ -96,8 +96,8 @@
                   }
                 },
                 "addDateRow": {
-                  "description": "Add dated row",
-                  "summary": "Writes a row containing date columns, declaring the format of each date column separately.",
+                  "description": "Writes a row containing date columns, declaring the format of each date column separately.",
+                  "summary": "Add dated row",
                   "value": {
                     "CONFIG": {
                       "columns": {
@@ -150,7 +150,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -204,8 +204,8 @@
               },
               "examples": {
                 "updateMatching": {
-                  "description": "Update matching rows",
-                  "summary": "Updates only the rows that satisfy the criteria.",
+                  "description": "Updates only the rows that satisfy the criteria.",
+                  "summary": "Update matching rows",
                   "value": {
                     "CONFIG": {
                       "columns": {
@@ -216,8 +216,8 @@
                   }
                 },
                 "updateAll": {
-                  "description": "Update all rows",
-                  "summary": "Updates every row in the table. criteria must not be sent along with updateAllRows.",
+                  "description": "Updates every row in the table. criteria must not be sent along with updateAllRows.",
+                  "summary": "Update all rows",
                   "value": {
                     "CONFIG": {
                       "columns": {
@@ -228,8 +228,8 @@
                   }
                 },
                 "upsertRow": {
-                  "description": "Update or add",
-                  "summary": "Updates the rows matching the criteria, and adds a new row when nothing matches.",
+                  "description": "Updates the rows matching the criteria, and adds a new row when nothing matches.",
+                  "summary": "Update or add",
                   "value": {
                     "CONFIG": {
                       "columns": {
@@ -279,7 +279,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -333,8 +333,8 @@
               },
               "examples": {
                 "deleteMatching": {
-                  "description": "Delete matching rows",
-                  "summary": "Deletes only the rows that satisfy the criteria.",
+                  "description": "Deletes only the rows that satisfy the criteria.",
+                  "summary": "Delete matching rows",
                   "value": {
                     "CONFIG": {
                       "criteria": "\"SalesTable\".\"Region\"='East'"
@@ -342,8 +342,8 @@
                   }
                 },
                 "deleteAll": {
-                  "description": "Delete all rows",
-                  "summary": "Deletes every row in the table. criteria must not be sent along with deleteAllRows.",
+                  "description": "Deletes every row in the table. criteria must not be sent along with deleteAllRows.",
+                  "summary": "Delete all rows",
                   "value": {
                     "CONFIG": {
                       "deleteAllRows": true
@@ -383,7 +383,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -397,7 +397,6 @@
         "tags": [
           "Data Import (Synchronous)"
         ],
-        "x-zenesis-title": "Import Data into a New Table",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -454,11 +453,8 @@
               },
               "examples": {
                 "fileImport": {
-                  "description": "Import using FILE",
-                  "summary": "File upload. The FILE part carries the file contents; the value shown here is a placeholder for the uploaded file.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "File upload. The FILE part carries the file contents; the value shown here is a placeholder for the uploaded file.",
+                  "summary": "Import using FILE",
                   "value": {
                     "FILE": "@/path/to/Sales.csv",
                     "CONFIG": {
@@ -469,11 +465,8 @@
                   }
                 },
                 "dataImport": {
-                  "description": "Import using DATA",
-                  "summary": "Raw data import. The data is sent inline as a string, with no file upload.",
-                  "x-zenesis-usecase-tag": [
-                    "json"
-                  ],
+                  "description": "Raw data import. The data is sent inline as a string, with no file upload.",
+                  "summary": "Import using DATA",
                   "value": {
                     "DATA": "[{\"Region\":\"East\",\"Sales\":\"1000\"},{\"Region\":\"West\",\"Sales\":\"2000\"}]",
                     "CONFIG": {
@@ -528,32 +521,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "csv": {
-              "name": "CSV Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>csv</strong>. These attributes are mandatory when <strong>autoIdentify</strong> is set to <strong>false</strong>.</p>"
-            },
-            "json": {
-              "name": "JSON Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>json</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CSV specific attributes - commentChar, delimiter and quoted - are mandatory if autoIdentify is set to false.\n</span></blockquote>"
-            }
           }
         }
       }
@@ -563,7 +535,6 @@
         "tags": [
           "Data Import (Synchronous)"
         ],
-        "x-zenesis-title": "Import Data into an Existing Table",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -623,11 +594,8 @@
               },
               "examples": {
                 "fileImport": {
-                  "description": "Import using FILE",
-                  "summary": "File upload using the updateadd import type. Rows whose matchingColumns values match an existing row are updated; the rest are appended.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "File upload using the updateadd import type. Rows whose matchingColumns values match an existing row are updated; the rest are appended.",
+                  "summary": "Import using FILE",
                   "value": {
                     "FILE": "@/path/to/Sales.csv",
                     "CONFIG": {
@@ -642,11 +610,8 @@
                   }
                 },
                 "dataImport": {
-                  "description": "Import using DATA",
-                  "summary": "Raw data import using the updateadd import type. The data is sent inline as a string, with no file upload.",
-                  "x-zenesis-usecase-tag": [
-                    "json"
-                  ],
+                  "description": "Raw data import using the updateadd import type. The data is sent inline as a string, with no file upload.",
+                  "summary": "Import using DATA",
                   "value": {
                     "DATA": "[{\"Region\":\"East\",\"Sales\":\"1000\"},{\"Region\":\"West\",\"Sales\":\"2000\"}]",
                     "CONFIG": {
@@ -705,32 +670,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "csv": {
-              "name": "CSV Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>csv</strong>. These attributes are mandatory when <strong>autoIdentify</strong> is set to <strong>false</strong>.</p>"
-            },
-            "json": {
-              "name": "JSON Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>json</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CSV specific attributes - commentChar, delimiter and quoted - are mandatory if autoIdentify is set to false.\n</span></blockquote>"
-            }
           }
         }
       },
@@ -738,7 +682,6 @@
         "tags": [
           "Data Export (Synchronous)"
         ],
-        "x-zenesis-title": "Export Data from a View",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -767,11 +710,8 @@
             },
             "examples": {
               "filteredExport": {
-                "description": "Export using criteria",
-                "summary": "Exports only the rows matching the criteria as a CSV file.",
-                "x-zenesis-usecase-tag": [
-                  "csv"
-                ],
+                "description": "Exports only the rows matching the criteria as a CSV file.",
+                "summary": "Export using criteria",
                 "value": {
                   "responseFormat": "csv",
                   "criteria": "\"SalesTable\".\"Region\"='East'",
@@ -781,11 +721,8 @@
                 }
               },
               "protectedExport": {
-                "description": "Export with password",
-                "summary": "Exports the selected columns into a password protected CSV file. Shows every attribute the CONFIG accepts; only the mandatory ones need to be sent.",
-                "x-zenesis-usecase-tag": [
-                  "csv"
-                ],
+                "description": "Exports the selected columns into a password protected CSV file. Shows every attribute the CONFIG accepts; only the mandatory ones need to be sent.",
+                "summary": "Export with password",
                 "value": {
                   "responseFormat": "csv",
                   "criteria": "\"SalesTable\".\"Region\"='East'",
@@ -804,11 +741,8 @@
                 }
               },
               "jsonExport": {
-                "description": "Export as JSON",
-                "summary": "Exports the data as a JSON file with each row returned as column name and value pairs.",
-                "x-zenesis-usecase-tag": [
-                  "json"
-                ],
+                "description": "Exports the data as a JSON file with each row returned as column name and value pairs.",
+                "summary": "Export as JSON",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "json",
@@ -816,11 +750,8 @@
                 }
               },
               "xmlExport": {
-                "description": "Export as XML",
-                "summary": "Exports the data as an XML file. Set keyValueFormat to true to return each row as column name and value pairs.",
-                "x-zenesis-usecase-tag": [
-                  "xml"
-                ],
+                "description": "Exports the data as an XML file. Set keyValueFormat to true to return each row as column name and value pairs.",
+                "summary": "Export as XML",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "xml",
@@ -828,11 +759,8 @@
                 }
               },
               "xlsExport": {
-                "description": "Export as XLS",
-                "summary": "Exports the selected columns into an Excel workbook.",
-                "x-zenesis-usecase-tag": [
-                  "xls"
-                ],
+                "description": "Exports the selected columns into an Excel workbook.",
+                "summary": "Export as XLS",
                 "value": {
                   "responseFormat": "xls",
                   "criteria": "\"SalesTable\".\"Region\"='East'",
@@ -845,11 +773,8 @@
                 }
               },
               "pdfExport": {
-                "description": "Export as PDF",
-                "summary": "Exports the data as a PDF file using the PDF specific page setup attributes.",
-                "x-zenesis-usecase-tag": [
-                  "pdf"
-                ],
+                "description": "Exports the data as a PDF file using the PDF specific page setup attributes.",
+                "summary": "Export as PDF",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "pdf",
@@ -860,11 +785,8 @@
                 }
               },
               "htmlExport": {
-                "description": "Export as HTML",
-                "summary": "Exports the data as an HTML file with the title and description placed at the top.",
-                "x-zenesis-usecase-tag": [
-                  "html"
-                ],
+                "description": "Exports the data as an HTML file with the title and description placed at the top.",
+                "summary": "Export as HTML",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "html",
@@ -873,11 +795,8 @@
                 }
               },
               "imageExport": {
-                "description": "Export as image",
-                "summary": "Exports the view as an image of the given dimensions and format.",
-                "x-zenesis-usecase-tag": [
-                  "image"
-                ],
+                "description": "Exports the view as an image of the given dimensions and format.",
+                "summary": "Export as image",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "image",
@@ -907,58 +826,11 @@
               "image/jpeg": {}
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "csv": {
-              "name": "CSV Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>csv</strong>.</p>"
-            },
-            "json": {
-              "name": "JSON Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>json</strong>.</p>"
-            },
-            "xml": {
-              "name": "XML Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>xml</strong>.</p>"
-            },
-            "xls": {
-              "name": "XLS Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>xls</strong>.</p>"
-            },
-            "pdf": {
-              "name": "PDF Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>pdf</strong>.</p>"
-            },
-            "html": {
-              "name": "HTML Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>html</strong>.</p>"
-            },
-            "image": {
-              "name": "IMAGE Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>image</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nExport Data API is restricted for the resources given below. For these, use the Asynchronous Export APIs instead.<ul><li>Tables having more than one million rows.</li><li>Tables and Views from live connect workspaces.</li><li>Dashboard and Query Table view types.</li></ul>\n</span></blockquote>"
-            }
-          },
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a GET request, so the CONFIG value is sent as a query parameter. The JSONObject must be stringified and URL encoded before it is appended to the request URL.\n</span></blockquote>"
-            }
           }
         }
       }
@@ -968,7 +840,6 @@
         "tags": [
           "Data Import (Asynchronous)"
         ],
-        "x-zenesis-title": "Create Import Job for a New Table",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1019,11 +890,8 @@
               },
               "examples": {
                 "csvImport": {
-                  "description": "CSV file import",
-                  "summary": "File upload. The FILE part carries the file contents; the value shown here is a placeholder for the uploaded file.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "File upload. The FILE part carries the file contents; the value shown here is a placeholder for the uploaded file.",
+                  "summary": "CSV file import",
                   "value": {
                     "FILE": "@/path/to/Sales.csv",
                     "CONFIG": {
@@ -1034,11 +902,8 @@
                   }
                 },
                 "jsonImport": {
-                  "description": "JSON file import",
-                  "summary": "File upload. The FILE part carries the file contents; the value shown here is a placeholder for the uploaded file.",
-                  "x-zenesis-usecase-tag": [
-                    "json"
-                  ],
+                  "description": "File upload. The FILE part carries the file contents; the value shown here is a placeholder for the uploaded file.",
+                  "summary": "JSON file import",
                   "value": {
                     "FILE": "@/path/to/Sales.json",
                     "CONFIG": {
@@ -1074,32 +939,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "csv": {
-              "name": "CSV Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>csv</strong>. These attributes are mandatory when <strong>autoIdentify</strong> is set to <strong>false</strong>.</p>"
-            },
-            "json": {
-              "name": "JSON Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>json</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CSV specific attributes - commentChar, delimiter and quoted - are mandatory if autoIdentify is set to false.\n</span></blockquote>"
-            }
           }
         }
       },
@@ -1107,7 +951,6 @@
         "tags": [
           "Data Export (Asynchronous)"
         ],
-        "x-zenesis-title": "Create Export Job using SQL Query",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1134,11 +977,8 @@
             },
             "examples": {
               "filteredExport": {
-                "description": "Export query result",
-                "summary": "Runs the SQL SELECT statement and exports the result as a CSV file.",
-                "x-zenesis-usecase-tag": [
-                  "csv"
-                ],
+                "description": "Runs the SQL SELECT statement and exports the result as a CSV file.",
+                "summary": "Export query result",
                 "value": {
                   "sqlQuery": "select * from Sales",
                   "responseFormat": "csv",
@@ -1148,11 +988,8 @@
                 }
               },
               "tableFilteredExport": {
-                "description": "Export using per-table criteria",
-                "summary": "Applies one filter expression per table referenced by the query.",
-                "x-zenesis-usecase-tag": [
-                  "csv"
-                ],
+                "description": "Applies one filter expression per table referenced by the query.",
+                "summary": "Export using per-table criteria",
                 "value": {
                   "sqlQuery": "SELECT \"Sales\".\"Region\", \"Sales\".\"Amount\" FROM \"Sales\" JOIN \"Targets\" ON \"Sales\".\"Region\" = \"Targets\".\"Region\"",
                   "responseFormat": "csv",
@@ -1169,11 +1006,8 @@
                 }
               },
               "protectedExport": {
-                "description": "Export with password",
-                "summary": "Exports the selected columns into a password protected CSV file. Shows every attribute the CONFIG accepts; only the mandatory ones need to be sent.",
-                "x-zenesis-usecase-tag": [
-                  "csv"
-                ],
+                "description": "Exports the selected columns into a password protected CSV file. Shows every attribute the CONFIG accepts; only the mandatory ones need to be sent.",
+                "summary": "Export with password",
                 "value": {
                   "sqlQuery": "select * from Sales",
                   "responseFormat": "csv",
@@ -1193,11 +1027,8 @@
                 }
               },
               "jsonExport": {
-                "description": "Export as JSON",
-                "summary": "Exports the data as a JSON file with each row returned as column name and value pairs.",
-                "x-zenesis-usecase-tag": [
-                  "json"
-                ],
+                "description": "Exports the data as a JSON file with each row returned as column name and value pairs.",
+                "summary": "Export as JSON",
                 "value": {
                   "sqlQuery": "select * from Sales",
                   "responseFormat": "json",
@@ -1205,11 +1036,8 @@
                 }
               },
               "xmlExport": {
-                "description": "Export as XML",
-                "summary": "Exports the data as an XML file. Set keyValueFormat to true to return each row as column name and value pairs.",
-                "x-zenesis-usecase-tag": [
-                  "xml"
-                ],
+                "description": "Exports the data as an XML file. Set keyValueFormat to true to return each row as column name and value pairs.",
+                "summary": "Export as XML",
                 "value": {
                   "sqlQuery": "select * from Sales",
                   "responseFormat": "xml",
@@ -1217,11 +1045,8 @@
                 }
               },
               "xlsExport": {
-                "description": "Export as XLS",
-                "summary": "Exports the selected columns into an Excel workbook.",
-                "x-zenesis-usecase-tag": [
-                  "xls"
-                ],
+                "description": "Exports the selected columns into an Excel workbook.",
+                "summary": "Export as XLS",
                 "value": {
                   "responseFormat": "xls",
                   "sqlQuery": "SELECT \"Region\", \"Sales\" FROM \"SalesTable\"",
@@ -1234,11 +1059,8 @@
                 }
               },
               "pdfExport": {
-                "description": "Export as PDF",
-                "summary": "Exports the data as a PDF file using the PDF specific page setup attributes.",
-                "x-zenesis-usecase-tag": [
-                  "pdf"
-                ],
+                "description": "Exports the data as a PDF file using the PDF specific page setup attributes.",
+                "summary": "Export as PDF",
                 "value": {
                   "sqlQuery": "select * from Sales",
                   "responseFormat": "pdf",
@@ -1249,11 +1071,8 @@
                 }
               },
               "htmlExport": {
-                "description": "Export as HTML",
-                "summary": "Exports the data as an HTML file with the title and description placed at the top.",
-                "x-zenesis-usecase-tag": [
-                  "html"
-                ],
+                "description": "Exports the data as an HTML file with the title and description placed at the top.",
+                "summary": "Export as HTML",
                 "value": {
                   "sqlQuery": "select * from Sales",
                   "responseFormat": "html",
@@ -1289,48 +1108,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "csv": {
-              "name": "CSV Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>csv</strong>.</p>"
-            },
-            "json": {
-              "name": "JSON Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>json</strong>.</p>"
-            },
-            "xml": {
-              "name": "XML Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>xml</strong>.</p>"
-            },
-            "xls": {
-              "name": "XLS Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>xls</strong>.</p>"
-            },
-            "pdf": {
-              "name": "PDF Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>pdf</strong>.</p>"
-            },
-            "html": {
-              "name": "HTML Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>html</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a GET request, so the CONFIG value is sent as a query parameter. The JSONObject must be stringified and URL encoded before it is appended to the request URL.\n</span></blockquote>"
-            }
           }
         }
       }
@@ -1340,7 +1122,6 @@
         "tags": [
           "Data Import (Asynchronous)"
         ],
-        "x-zenesis-title": "Create Import Job for an Existing Table",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1394,11 +1175,8 @@
               },
               "examples": {
                 "appendImport": {
-                  "description": "Append import",
-                  "summary": "Appends every row in the uploaded file to the table.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "Appends every row in the uploaded file to the table.",
+                  "summary": "Append import",
                   "value": {
                     "FILE": "@/path/to/Sales.csv",
                     "CONFIG": {
@@ -1409,11 +1187,8 @@
                   }
                 },
                 "updateAddImport": {
-                  "description": "Update add import",
-                  "summary": "Rows whose matchingColumns values match an existing row are updated; the remaining rows are appended as new rows. matchingColumns is mandatory for this import type.",
-                  "x-zenesis-usecase-tag": [
-                    "json"
-                  ],
+                  "description": "Rows whose matchingColumns values match an existing row are updated; the remaining rows are appended as new rows. matchingColumns is mandatory for this import type.",
+                  "summary": "Update add import",
                   "value": {
                     "FILE": "@/path/to/Sales.json",
                     "CONFIG": {
@@ -1453,32 +1228,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "csv": {
-              "name": "CSV Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>csv</strong>. These attributes are mandatory when <strong>autoIdentify</strong> is set to <strong>false</strong>.</p>"
-            },
-            "json": {
-              "name": "JSON Specific Attributes",
-              "description": "<p>Applicable when <strong>fileType</strong> is set to <strong>json</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CSV specific attributes - commentChar, delimiter and quoted - are mandatory if autoIdentify is set to false.\n</span></blockquote>"
-            }
           }
         }
       },
@@ -1486,7 +1240,6 @@
         "tags": [
           "Data Export (Asynchronous)"
         ],
-        "x-zenesis-title": "Create Export Job using View ID",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1515,11 +1268,8 @@
             },
             "examples": {
               "filteredExport": {
-                "description": "Export using criteria",
-                "summary": "Exports only the rows matching the criteria as a CSV file.",
-                "x-zenesis-usecase-tag": [
-                  "csv"
-                ],
+                "description": "Exports only the rows matching the criteria as a CSV file.",
+                "summary": "Export using criteria",
                 "value": {
                   "responseFormat": "csv",
                   "criteria": "\"SalesTable\".\"Region\"='East'",
@@ -1529,11 +1279,8 @@
                 }
               },
               "protectedExport": {
-                "description": "Export with password",
-                "summary": "Exports the selected columns into a password protected CSV file. Shows every attribute the CONFIG accepts; only the mandatory ones need to be sent.",
-                "x-zenesis-usecase-tag": [
-                  "csv"
-                ],
+                "description": "Exports the selected columns into a password protected CSV file. Shows every attribute the CONFIG accepts; only the mandatory ones need to be sent.",
+                "summary": "Export with password",
                 "value": {
                   "responseFormat": "csv",
                   "criteria": "\"SalesTable\".\"Region\"='East'",
@@ -1555,11 +1302,8 @@
                 }
               },
               "jsonExport": {
-                "description": "Export as JSON",
-                "summary": "Exports the data as a JSON file with each row returned as column name and value pairs.",
-                "x-zenesis-usecase-tag": [
-                  "json"
-                ],
+                "description": "Exports the data as a JSON file with each row returned as column name and value pairs.",
+                "summary": "Export as JSON",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "json",
@@ -1567,11 +1311,8 @@
                 }
               },
               "xmlExport": {
-                "description": "Export as XML",
-                "summary": "Exports the data as an XML file. Set keyValueFormat to true to return each row as column name and value pairs.",
-                "x-zenesis-usecase-tag": [
-                  "xml"
-                ],
+                "description": "Exports the data as an XML file. Set keyValueFormat to true to return each row as column name and value pairs.",
+                "summary": "Export as XML",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "xml",
@@ -1579,11 +1320,8 @@
                 }
               },
               "xlsExport": {
-                "description": "Export as XLS",
-                "summary": "Exports the selected columns into an Excel workbook.",
-                "x-zenesis-usecase-tag": [
-                  "xls"
-                ],
+                "description": "Exports the selected columns into an Excel workbook.",
+                "summary": "Export as XLS",
                 "value": {
                   "responseFormat": "xls",
                   "criteria": "\"SalesTable\".\"Region\"='East'",
@@ -1596,11 +1334,8 @@
                 }
               },
               "pdfExport": {
-                "description": "Export as PDF",
-                "summary": "Exports the data as a PDF file using the PDF specific page setup attributes.",
-                "x-zenesis-usecase-tag": [
-                  "pdf"
-                ],
+                "description": "Exports the data as a PDF file using the PDF specific page setup attributes.",
+                "summary": "Export as PDF",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "pdf",
@@ -1611,11 +1346,8 @@
                 }
               },
               "htmlExport": {
-                "description": "Export as HTML",
-                "summary": "Exports the data as an HTML file with the title and description placed at the top.",
-                "x-zenesis-usecase-tag": [
-                  "html"
-                ],
+                "description": "Exports the data as an HTML file with the title and description placed at the top.",
+                "summary": "Export as HTML",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "html",
@@ -1624,11 +1356,8 @@
                 }
               },
               "imageExport": {
-                "description": "Export as image",
-                "summary": "Exports the view as an image of the given dimensions and format.",
-                "x-zenesis-usecase-tag": [
-                  "image"
-                ],
+                "description": "Exports the view as an image of the given dimensions and format.",
+                "summary": "Export as image",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "responseFormat": "image",
@@ -1666,52 +1395,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-doc": {
-          "show": true,
-          "usecaseTags": {
-            "csv": {
-              "name": "CSV Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>csv</strong>.</p>"
-            },
-            "json": {
-              "name": "JSON Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>json</strong>.</p>"
-            },
-            "xml": {
-              "name": "XML Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>xml</strong>.</p>"
-            },
-            "xls": {
-              "name": "XLS Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>xls</strong>.</p>"
-            },
-            "pdf": {
-              "name": "PDF Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>pdf</strong>.</p>"
-            },
-            "html": {
-              "name": "HTML Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>html</strong>.</p>"
-            },
-            "image": {
-              "name": "IMAGE Specific Attributes",
-              "description": "<p>Applicable when <strong>responseFormat</strong> is set to <strong>image</strong>.</p>"
-            }
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a GET request, so the CONFIG value is sent as a query parameter. The JSONObject must be stringified and URL encoded before it is appended to the request URL.\n</span></blockquote>"
-            }
           }
         }
       }
@@ -1721,7 +1409,6 @@
         "tags": [
           "Data Import (Asynchronous)"
         ],
-        "x-zenesis-title": "Batch Import Data into New Table",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1772,11 +1459,8 @@
               },
               "examples": {
                 "firstBatch": {
-                  "description": "First batch",
-                  "summary": "Opens the batch import job. batchKey must be \"start\"; the response returns the batchKey to use for every following batch.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "Opens the batch import job. batchKey must be \"start\"; the response returns the batchKey to use for every following batch.",
+                  "summary": "First batch",
                   "value": {
                     "FILE": "@/path/to/Sales_batch1.csv",
                     "CONFIG": {
@@ -1789,11 +1473,8 @@
                   }
                 },
                 "followUpBatch": {
-                  "description": "Follow up batch",
-                  "summary": "Uploads an intermediate batch using the batchKey returned by the first call.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "Uploads an intermediate batch using the batchKey returned by the first call.",
+                  "summary": "Follow up batch",
                   "value": {
                     "FILE": "@/path/to/Sales_batch2.csv",
                     "CONFIG": {
@@ -1806,11 +1487,8 @@
                   }
                 },
                 "lastBatch": {
-                  "description": "Last batch",
-                  "summary": "Uploads the final batch and closes the job. isLastBatch must be true.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "Uploads the final batch and closes the job. isLastBatch must be true.",
+                  "summary": "Last batch",
                   "value": {
                     "FILE": "@/path/to/Sales_batch3.csv",
                     "CONFIG": {
@@ -1849,19 +1527,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CSV specific attributes - commentChar, delimiter and quoted - are mandatory if autoIdentify is set to false.\n</span></blockquote>"
-            }
           }
         }
       }
@@ -1871,7 +1541,6 @@
         "tags": [
           "Data Import (Asynchronous)"
         ],
-        "x-zenesis-title": "Batch Import Data into Existing Table",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1925,11 +1594,8 @@
               },
               "examples": {
                 "firstBatch": {
-                  "description": "First batch",
-                  "summary": "Opens the batch import job using the updateadd import type. batchKey must be \"start\"; the response returns the batchKey to use for every following batch.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "Opens the batch import job using the updateadd import type. batchKey must be \"start\"; the response returns the batchKey to use for every following batch.",
+                  "summary": "First batch",
                   "value": {
                     "FILE": "@/path/to/Sales_batch1.csv",
                     "CONFIG": {
@@ -1946,11 +1612,8 @@
                   }
                 },
                 "followUpBatch": {
-                  "description": "Follow up batch",
-                  "summary": "Uploads an intermediate batch using the batchKey returned by the first call. Every batch repeats the same import configuration.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "Uploads an intermediate batch using the batchKey returned by the first call. Every batch repeats the same import configuration.",
+                  "summary": "Follow up batch",
                   "value": {
                     "FILE": "@/path/to/Sales_batch2.csv",
                     "CONFIG": {
@@ -1967,11 +1630,8 @@
                   }
                 },
                 "lastBatch": {
-                  "description": "Last batch",
-                  "summary": "Uploads the final batch and closes the job. isLastBatch must be true.",
-                  "x-zenesis-usecase-tag": [
-                    "csv"
-                  ],
+                  "description": "Uploads the final batch and closes the job. isLastBatch must be true.",
+                  "summary": "Last batch",
                   "value": {
                     "FILE": "@/path/to/Sales_batch3.csv",
                     "CONFIG": {
@@ -2014,19 +1674,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CSV specific attributes - commentChar, delimiter and quoted - are mandatory if autoIdentify is set to false.\n</span></blockquote>"
-            }
           }
         }
       }
@@ -2036,7 +1688,6 @@
         "tags": [
           "Data Import (Asynchronous)"
         ],
-        "x-zenesis-title": "Get Import Job Details",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2105,7 +1756,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2119,7 +1770,6 @@
         "tags": [
           "Data Export (Asynchronous)"
         ],
-        "x-zenesis-title": "Get Export Job Details",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2167,7 +1817,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2181,7 +1831,6 @@
         "tags": [
           "Data Export (Asynchronous)"
         ],
-        "x-zenesis-title": "Download Exported Data",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2190,7 +1839,7 @@
           }
         ],
         "summary": "Download Exported Data",
-        "description": "Download the file produced by a completed asynchronous export job. The job must have reached jobCode 1004; calling earlier fails with 8121 (queued) or 8122 (running), and 8123 if the job failed. Only the user who created the job may download it.",
+        "description": "Download the file produced by a completed asynchronous export job. The job must have reached jobCode 1004; calling earlier fails with 8121 (queued) or 8122 (running), and 8123 if the job failed. Only the user who created the job may download it.\n\n**Notes**\n\n> Note:\n>\n> The exported file is available only for one hour after the export job completes.",
         "operationId": "downloadExportedData",
         "parameters": [
           {
@@ -2218,19 +1867,11 @@
               "application/zip": {}
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe exported file is available only for one hour after the export job completes.\n</span></blockquote>"
-            }
           }
         }
       }
@@ -2240,7 +1881,6 @@
         "tags": [
           "Data Sync & Connectivity"
         ],
-        "x-zenesis-title": "Get Last Import Details",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2272,8 +1912,8 @@
                 },
                 "examples": {
                   "importDetails": {
-                    "description": "Last import details",
-                    "summary": "Details of the most recent import performed on the view.",
+                    "description": "Details of the most recent import performed on the view.",
+                    "summary": "Last import details",
                     "value": {
                       "status": "success",
                       "summary": "Fetch last import details",
@@ -2299,7 +1939,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2313,7 +1953,6 @@
         "tags": [
           "Data Sync & Connectivity"
         ],
-        "x-zenesis-title": "Refetch Data",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2339,7 +1978,7 @@
           "204": {
             "description": "Refetch initiated successfully"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2365,8 +2004,8 @@
               },
               "examples": {
                 "refetchWithCredentials": {
-                  "description": "Refetch with credentials",
-                  "summary": "Refetches the data by passing the datasource credentials.",
+                  "description": "Refetches the data by passing the datasource credentials.",
+                  "summary": "Refetch with credentials",
                   "value": {
                     "CONFIG": {
                       "userName": "john@zylker.com",
@@ -2375,8 +2014,8 @@
                   }
                 },
                 "refetchStoredCredentials": {
-                  "description": "Refetch stored credentials",
-                  "summary": "Refetches the data using the credentials already saved for the datasource. CONFIG is not sent.",
+                  "description": "Refetches the data using the credentials already saved for the datasource. CONFIG is not sent.",
+                  "summary": "Refetch stored credentials",
                   "value": {}
                 }
               }
@@ -2390,7 +2029,6 @@
         "tags": [
           "Data Sync & Connectivity"
         ],
-        "x-zenesis-title": "Sync Data",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2416,7 +2054,7 @@
           "204": {
             "description": "Sync initiated successfully"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2442,8 +2080,8 @@
               },
               "examples": {
                 "syncWithCredentials": {
-                  "description": "Sync with credentials",
-                  "summary": "Initiates a sync by passing the datasource credentials.",
+                  "description": "Initiates a sync by passing the datasource credentials.",
+                  "summary": "Sync with credentials",
                   "value": {
                     "CONFIG": {
                       "userName": "john@zylker.com",
@@ -2452,8 +2090,8 @@
                   }
                 },
                 "syncSpecificInterval": {
-                  "description": "Sync one interval",
-                  "summary": "Initiates a sync for a specific sync interval when multiple intervals are configured for the datasource.",
+                  "description": "Initiates a sync for a specific sync interval when multiple intervals are configured for the datasource.",
+                  "summary": "Sync one interval",
                   "value": {
                     "CONFIG": {
                       "userName": "john@zylker.com",
@@ -2473,7 +2111,6 @@
         "tags": [
           "Data Sync & Connectivity"
         ],
-        "x-zenesis-title": "Update Datasource Connection",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2517,8 +2154,8 @@
               },
               "examples": {
                 "updateCredentials": {
-                  "description": "Update credentials",
-                  "summary": "Updates the login credentials of an Amazon RDS MySQL connection.",
+                  "description": "Updates the login credentials of an Amazon RDS MySQL connection.",
+                  "summary": "Update credentials",
                   "value": {
                     "CONFIG": {
                       "serviceName": "AMAZON RDS",
@@ -2533,8 +2170,8 @@
                   }
                 },
                 "updateSnowflake": {
-                  "description": "Update Snowflake connection",
-                  "summary": "Updates a Snowflake connection, where hostName carries the full account name and warehouseName is mandatory.",
+                  "description": "Updates a Snowflake connection, where hostName carries the full account name and warehouseName is mandatory.",
+                  "summary": "Update Snowflake connection",
                   "value": {
                     "CONFIG": {
                       "serviceName": "SNOWFLAKE",
@@ -2554,7 +2191,7 @@
           "204": {
             "description": "Datasource connection updated successfully"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2568,7 +2205,6 @@
         "tags": [
           "Data Sync & Connectivity"
         ],
-        "x-zenesis-title": "Get Datasources",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2597,8 +2233,8 @@
                 },
                 "examples": {
                   "singleInterval": {
-                    "description": "Single sync interval",
-                    "summary": "A datasource with one sync schedule. The sync details sit directly on the datasource.",
+                    "description": "A datasource with one sync schedule. The sync details sit directly on the datasource.",
+                    "summary": "Single sync interval",
                     "value": {
                       "status": "success",
                       "summary": "Fetch Datasources",
@@ -2630,8 +2266,8 @@
                     }
                   },
                   "multipleIntervals": {
-                    "description": "Multiple sync intervals",
-                    "summary": "A datasource with more than one sync schedule. The sync details move into the syncIntervals array, each with its own syncIntervalId.",
+                    "description": "A datasource with more than one sync schedule. The sync details move into the syncIntervals array, each with its own syncIntervalId.",
+                    "summary": "Multiple sync intervals",
                     "value": {
                       "status": "success",
                       "summary": "Fetch Datasources",
@@ -2687,7 +2323,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2785,6 +2421,14 @@
         },
         "required": [
           "columns"
+        ],
+        "examples": [
+          {
+            "columns": {
+              "Region": "East",
+              "Sales": "1000"
+            }
+          }
         ]
       },
       "RowColumns": {
@@ -2910,21 +2554,21 @@
               "AUTO_NUMBER",
               "GEO"
             ],
-            "x-zenesis-enums-desc": [
-              "Plain text",
-              "Multi line",
-              "Email address",
-              "Whole number",
-              "Positive number",
-              "Decimal number",
-              "Currency value",
-              "Percentage value",
-              "Date value",
-              "Boolean value",
-              "URL value",
-              "Auto number",
-              "Geo location"
-            ]
+            "x-enumDescriptions": {
+              "PLAIN": "Plain text",
+              "MULTI_LINE": "Multi line",
+              "EMAIL": "Email address",
+              "NUMBER": "Whole number",
+              "POSITIVE_NUMBER": "Positive number",
+              "DECIMAL_NUMBER": "Decimal number",
+              "CURRENCY": "Currency value",
+              "PERCENT": "Percentage value",
+              "DATE": "Date value",
+              "BOOLEAN": "Boolean value",
+              "URL": "URL value",
+              "AUTO_NUMBER": "Auto number",
+              "GEO": "Geo location"
+            }
           },
           "geoRole": {
             "type": "string",
@@ -2961,7 +2605,18 @@
             "type": "string",
             "description": "The data type identified for that column. NOTE: key is an actual column name in the table."
           }
-        }
+        },
+        "examples": [
+          {
+            "Date": "Date",
+            "Region": "Plain Text",
+            "Product Category": "Plain Text",
+            "Product": "Plain Text",
+            "Customer Name": "Plain Text",
+            "Sales": "Currency",
+            "Cost": "Currency"
+          }
+        ]
       },
       "ImportSummary": {
         "type": "object",
@@ -3017,12 +2672,23 @@
               "created",
               "updated"
             ],
-            "x-zenesis-enums-desc": [
-              "Table created",
-              "Table updated"
-            ]
+            "x-enumDescriptions": {
+              "created": "Table created",
+              "updated": "Table updated"
+            }
           }
-        }
+        },
+        "examples": [
+          {
+            "importType": "APPEND",
+            "totalColumnCount": 7,
+            "selectedColumnCount": 7,
+            "totalRowCount": 755,
+            "successRowCount": 755,
+            "warnings": 0,
+            "importOperation": "created"
+          }
+        ]
       },
       "ImportJobInfo": {
         "type": "object",
@@ -3046,7 +2712,31 @@
             "type": "string",
             "description": "Errors raised during the import. Empty when the import completed without errors."
           }
-        }
+        },
+        "examples": [
+          {
+            "viewId": "1767024000003154002",
+            "importSummary": {
+              "importType": "APPEND",
+              "totalColumnCount": 7,
+              "selectedColumnCount": 7,
+              "totalRowCount": 755,
+              "successRowCount": 755,
+              "warnings": 0,
+              "importOperation": "created"
+            },
+            "columnDetails": {
+              "Date": "Date",
+              "Region": "Plain Text",
+              "Product Category": "Plain Text",
+              "Product": "Plain Text",
+              "Customer Name": "Plain Text",
+              "Sales": "Currency",
+              "Cost": "Currency"
+            },
+            "importErrors": ""
+          }
+        ]
       },
       "AddedColumns": {
         "type": "object",
@@ -3057,7 +2747,13 @@
             "type": "string",
             "description": "The value written into that column. NOTE: key is an actual column name in the table."
           }
-        }
+        },
+        "examples": [
+          {
+            "region": "East",
+            "Sales": "1000"
+          }
+        ]
       },
       "UpdatedColumns": {
         "type": "object",
@@ -3068,7 +2764,13 @@
             "type": "string",
             "description": "The value written into that column. NOTE: key is an actual column name in the table."
           }
-        }
+        },
+        "examples": [
+          {
+            "Region": "East",
+            "Sales": "1000"
+          }
+        ]
       },
       "InvalidColumns": {
         "type": "object",
@@ -3079,7 +2781,10 @@
             "type": "string",
             "description": "The value that could not be applied to that column. NOTE: key is an actual column name in the table."
           }
-        }
+        },
+        "examples": [
+          {}
+        ]
       },
       "AddRowResponse": {
         "type": "object",
@@ -3106,7 +2811,20 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Add row",
+            "data": {
+              "addedColumns": {
+                "region": "East",
+                "Sales": "1000"
+              },
+              "invalidColumns": {}
+            }
+          }
+        ]
       },
       "BatchImportSuccessResponse": {
         "type": "object",
@@ -3119,9 +2837,9 @@
             "enum": [
               "success"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded"
+            }
           },
           "summary": {
             "type": "string",
@@ -3150,7 +2868,17 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create bulk import job",
+            "data": {
+              "batchKey": "1694703482470_1767024000008426012_SalesTable",
+              "jobId": "1767024000008787011"
+            }
+          }
+        ]
       },
       "DeleteRowsConfig": {
         "type": "object",
@@ -3171,7 +2899,12 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "criteria": "\"SalesTable\".\"Region\"='East'"
+          }
+        ]
       },
       "DeleteRowsResponse": {
         "type": "object",
@@ -3196,7 +2929,16 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Delete row",
+            "data": {
+              "deletedRows": 27
+            }
+          }
+        ]
       },
       "ExistImportSuccessResponse": {
         "type": "object",
@@ -3250,7 +2992,35 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Import data",
+            "data": {
+              "viewId": "1767024000003153002",
+              "importSummary": {
+                "importType": "APPEND",
+                "totalColumnCount": 7,
+                "selectedColumnCount": 7,
+                "totalRowCount": 101,
+                "successRowCount": 101,
+                "warnings": 0,
+                "importOperation": "updated"
+              },
+              "columnDetails": {
+                "Date": "Date",
+                "Region": "Plain Text",
+                "Product Category": "Plain Text",
+                "Product": "Plain Text",
+                "Customer Name": "Plain Text",
+                "Sales": "Currency",
+                "Cost": "Currency"
+              },
+              "importErrors": ""
+            }
+          }
+        ]
       },
       "ExportJobCreationResponse": {
         "type": "object",
@@ -3263,9 +3033,9 @@
             "enum": [
               "success"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded"
+            }
           },
           "summary": {
             "type": "string",
@@ -3287,7 +3057,16 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create bulk export job",
+            "data": {
+              "jobId": "1767024000008787011"
+            }
+          }
+        ]
       },
       "ExportJobDetailsResponse": {
         "type": "object",
@@ -3300,9 +3079,9 @@
             "enum": [
               "success"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded"
+            }
           },
           "summary": {
             "type": "string",
@@ -3361,7 +3140,20 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Fetch export job info",
+            "data": {
+              "jobId": "35130000001391001",
+              "jobCode": "1004",
+              "jobStatus": "JOB COMPLETED",
+              "downloadUrl": "https://analyticsapi.zoho.com/restapi/v2/bulk/workspaces/35130000001242001/exportjobs/35130000001391001/data",
+              "expiryTime": "1623765872891"
+            }
+          }
+        ]
       },
       "GetDatasourcesResponse": {
         "type": "object",
@@ -3374,9 +3166,9 @@
             "enum": [
               "success"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded"
+            }
           },
           "summary": {
             "type": "string",
@@ -3444,10 +3236,10 @@
                         "active",
                         "inactive"
                       ],
-                      "x-zenesis-enums-desc": [
-                        "Agent is connected",
-                        "Agent is not reachable"
-                      ]
+                      "x-enumDescriptions": {
+                        "active": "Agent is connected",
+                        "inactive": "Agent is not reachable"
+                      }
                     },
                     "lastDataSyncStatus": {
                       "type": "string",
@@ -3523,7 +3315,38 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Fetch Datasources",
+            "data": {
+              "dataSources": [
+                {
+                  "datasourceName": "Amazon RDS MySQL",
+                  "datasourceId": "100003000000032016",
+                  "source": "relmodel",
+                  "lastDataSyncStatus": "Not Applicable",
+                  "lastDataSyncTime": "03 August, 2024 03:39:16 PM IST",
+                  "schedule": "Every 15 Minutes",
+                  "nextScheduleTime": "03 August, 2024 03:52:56 PM IST",
+                  "syncUsed": "0",
+                  "totalSyncAllowed": "5",
+                  "syncIntervalId": "100003000000032134",
+                  "tableDetails": [
+                    {
+                      "viewName": "Check_3",
+                      "viewId": "100003000000032019",
+                      "sourceName": "Check_3",
+                      "lastSyncTime": "03 August, 2024 03:39:13 PM IST",
+                      "syncStatus": "Success"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetLastImportDetailsResponse": {
         "type": "object",
@@ -3536,9 +3359,9 @@
             "enum": [
               "success"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded"
+            }
           },
           "summary": {
             "type": "string",
@@ -3576,11 +3399,11 @@
                   "Partial Success",
                   "Failed"
                 ],
-                "x-zenesis-enums-desc": [
-                  "Everything loaded, or nothing needed loading",
-                  "Some rows loaded and some did not",
-                  "The load did not complete"
-                ]
+                "x-enumDescriptions": {
+                  "Success": "Everything loaded, or nothing needed loading",
+                  "Partial Success": "Some rows loaded and some did not",
+                  "Failed": "The load did not complete"
+                }
               },
               "importSentFromEmail": {
                 "type": "string",
@@ -3649,7 +3472,29 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Fetch last import details",
+            "data": {
+              "viewName": "SampleSales",
+              "lastImportTime": "18 October, 2021 11:02:41 AM GMT",
+              "lastImportStatus": "Success",
+              "columns": {
+                "total": "7",
+                "success": "7"
+              },
+              "rows": {
+                "total": "755",
+                "success": "755",
+                "warning": "0",
+                "failed": "0"
+              },
+              "importErrors": ""
+            }
+          }
+        ]
       },
       "ImportJobCreationResponse": {
         "type": "object",
@@ -3662,9 +3507,9 @@
             "enum": [
               "success"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded"
+            }
           },
           "summary": {
             "type": "string",
@@ -3686,7 +3531,16 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create bulk import job",
+            "data": {
+              "jobId": "1767024000003153087"
+            }
+          }
+        ]
       },
       "ImportJobDetailsResponse": {
         "type": "object",
@@ -3699,9 +3553,9 @@
             "enum": [
               "success"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded"
+            }
           },
           "summary": {
             "type": "string",
@@ -3755,7 +3609,41 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Fetch import job info",
+            "data": {
+              "jobId": "1767024000003153087",
+              "jobCode": "1004",
+              "jobStatus": "JOB COMPLETED",
+              "jobInfo": {
+                "viewId": "1767024000003154002",
+                "importSummary": {
+                  "importType": "APPEND",
+                  "totalColumnCount": 7,
+                  "selectedColumnCount": 7,
+                  "totalRowCount": 755,
+                  "successRowCount": 755,
+                  "warnings": 0,
+                  "importOperation": "created"
+                },
+                "columnDetails": {
+                  "Date": "Date",
+                  "Region": "Plain Text",
+                  "Product Category": "Plain Text",
+                  "Product": "Plain Text",
+                  "Customer Name": "Plain Text",
+                  "Sales": "Currency",
+                  "Cost": "Currency"
+                },
+                "importErrors": ""
+              },
+              "expiryTime": "1623764592309"
+            }
+          }
+        ]
       },
       "ImportSuccessResponse": {
         "type": "object",
@@ -3812,7 +3700,35 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Import data",
+            "data": {
+              "viewId": "1767024000003153002",
+              "importSummary": {
+                "importType": "APPEND",
+                "totalColumnCount": 7,
+                "selectedColumnCount": 7,
+                "totalRowCount": 101,
+                "successRowCount": 101,
+                "warnings": 0,
+                "importOperation": "created"
+              },
+              "columnDetails": {
+                "Date": "Date",
+                "Region": "Plain Text",
+                "Product Category": "Plain Text",
+                "Product": "Plain Text",
+                "Customer Name": "Plain Text",
+                "Sales": "Currency",
+                "Cost": "Currency"
+              },
+              "importErrors": ""
+            }
+          }
+        ]
       },
       "UpdateRowsConfig": {
         "type": "object",
@@ -3858,6 +3774,14 @@
         },
         "required": [
           "columns"
+        ],
+        "examples": [
+          {
+            "columns": {
+              "Sales": "2000"
+            },
+            "criteria": "\"SalesTable\".\"Region\"='East'"
+          }
         ]
       },
       "UpdateRowsResponse": {
@@ -3889,7 +3813,21 @@
               }
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Update row",
+            "data": {
+              "updatedColumns": {
+                "Region": "East",
+                "Sales": "1000"
+              },
+              "updatedRows": 27,
+              "invalidColumns": {}
+            }
+          }
+        ]
       },
       "ImportConfigNewTable": {
         "type": "object",
@@ -3915,10 +3853,10 @@
               "csv",
               "json"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV file",
-              "JSON file"
-            ]
+            "x-enumDescriptions": {
+              "csv": "CSV file",
+              "json": "JSON file"
+            }
           },
           "autoIdentify": {
             "type": "boolean",
@@ -3956,11 +3894,17 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "DOT",
+              "2": "SPACE",
+              "3": "SINGLE QUOTE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "DOT",
               "SPACE",
-              "SINGLE QUOTE"
+              "SINGLE_QUOTE"
             ]
           },
           "decimalSeparator": {
@@ -3970,7 +3914,11 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "DOT",
+              "1": "COMMA"
+            },
+            "x-enum-varnames": [
               "DOT",
               "COMMA"
             ]
@@ -3992,7 +3940,6 @@
         "oneOf": [
           {
             "title": "CSV Specific Attributes",
-            "x-zenesis-usecase-tag": "csv",
             "type": "object",
             "properties": {
               "commentChar": {
@@ -4012,7 +3959,13 @@
                   2,
                   3
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "COMMA",
+                  "1": "TAB",
+                  "2": "SEMICOLON",
+                  "3": "SPACE"
+                },
+                "x-enum-varnames": [
                   "COMMA",
                   "TAB",
                   "SEMICOLON",
@@ -4027,17 +3980,21 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "NONE",
+                  "1": "SINGLE QUOTE",
+                  "2": "DOUBLE QUOTE"
+                },
+                "x-enum-varnames": [
                   "NONE",
-                  "SINGLE QUOTE",
-                  "DOUBLE QUOTE"
+                  "SINGLE_QUOTE",
+                  "DOUBLE_QUOTE"
                 ]
               }
             }
           },
           {
             "title": "JSON Specific Attributes",
-            "x-zenesis-usecase-tag": "json",
             "type": "object",
             "properties": {
               "retainColumnNames": {
@@ -4050,6 +4007,13 @@
                 ]
               }
             }
+          }
+        ],
+        "examples": [
+          {
+            "tableName": "Sales",
+            "fileType": "csv",
+            "autoIdentify": true
           }
         ]
       },
@@ -4079,10 +4043,10 @@
               "csv",
               "json"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV file",
-              "JSON file"
-            ]
+            "x-enumDescriptions": {
+              "csv": "CSV file",
+              "json": "JSON file"
+            }
           },
           "autoIdentify": {
             "type": "boolean",
@@ -4123,11 +4087,17 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "DOT",
+              "2": "SPACE",
+              "3": "SINGLE QUOTE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "DOT",
               "SPACE",
-              "SINGLE QUOTE"
+              "SINGLE_QUOTE"
             ]
           },
           "decimalSeparator": {
@@ -4137,7 +4107,11 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "DOT",
+              "1": "COMMA"
+            },
+            "x-enum-varnames": [
               "DOT",
               "COMMA"
             ]
@@ -4159,7 +4133,6 @@
         "oneOf": [
           {
             "title": "CSV Specific Attributes",
-            "x-zenesis-usecase-tag": "csv",
             "type": "object",
             "properties": {
               "commentChar": {
@@ -4179,7 +4152,13 @@
                   2,
                   3
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "COMMA",
+                  "1": "TAB",
+                  "2": "SEMICOLON",
+                  "3": "SPACE"
+                },
+                "x-enum-varnames": [
                   "COMMA",
                   "TAB",
                   "SEMICOLON",
@@ -4194,17 +4173,21 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "NONE",
+                  "1": "SINGLE QUOTE",
+                  "2": "DOUBLE QUOTE"
+                },
+                "x-enum-varnames": [
                   "NONE",
-                  "SINGLE QUOTE",
-                  "DOUBLE QUOTE"
+                  "SINGLE_QUOTE",
+                  "DOUBLE_QUOTE"
                 ]
               }
             }
           },
           {
             "title": "JSON Specific Attributes",
-            "x-zenesis-usecase-tag": "json",
             "type": "object",
             "properties": {
               "retainColumnNames": {
@@ -4217,6 +4200,17 @@
                 ]
               }
             }
+          }
+        ],
+        "examples": [
+          {
+            "importType": "updateadd",
+            "fileType": "csv",
+            "autoIdentify": true,
+            "matchingColumns": [
+              "Region",
+              "Product"
+            ]
           }
         ]
       },
@@ -4244,10 +4238,10 @@
               "csv",
               "json"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV file",
-              "JSON file"
-            ]
+            "x-enumDescriptions": {
+              "csv": "CSV file",
+              "json": "JSON file"
+            }
           },
           "autoIdentify": {
             "type": "boolean",
@@ -4285,11 +4279,17 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "DOT",
+              "2": "SPACE",
+              "3": "SINGLE QUOTE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "DOT",
               "SPACE",
-              "SINGLE QUOTE"
+              "SINGLE_QUOTE"
             ]
           },
           "decimalSeparator": {
@@ -4299,7 +4299,11 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "DOT",
+              "1": "COMMA"
+            },
+            "x-enum-varnames": [
               "DOT",
               "COMMA"
             ]
@@ -4329,7 +4333,6 @@
         "oneOf": [
           {
             "title": "CSV Specific Attributes",
-            "x-zenesis-usecase-tag": "csv",
             "type": "object",
             "properties": {
               "commentChar": {
@@ -4349,7 +4352,13 @@
                   2,
                   3
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "COMMA",
+                  "1": "TAB",
+                  "2": "SEMICOLON",
+                  "3": "SPACE"
+                },
+                "x-enum-varnames": [
                   "COMMA",
                   "TAB",
                   "SEMICOLON",
@@ -4364,17 +4373,21 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "NONE",
+                  "1": "SINGLE QUOTE",
+                  "2": "DOUBLE QUOTE"
+                },
+                "x-enum-varnames": [
                   "NONE",
-                  "SINGLE QUOTE",
-                  "DOUBLE QUOTE"
+                  "SINGLE_QUOTE",
+                  "DOUBLE_QUOTE"
                 ]
               }
             }
           },
           {
             "title": "JSON Specific Attributes",
-            "x-zenesis-usecase-tag": "json",
             "type": "object",
             "properties": {
               "retainColumnNames": {
@@ -4387,6 +4400,13 @@
                 ]
               }
             }
+          }
+        ],
+        "examples": [
+          {
+            "tableName": "Sales",
+            "fileType": "csv",
+            "autoIdentify": true
           }
         ]
       },
@@ -4416,10 +4436,10 @@
               "csv",
               "json"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV file",
-              "JSON file"
-            ]
+            "x-enumDescriptions": {
+              "csv": "CSV file",
+              "json": "JSON file"
+            }
           },
           "autoIdentify": {
             "type": "boolean",
@@ -4460,11 +4480,17 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "DOT",
+              "2": "SPACE",
+              "3": "SINGLE QUOTE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "DOT",
               "SPACE",
-              "SINGLE QUOTE"
+              "SINGLE_QUOTE"
             ]
           },
           "decimalSeparator": {
@@ -4474,7 +4500,11 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "DOT",
+              "1": "COMMA"
+            },
+            "x-enum-varnames": [
               "DOT",
               "COMMA"
             ]
@@ -4504,7 +4534,6 @@
         "oneOf": [
           {
             "title": "CSV Specific Attributes",
-            "x-zenesis-usecase-tag": "csv",
             "type": "object",
             "properties": {
               "commentChar": {
@@ -4524,7 +4553,13 @@
                   2,
                   3
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "COMMA",
+                  "1": "TAB",
+                  "2": "SEMICOLON",
+                  "3": "SPACE"
+                },
+                "x-enum-varnames": [
                   "COMMA",
                   "TAB",
                   "SEMICOLON",
@@ -4539,17 +4574,21 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "NONE",
+                  "1": "SINGLE QUOTE",
+                  "2": "DOUBLE QUOTE"
+                },
+                "x-enum-varnames": [
                   "NONE",
-                  "SINGLE QUOTE",
-                  "DOUBLE QUOTE"
+                  "SINGLE_QUOTE",
+                  "DOUBLE_QUOTE"
                 ]
               }
             }
           },
           {
             "title": "JSON Specific Attributes",
-            "x-zenesis-usecase-tag": "json",
             "type": "object",
             "properties": {
               "retainColumnNames": {
@@ -4562,6 +4601,13 @@
                 ]
               }
             }
+          }
+        ],
+        "examples": [
+          {
+            "importType": "append",
+            "fileType": "csv",
+            "autoIdentify": true
           }
         ]
       },
@@ -4635,11 +4681,17 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "DOT",
+              "2": "SPACE",
+              "3": "SINGLE QUOTE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "DOT",
               "SPACE",
-              "SINGLE QUOTE"
+              "SINGLE_QUOTE"
             ]
           },
           "decimalSeparator": {
@@ -4649,7 +4701,11 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "DOT",
+              "1": "COMMA"
+            },
+            "x-enum-varnames": [
               "DOT",
               "COMMA"
             ]
@@ -4692,7 +4748,13 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "TAB",
+              "2": "SEMICOLON",
+              "3": "SPACE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "TAB",
               "SEMICOLON",
@@ -4707,13 +4769,27 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "NONE",
+              "1": "SINGLE QUOTE",
+              "2": "DOUBLE QUOTE"
+            },
+            "x-enum-varnames": [
               "NONE",
-              "SINGLE QUOTE",
-              "DOUBLE QUOTE"
+              "SINGLE_QUOTE",
+              "DOUBLE_QUOTE"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "batchKey": "start",
+            "isLastBatch": false,
+            "tableName": "SalesTable",
+            "autoIdentify": true,
+            "onError": "setcolumnempty"
+          }
+        ]
       },
       "BatchImportConfigExistingTable": {
         "type": "object",
@@ -4790,11 +4866,17 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "DOT",
+              "2": "SPACE",
+              "3": "SINGLE QUOTE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "DOT",
               "SPACE",
-              "SINGLE QUOTE"
+              "SINGLE_QUOTE"
             ]
           },
           "decimalSeparator": {
@@ -4804,7 +4886,11 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "DOT",
+              "1": "COMMA"
+            },
+            "x-enum-varnames": [
               "DOT",
               "COMMA"
             ]
@@ -4847,7 +4933,13 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "COMMA",
+              "1": "TAB",
+              "2": "SEMICOLON",
+              "3": "SPACE"
+            },
+            "x-enum-varnames": [
               "COMMA",
               "TAB",
               "SEMICOLON",
@@ -4862,13 +4954,31 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
+            "x-enumDescriptions": {
+              "0": "NONE",
+              "1": "SINGLE QUOTE",
+              "2": "DOUBLE QUOTE"
+            },
+            "x-enum-varnames": [
               "NONE",
-              "SINGLE QUOTE",
-              "DOUBLE QUOTE"
+              "SINGLE_QUOTE",
+              "DOUBLE_QUOTE"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "batchKey": "start",
+            "isLastBatch": false,
+            "importType": "updateadd",
+            "autoIdentify": true,
+            "matchingColumns": [
+              "Region",
+              "Product"
+            ],
+            "onError": "setcolumnempty"
+          }
+        ]
       },
       "ExportConfig": {
         "type": "object",
@@ -4887,16 +4997,16 @@
               "html",
               "image"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV format",
-              "JSON format",
-              "XML format",
-              "XLS format",
-              "PDF format",
-              "HTML format",
-              "Image format"
-            ],
-            "default": "csv"
+            "default": "csv",
+            "x-enumDescriptions": {
+              "csv": "CSV format",
+              "json": "JSON format",
+              "xml": "XML format",
+              "xls": "XLS format",
+              "pdf": "PDF format",
+              "html": "HTML format",
+              "image": "Image format"
+            }
           },
           "criteria": {
             "type": "string",
@@ -4975,7 +5085,6 @@
         "oneOf": [
           {
             "title": "CSV Specific Attributes",
-            "x-zenesis-usecase-tag": "csv",
             "type": "object",
             "description": "Applicable when responseFormat is csv.",
             "properties": {
@@ -4989,7 +5098,14 @@
                   3,
                   4
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "COMMA",
+                  "1": "TAB",
+                  "2": "SEMICOLON",
+                  "3": "SPACE",
+                  "4": "PIPE"
+                },
+                "x-enum-varnames": [
                   "COMMA",
                   "TAB",
                   "SEMICOLON",
@@ -5005,7 +5121,12 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "DOS",
+                  "1": "UNIX",
+                  "2": "MAC"
+                },
+                "x-enum-varnames": [
                   "DOS",
                   "UNIX",
                   "MAC"
@@ -5018,7 +5139,11 @@
                   0,
                   1
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "SINGLE",
+                  "1": "DOUBLE"
+                },
+                "x-enum-varnames": [
                   "SINGLE",
                   "DOUBLE"
                 ]
@@ -5036,7 +5161,6 @@
           },
           {
             "title": "JSON Specific Attributes",
-            "x-zenesis-usecase-tag": "json",
             "type": "object",
             "description": "Applicable when responseFormat is json.",
             "properties": {
@@ -5053,7 +5177,6 @@
           },
           {
             "title": "XML Specific Attributes",
-            "x-zenesis-usecase-tag": "xml",
             "type": "object",
             "description": "Applicable when responseFormat is xml.",
             "properties": {
@@ -5070,7 +5193,6 @@
           },
           {
             "title": "XLS Specific Attributes",
-            "x-zenesis-usecase-tag": "xls",
             "type": "object",
             "description": "Applicable when responseFormat is xls.",
             "properties": {
@@ -5087,7 +5209,6 @@
           },
           {
             "title": "PDF Specific Attributes",
-            "x-zenesis-usecase-tag": "pdf",
             "type": "object",
             "description": "Applicable when responseFormat is pdf.",
             "properties": {
@@ -5102,15 +5223,23 @@
                   4,
                   5
                 ],
-                "x-zenesis-enums-desc": [
+                "default": 4,
+                "x-enumDescriptions": {
+                  "0": "LETTER",
+                  "1": "LEGAL",
+                  "2": "TABLOID",
+                  "3": "A3",
+                  "4": "A4",
+                  "5": "AUTO"
+                },
+                "x-enum-varnames": [
                   "LETTER",
                   "LEGAL",
                   "TABLOID",
                   "A3",
                   "A4",
                   "AUTO"
-                ],
-                "default": 4
+                ]
               },
               "paperStyle": {
                 "type": "string",
@@ -5119,11 +5248,11 @@
                   "Portrait",
                   "Landscape"
                 ],
-                "x-zenesis-enums-desc": [
-                  "Portrait orientation",
-                  "Landscape orientation"
-                ],
-                "default": "Portrait"
+                "default": "Portrait",
+                "x-enumDescriptions": {
+                  "Portrait": "Portrait orientation",
+                  "Landscape": "Landscape orientation"
+                }
               },
               "showTitle": {
                 "type": "integer",
@@ -5133,12 +5262,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "default": 0,
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
-                ],
-                "default": 0
+                ]
               },
               "showDesc": {
                 "type": "integer",
@@ -5148,12 +5282,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "default": 0,
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
-                ],
-                "default": 0
+                ]
               },
               "exportLanguage": {
                 "type": "integer",
@@ -5166,7 +5305,14 @@
                   3,
                   4
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "ENGLISH",
+                  "1": "CHINESE",
+                  "2": "JAPANESE",
+                  "3": "EUROPEAN",
+                  "4": "KOREAN"
+                },
+                "x-enum-varnames": [
                   "ENGLISH",
                   "CHINESE",
                   "JAPANESE",
@@ -5330,12 +5476,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AS IN VIEW",
-                  "FIT TO CONTENT",
-                  "EQUAL WIDTH"
-                ],
-                "default": 1
+                "default": 1,
+                "x-enumDescriptions": {
+                  "0": "AS IN VIEW",
+                  "1": "FIT TO CONTENT",
+                  "2": "EQUAL WIDTH"
+                },
+                "x-enum-varnames": [
+                  "AS_IN_VIEW",
+                  "FIT_TO_CONTENT",
+                  "EQUAL_WIDTH"
+                ]
               },
               "includeHeader": {
                 "type": "boolean",
@@ -5350,7 +5501,6 @@
           },
           {
             "title": "HTML Specific Attributes",
-            "x-zenesis-usecase-tag": "html",
             "type": "object",
             "description": "Applicable when responseFormat is html.",
             "properties": {
@@ -5363,9 +5513,14 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
                 ]
               },
@@ -5378,9 +5533,14 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
                 ]
               },
@@ -5392,12 +5552,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AS IN VIEW",
-                  "FIT TO CONTENT",
-                  "EQUAL WIDTH"
-                ],
-                "default": 2
+                "default": 2,
+                "x-enumDescriptions": {
+                  "0": "AS IN VIEW",
+                  "1": "FIT TO CONTENT",
+                  "2": "EQUAL WIDTH"
+                },
+                "x-enum-varnames": [
+                  "AS_IN_VIEW",
+                  "FIT_TO_CONTENT",
+                  "EQUAL_WIDTH"
+                ]
               },
               "includeHeader": {
                 "type": "boolean",
@@ -5412,7 +5577,6 @@
           },
           {
             "title": "IMAGE Specific Attributes",
-            "x-zenesis-usecase-tag": "image",
             "type": "object",
             "description": "Applicable when responseFormat is image.",
             "properties": {
@@ -5466,13 +5630,22 @@
                   "jpg",
                   "jpeg"
                 ],
-                "x-zenesis-enums-desc": [
-                  "PNG image",
-                  "JPG image",
-                  "JPEG image"
-                ]
+                "x-enumDescriptions": {
+                  "png": "PNG image",
+                  "jpg": "JPG image",
+                  "jpeg": "JPEG image"
+                }
               }
             }
+          }
+        ],
+        "examples": [
+          {
+            "responseFormat": "csv",
+            "criteria": "\"SalesTable\".\"Region\"='East'",
+            "delimiter": 0,
+            "quoted": 1,
+            "includeHeader": true
           }
         ]
       },
@@ -5503,15 +5676,15 @@
               "pdf",
               "html"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV format",
-              "JSON format",
-              "XML format",
-              "XLS format",
-              "PDF format",
-              "HTML format"
-            ],
-            "default": "csv"
+            "default": "csv",
+            "x-enumDescriptions": {
+              "csv": "CSV format",
+              "json": "JSON format",
+              "xml": "XML format",
+              "xls": "XLS format",
+              "pdf": "PDF format",
+              "html": "HTML format"
+            }
           },
           "password": {
             "type": "string",
@@ -5613,7 +5786,6 @@
         "oneOf": [
           {
             "title": "CSV Specific Attributes",
-            "x-zenesis-usecase-tag": "csv",
             "type": "object",
             "description": "Applicable when responseFormat is csv.",
             "properties": {
@@ -5627,7 +5799,14 @@
                   3,
                   4
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "COMMA",
+                  "1": "TAB",
+                  "2": "SEMICOLON",
+                  "3": "SPACE",
+                  "4": "PIPE"
+                },
+                "x-enum-varnames": [
                   "COMMA",
                   "TAB",
                   "SEMICOLON",
@@ -5643,7 +5822,12 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "DOS",
+                  "1": "UNIX",
+                  "2": "MAC"
+                },
+                "x-enum-varnames": [
                   "DOS",
                   "UNIX",
                   "MAC"
@@ -5656,7 +5840,11 @@
                   0,
                   1
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "SINGLE",
+                  "1": "DOUBLE"
+                },
+                "x-enum-varnames": [
                   "SINGLE",
                   "DOUBLE"
                 ]
@@ -5674,7 +5862,6 @@
           },
           {
             "title": "JSON Specific Attributes",
-            "x-zenesis-usecase-tag": "json",
             "type": "object",
             "description": "Applicable when responseFormat is json.",
             "properties": {
@@ -5691,7 +5878,6 @@
           },
           {
             "title": "XML Specific Attributes",
-            "x-zenesis-usecase-tag": "xml",
             "type": "object",
             "description": "Applicable when responseFormat is xml.",
             "properties": {
@@ -5708,7 +5894,6 @@
           },
           {
             "title": "XLS Specific Attributes",
-            "x-zenesis-usecase-tag": "xls",
             "type": "object",
             "description": "Applicable when responseFormat is xls.",
             "properties": {
@@ -5725,7 +5910,6 @@
           },
           {
             "title": "PDF Specific Attributes",
-            "x-zenesis-usecase-tag": "pdf",
             "type": "object",
             "description": "Applicable when responseFormat is pdf.",
             "properties": {
@@ -5740,15 +5924,23 @@
                   4,
                   5
                 ],
-                "x-zenesis-enums-desc": [
+                "default": 4,
+                "x-enumDescriptions": {
+                  "0": "LETTER",
+                  "1": "LEGAL",
+                  "2": "TABLOID",
+                  "3": "A3",
+                  "4": "A4",
+                  "5": "AUTO"
+                },
+                "x-enum-varnames": [
                   "LETTER",
                   "LEGAL",
                   "TABLOID",
                   "A3",
                   "A4",
                   "AUTO"
-                ],
-                "default": 4
+                ]
               },
               "paperStyle": {
                 "type": "string",
@@ -5757,11 +5949,11 @@
                   "Portrait",
                   "Landscape"
                 ],
-                "x-zenesis-enums-desc": [
-                  "Portrait orientation",
-                  "Landscape orientation"
-                ],
-                "default": "Portrait"
+                "default": "Portrait",
+                "x-enumDescriptions": {
+                  "Portrait": "Portrait orientation",
+                  "Landscape": "Landscape orientation"
+                }
               },
               "showTitle": {
                 "type": "integer",
@@ -5771,12 +5963,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "default": 0,
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
-                ],
-                "default": 0
+                ]
               },
               "showDesc": {
                 "type": "integer",
@@ -5786,12 +5983,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "default": 0,
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
-                ],
-                "default": 0
+                ]
               },
               "exportLanguage": {
                 "type": "integer",
@@ -5804,7 +6006,14 @@
                   3,
                   4
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "ENGLISH",
+                  "1": "CHINESE",
+                  "2": "JAPANESE",
+                  "3": "EUROPEAN",
+                  "4": "KOREAN"
+                },
+                "x-enum-varnames": [
                   "ENGLISH",
                   "CHINESE",
                   "JAPANESE",
@@ -5968,12 +6177,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AS IN VIEW",
-                  "FIT TO CONTENT",
-                  "EQUAL WIDTH"
-                ],
-                "default": 1
+                "default": 1,
+                "x-enumDescriptions": {
+                  "0": "AS IN VIEW",
+                  "1": "FIT TO CONTENT",
+                  "2": "EQUAL WIDTH"
+                },
+                "x-enum-varnames": [
+                  "AS_IN_VIEW",
+                  "FIT_TO_CONTENT",
+                  "EQUAL_WIDTH"
+                ]
               },
               "includeHeader": {
                 "type": "boolean",
@@ -5988,7 +6202,6 @@
           },
           {
             "title": "HTML Specific Attributes",
-            "x-zenesis-usecase-tag": "html",
             "type": "object",
             "description": "Applicable when responseFormat is html.",
             "properties": {
@@ -6001,9 +6214,14 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
                 ]
               },
@@ -6016,9 +6234,14 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
                 ]
               },
@@ -6030,12 +6253,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AS IN VIEW",
-                  "FIT TO CONTENT",
-                  "EQUAL WIDTH"
-                ],
-                "default": 2
+                "default": 2,
+                "x-enumDescriptions": {
+                  "0": "AS IN VIEW",
+                  "1": "FIT TO CONTENT",
+                  "2": "EQUAL WIDTH"
+                },
+                "x-enum-varnames": [
+                  "AS_IN_VIEW",
+                  "FIT_TO_CONTENT",
+                  "EQUAL_WIDTH"
+                ]
               },
               "includeHeader": {
                 "type": "boolean",
@@ -6047,6 +6275,15 @@
                 ]
               }
             }
+          }
+        ],
+        "examples": [
+          {
+            "sqlQuery": "select * from Sales",
+            "responseFormat": "csv",
+            "delimiter": 0,
+            "quoted": 1,
+            "includeHeader": true
           }
         ]
       },
@@ -6067,16 +6304,16 @@
               "html",
               "image"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV format",
-              "JSON format",
-              "XML format",
-              "XLS format",
-              "PDF format",
-              "HTML format",
-              "Image format"
-            ],
-            "default": "csv"
+            "default": "csv",
+            "x-enumDescriptions": {
+              "csv": "CSV format",
+              "json": "JSON format",
+              "xml": "XML format",
+              "xls": "XLS format",
+              "pdf": "PDF format",
+              "html": "HTML format",
+              "image": "Image format"
+            }
           },
           "criteria": {
             "type": "string",
@@ -6182,7 +6419,6 @@
         "oneOf": [
           {
             "title": "CSV Specific Attributes",
-            "x-zenesis-usecase-tag": "csv",
             "type": "object",
             "description": "Applicable when responseFormat is csv.",
             "properties": {
@@ -6196,7 +6432,14 @@
                   3,
                   4
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "COMMA",
+                  "1": "TAB",
+                  "2": "SEMICOLON",
+                  "3": "SPACE",
+                  "4": "PIPE"
+                },
+                "x-enum-varnames": [
                   "COMMA",
                   "TAB",
                   "SEMICOLON",
@@ -6212,7 +6455,12 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "DOS",
+                  "1": "UNIX",
+                  "2": "MAC"
+                },
+                "x-enum-varnames": [
                   "DOS",
                   "UNIX",
                   "MAC"
@@ -6225,7 +6473,11 @@
                   0,
                   1
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "SINGLE",
+                  "1": "DOUBLE"
+                },
+                "x-enum-varnames": [
                   "SINGLE",
                   "DOUBLE"
                 ]
@@ -6243,7 +6495,6 @@
           },
           {
             "title": "JSON Specific Attributes",
-            "x-zenesis-usecase-tag": "json",
             "type": "object",
             "description": "Applicable when responseFormat is json.",
             "properties": {
@@ -6260,7 +6511,6 @@
           },
           {
             "title": "XML Specific Attributes",
-            "x-zenesis-usecase-tag": "xml",
             "type": "object",
             "description": "Applicable when responseFormat is xml.",
             "properties": {
@@ -6277,7 +6527,6 @@
           },
           {
             "title": "XLS Specific Attributes",
-            "x-zenesis-usecase-tag": "xls",
             "type": "object",
             "description": "Applicable when responseFormat is xls.",
             "properties": {
@@ -6294,7 +6543,6 @@
           },
           {
             "title": "PDF Specific Attributes",
-            "x-zenesis-usecase-tag": "pdf",
             "type": "object",
             "description": "Applicable when responseFormat is pdf.",
             "properties": {
@@ -6309,15 +6557,23 @@
                   4,
                   5
                 ],
-                "x-zenesis-enums-desc": [
+                "default": 4,
+                "x-enumDescriptions": {
+                  "0": "LETTER",
+                  "1": "LEGAL",
+                  "2": "TABLOID",
+                  "3": "A3",
+                  "4": "A4",
+                  "5": "AUTO"
+                },
+                "x-enum-varnames": [
                   "LETTER",
                   "LEGAL",
                   "TABLOID",
                   "A3",
                   "A4",
                   "AUTO"
-                ],
-                "default": 4
+                ]
               },
               "paperStyle": {
                 "type": "string",
@@ -6326,11 +6582,11 @@
                   "Portrait",
                   "Landscape"
                 ],
-                "x-zenesis-enums-desc": [
-                  "Portrait orientation",
-                  "Landscape orientation"
-                ],
-                "default": "Portrait"
+                "default": "Portrait",
+                "x-enumDescriptions": {
+                  "Portrait": "Portrait orientation",
+                  "Landscape": "Landscape orientation"
+                }
               },
               "showTitle": {
                 "type": "integer",
@@ -6340,12 +6596,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "default": 0,
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
-                ],
-                "default": 0
+                ]
               },
               "showDesc": {
                 "type": "integer",
@@ -6355,12 +6616,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "default": 0,
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
-                ],
-                "default": 0
+                ]
               },
               "exportLanguage": {
                 "type": "integer",
@@ -6373,7 +6639,14 @@
                   3,
                   4
                 ],
-                "x-zenesis-enums-desc": [
+                "x-enumDescriptions": {
+                  "0": "ENGLISH",
+                  "1": "CHINESE",
+                  "2": "JAPANESE",
+                  "3": "EUROPEAN",
+                  "4": "KOREAN"
+                },
+                "x-enum-varnames": [
                   "ENGLISH",
                   "CHINESE",
                   "JAPANESE",
@@ -6544,12 +6817,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AS IN VIEW",
-                  "FIT TO CONTENT",
-                  "EQUAL WIDTH"
-                ],
-                "default": 1
+                "default": 1,
+                "x-enumDescriptions": {
+                  "0": "AS IN VIEW",
+                  "1": "FIT TO CONTENT",
+                  "2": "EQUAL WIDTH"
+                },
+                "x-enum-varnames": [
+                  "AS_IN_VIEW",
+                  "FIT_TO_CONTENT",
+                  "EQUAL_WIDTH"
+                ]
               },
               "includeHeader": {
                 "type": "boolean",
@@ -6564,7 +6842,6 @@
           },
           {
             "title": "HTML Specific Attributes",
-            "x-zenesis-usecase-tag": "html",
             "type": "object",
             "description": "Applicable when responseFormat is html.",
             "properties": {
@@ -6577,9 +6854,14 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
                 ]
               },
@@ -6592,9 +6874,14 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AT TOP",
-                  "AT BOTTOM",
+                "x-enumDescriptions": {
+                  "0": "AT TOP",
+                  "1": "AT BOTTOM",
+                  "2": "NONE"
+                },
+                "x-enum-varnames": [
+                  "AT_TOP",
+                  "AT_BOTTOM",
                   "NONE"
                 ]
               },
@@ -6606,12 +6893,17 @@
                   1,
                   2
                 ],
-                "x-zenesis-enums-desc": [
-                  "AS IN VIEW",
-                  "FIT TO CONTENT",
-                  "EQUAL WIDTH"
-                ],
-                "default": 2
+                "default": 2,
+                "x-enumDescriptions": {
+                  "0": "AS IN VIEW",
+                  "1": "FIT TO CONTENT",
+                  "2": "EQUAL WIDTH"
+                },
+                "x-enum-varnames": [
+                  "AS_IN_VIEW",
+                  "FIT_TO_CONTENT",
+                  "EQUAL_WIDTH"
+                ]
               },
               "includeHeader": {
                 "type": "boolean",
@@ -6626,7 +6918,6 @@
           },
           {
             "title": "IMAGE Specific Attributes",
-            "x-zenesis-usecase-tag": "image",
             "type": "object",
             "description": "Applicable when responseFormat is image.",
             "properties": {
@@ -6680,13 +6971,22 @@
                   "jpg",
                   "jpeg"
                 ],
-                "x-zenesis-enums-desc": [
-                  "PNG image",
-                  "JPG image",
-                  "JPEG image"
-                ]
+                "x-enumDescriptions": {
+                  "png": "PNG image",
+                  "jpg": "JPG image",
+                  "jpeg": "JPEG image"
+                }
               }
             }
+          }
+        ],
+        "examples": [
+          {
+            "responseFormat": "csv",
+            "criteria": "\"SalesTable\".\"Region\"='East'",
+            "delimiter": 0,
+            "quoted": 1,
+            "includeHeader": true
           }
         ]
       },
@@ -6718,7 +7018,13 @@
               "100003000000032134"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "userName": "john@zylker.com",
+            "password": "Zoho@123"
+          }
+        ]
       },
       "RefetchDataConfig": {
         "type": "object",
@@ -6750,7 +7056,13 @@
             ],
             "maxLength": 1000
           }
-        }
+        },
+        "examples": [
+          {
+            "userName": "john@zylker.com",
+            "password": "Zoho@123"
+          }
+        ]
       },
       "DatasourceConnectionConfig": {
         "type": "object",
@@ -6990,11 +7302,15 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
-              "Individual fields (hostName, port, userName, password)",
-              "A single connectionString"
-            ],
-            "description": "How the connection is expressed. Honoured only for MongoDB database types; for every other engine the value is derived from databaseType and anything sent is replaced."
+            "description": "How the connection is expressed. Honoured only for MongoDB database types; for every other engine the value is derived from databaseType and anything sent is replaced.",
+            "x-enumDescriptions": {
+              "1": "Individual fields (hostName, port, userName, password)",
+              "2": "A single connectionString"
+            },
+            "x-enum-varnames": [
+              "INDIVIDUAL_FIELDS_HOSTNAME_PORT_USERNAME_PASSWORD",
+              "A_SINGLE_CONNECTIONSTRING"
+            ]
           },
           "refreshToken": {
             "type": "string",
@@ -7068,13 +7384,29 @@
               1
             ],
             "default": 0,
-            "x-zenesis-enums-desc": [
-              "Password authentication",
-              "Public key authentication"
-            ],
-            "description": "SSH tunnel authentication method. Read only when useSSH is true."
+            "description": "SSH tunnel authentication method. Read only when useSSH is true.",
+            "x-enumDescriptions": {
+              "0": "Password authentication",
+              "1": "Public key authentication"
+            },
+            "x-enum-varnames": [
+              "PASSWORD_AUTHENTICATION",
+              "PUBLIC_KEY_AUTHENTICATION"
+            ]
           }
-        }
+        },
+        "examples": [
+          {
+            "serviceName": "AMAZON RDS",
+            "databaseType": "MYSQL",
+            "hostName": "zylker.abcdef.us-east-1.rds.amazonaws.com",
+            "port": 3306,
+            "userName": "zylkeradmin",
+            "password": "Zoho@123",
+            "cloudDatabaseName": "sales_db",
+            "useSSL": true
+          }
+        ]
       },
       "SyncTableDetails": {
         "type": "array",
@@ -7139,13 +7471,24 @@
                 "active",
                 "inactive"
               ],
-              "x-zenesis-enums-desc": [
-                "Schedule is running",
-                "Schedule is paused"
-              ]
+              "x-enumDescriptions": {
+                "active": "Schedule is running",
+                "inactive": "Schedule is paused"
+              }
             }
           }
-        }
+        },
+        "examples": [
+          [
+            {
+              "viewName": "Check_3",
+              "viewId": "100003000000032019",
+              "sourceName": "Check_3",
+              "lastSyncTime": "03 August, 2024 03:39:13 PM IST",
+              "syncStatus": "Success"
+            }
+          ]
+        ]
       },
       "SyncIntervals": {
         "type": "array",

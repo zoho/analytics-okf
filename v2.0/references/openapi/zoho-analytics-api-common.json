@@ -153,8 +153,8 @@
         }
       },
       "BadRequestExample": {
-        "description": "Bad request (400)",
-        "summary": "The request is missing a required organization identifier in the request header.",
+        "summary": "Bad request (400)",
+        "description": "The request is missing a required organization identifier in the request header.",
         "value": {
           "status": "failure",
           "summary": "ORGID_NOT_PRESENT_IN_THE_HEADER",
@@ -165,8 +165,8 @@
         }
       },
       "AuthenticationFailedExample": {
-        "description": "Authentication Failed (401)",
-        "summary": "Authentication failed because the OAuth token is missing, expired, or invalid. Regenerate the access token and retry the request.",
+        "summary": "Authentication Failed (401)",
+        "description": "Authentication failed because the OAuth token is missing, expired, or invalid. Regenerate the access token and retry the request.",
         "value": {
           "status": "failure",
           "summary": "INVALID_OAUTHTOKEN",
@@ -177,8 +177,8 @@
         }
       },
       "PermissionDeniedExample": {
-        "description": "Permission denied (403)",
-        "summary": "The request is authenticated, but the user does not hold the privilege required for this operation on the requested resource. Ask the workspace or organization administrator to grant the required permission.",
+        "summary": "Permission denied (403)",
+        "description": "The request is authenticated, but the user does not hold the privilege required for this operation on the requested resource. Ask the workspace or organization administrator to grant the required permission.",
         "value": {
           "status": "failure",
           "summary": "SECURITY_NOT_PERMITTED",
@@ -189,8 +189,8 @@
         }
       },
       "ResourceNotFoundExample": {
-        "description": "Resource not found (404)",
-        "summary": "The workspace, view, or other resource addressed by the request URI does not exist, or has been deleted. Verify the identifiers used in the request path.",
+        "summary": "Resource not found (404)",
+        "description": "The workspace, view, or other resource addressed by the request URI does not exist, or has been deleted. Verify the identifiers used in the request path.",
         "value": {
           "status": "failure",
           "summary": "META_OBJECT_NOT_PRESENT",
@@ -201,8 +201,8 @@
         }
       },
       "UnexpectedErrorExample": {
-        "description": "Unexpected server error",
-        "summary": "An unexpected condition on the Zoho Analytics server prevented the request from completing. The request itself may be valid. Retry after a short interval, and contact Zoho Analytics support if the error persists.",
+        "summary": "Unexpected server error",
+        "description": "An unexpected condition on the Zoho Analytics server prevented the request from completing. The request itself may be valid. Retry after a short interval, and contact Zoho Analytics support if the error persists.",
         "value": {
           "status": "failure",
           "summary": "COMMON_INTERNAL_SERVER_ERROR",

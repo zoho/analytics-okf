@@ -13,12 +13,10 @@
   "tags": [
     {
       "name": "Reports",
-      "x-zenesis-description-pageName": "Reports Overview",
       "description": "APIs for creating, updating and reading the metadata of analysis views (charts, pivot tables and summary views) inside a workspace.\n\nAn analysis view is always built on top of a base table in the same workspace. Its whole definition - report type, chart sub-type, axis columns, filters, user filters, drill actions and display settings - travels in a single `CONFIG` JSON parameter that is shared, field for field, by all three APIs in this module.\n\n## Common request conventions\n\n| Header | Value | Required |\n|---|---|---|\n| `Authorization` | `Zoho-oauthtoken <oauth-token>` | Mandatory |\n| `ZANALYTICS-ORGID` | Organization ID owning the workspace | Mandatory |\n| `Content-Type` | `application/x-www-form-urlencoded` | POST and PUT only |\n\nFor Create and Update, `CONFIG` is a URL encoded JSON string sent as a form field named `CONFIG`. Get Report Metadata takes no `CONFIG` at all - every input is a URL path parameter.\n\nA `workspaceKey` in the format `orgid/workspacename` may be used in place of the numeric workspace ID in the URL path.\n\n`CONFIG` has a maximum serialized size of 10 MB for both Create and Update. The nested arrays `axisColumns`, `mergeAxisInfo`, `filters` and `userFilters` are the ones that realistically approach it.\n\n## OAuth scopes\n\n| API | Method | Scope |\n|---|---|---|\n| Create Analysis View | POST | `ZohoAnalytics.modeling.create` |\n| Update Analysis View | PUT | `ZohoAnalytics.modeling.update` |\n| Get Report Metadata | GET | `ZohoAnalytics.modeling.read` |\n\n## Response envelope\n\nEvery response follows the standard Zoho Analytics V2 envelope.\n\n**Update Analysis View returns a bare HTTP 204 No Content on success** - there is no JSON body to parse. Create Analysis View and Get Report Metadata return the envelope below; every API returns it on failure.\n\n- **status** - `success` or `failure`. Present in the JSON success responses of Create Analysis View and Get Report Metadata, and in every failure response.\n- **summary** - human readable message describing the result. Present only in the JSON success responses of Create Analysis View and Get Report Metadata.\n- **data.viewId** - Create only. The ID of the newly created analysis view; use it in the URL of later Update and Get Report Metadata calls.\n- **data.reportConfig** - Get Report Metadata only. The full stored configuration of the view.\n- **errorCode** and **errorMessage** - failure only.\n\n## Update is a reset, not a patch\n\nUpdate Analysis View replaces the whole configuration. Every axis column, filter, user filter and settings entry is overwritten with what was sent, fields that are omitted revert to their empty defaults, and `description` is cleared if it is left out. Always fetch, modify, then write back the complete configuration.\n\n**Read-modify-write**\n\n1. `GET /restapi/v2/workspaces/{workspace-id}/reports/{view-id}/metadata` and take `data.reportConfig`.\n2. Change only what needs to change - for example `chartType` from `bar` to `line`, or appending one entry to `axisColumns`. Carry the full `axisColumns`, `filters` and `userFilters` arrays through; anything dropped here is permanently removed from the view.\n3. `PUT` the complete modified object back as `CONFIG`.\n\n**Cloning a view**\n\n`data.reportConfig` is structurally identical to the Create `CONFIG`, so it doubles as a clone template. Give the clone a `title` that is unique in the workspace, keep `baseTableName`, and add `folderId` only if the copy belongs somewhere other than the default folder. When cloning across workspaces, every `columnName` and `tableName` in `axisColumns` must exist in the target workspace's base table.\n\n## Fields that behave unexpectedly on Update\n\n| Field | Behaviour | Recommendation |\n|---|---|---|\n| `title` | Silently ignored; the existing display name is always preserved. There is no V2 field to rename a view through Update. | Send it for clarity if you like, knowing it does nothing. |\n| `reportType` | Cannot be changed. A value that does not match the existing view type fails with error 8021. | Carry it unchanged from the Get Report Metadata response. |\n| `folderId` | If it differs from the view's current folder the request fails. The same value is a harmless no-op. | Omit it. It is not returned by Get Report Metadata, so it is naturally absent when the response is used as the base. |\n| `description` | Read from the CONFIG on every write. If absent it is set to null, clearing it. | Copy it from the Get Report Metadata response. |\n| `baseTableName` | Derived from the view's stored parent reference, not from the CONFIG. | Harmless to include; it has no effect. |\n| `axisColumns`, `filters`, `userFilters` | Fully replaced. Omitting them removes everything. | Send the full arrays unless the intent is to clear them. |\n| `mergeAxisInfo` | Required whenever `isAxisMerge` is true. | Omit both when axis merge is off. |\n\n## Axis type casing\n\nThe request samples use camelCase (`xAxis`, `yAxis`, `colorAxis`) while Get Report Metadata returns lowercase (`xaxis`, `yaxis`, `coloraxis`, `sizeaxis`, `textaxis`, `groupby`, `summarize`). The lowercase forms are documented as canonical. When building a `CONFIG` from a metadata response, copy the `type` values verbatim rather than re-casing them."
     },
     {
       "name": "Dashboard",
-      "x-zenesis-description-pageName": "Dashboards Overview",
       "description": "APIs for listing dashboards accessible to a user, and for creating, reading and updating dashboards inside a workspace.\n\nThe module splits into two families that behave differently.\n\n- **Listing APIs** - Get All Dashboards, Get Owned Dashboards and Get Shared Dashboards. These operate at user service level and return dashboards across every organization the caller belongs to. No `ZANALYTICS-ORGID` header is needed, and the OAuth token must be issued with user level scope.\n- **Workspace-scoped APIs** - Create Dashboard, Get Dashboard Metadata and Update Dashboard. These operate on one workspace and require the `ZANALYTICS-ORGID` header.\n\n## Common request conventions\n\n| Header | Value | Required |\n|---|---|---|\n| `Authorization` | `Zoho-oauthtoken <oauth-token>` | Mandatory for every API |\n| `ZANALYTICS-ORGID` | Organization ID owning the workspace | Workspace-scoped APIs only |\n| `Content-Type` | `application/x-www-form-urlencoded` | Create and Update only |\n\nGet Shared Dashboards works on custom domains. Get All Dashboards and Get Owned Dashboards are disabled on custom domains. The workspace-scoped APIs are reachable on custom domains subject to additional permission checks.\n\n## OAuth scopes\n\n| API | Method | Scope |\n|---|---|---|\n| Get All Dashboards | GET | `ZohoAnalytics.metadata.read` |\n| Get Owned Dashboards | GET | `ZohoAnalytics.metadata.read` |\n| Get Shared Dashboards | GET | `ZohoAnalytics.metadata.read` |\n| Create Dashboard | POST | `ZohoAnalytics.modeling.create` |\n| Get Dashboard Metadata | GET | `ZohoAnalytics.modeling.read` |\n| Update Dashboard | PUT | `ZohoAnalytics.modeling.update` |\n\n## Response envelope\n\n- **status** - `success` or `failure`.\n- **summary** - human readable description of the completed operation.\n- **data.ownedViews** and **data.sharedViews** - Get All Dashboards only.\n- **data.views** - Get Owned Dashboards and Get Shared Dashboards; a single list, owned-only or shared-only depending on the endpoint.\n- **data.dashboardId** and **data.displayName** - Create Dashboard only.\n- **data.dashboardConfig** - Get Dashboard Metadata only.\n\n`viewId`, `workspaceId` and `orgId` are returned as strings even though the underlying values are long integers. `createdTime` and `lastModifiedTime` are epoch timestamps in milliseconds, as strings - divide by 1000 for epoch seconds. `sharedBy` is present on every entry, empty in owned items and populated with an email in shared ones. `isFavorite` is user specific and reflects the requesting user.\n\n`dashboardConfig.objId`, `data.dashboardId` and `viewId` are the same value under three different names.\n\n## Update replaces sections wholesale\n\nUpdate Dashboard does not merge. When `layout`, `themes` or `settings` is included, every stored row for that section is deleted and exactly what was sent is stored in its place. Sending `{\"settings\":{\"enableGlobalUF\":\"true\"}}` reverts every other setting to its system default. A section left out of the CONFIG is not touched.\n\n**Read-modify-write**\n\n1. `GET .../metadata?CONFIG={\"include\":\"settings\"}` to fetch just the section being changed.\n2. Merge the change into the returned object, keeping every key that came back.\n3. `PUT` the complete section.\n\n**Adding a layout card without losing the others**\n\nThe layout is a complete card map keyed by index string. Fetch it with `include=layout`, append the new card under the next sequential key, and PUT the whole map back.\n\n**Cloning a dashboard**\n\nFetch the full metadata, take `layout`, `themes` and `settings` from `dashboardConfig`, drop `objId`, `displayName` and `description` (they are read-only in the response and are not valid Create CONFIG fields other than `displayName`/`description`, which must be supplied fresh), then POST with a new `displayName`. The `viewName` values inside `layout` must match views that exist in the target workspace.\n\n## Behaviour worth knowing before the first call\n\n| Case | Behaviour | Recommendation |\n|---|---|---|\n| Partial `settings` on Update | Only the keys sent are stored; the rest revert to defaults. | Send the full settings object fetched via GET. |\n| Section omitted on Update | Left unchanged. | Include only the sections being replaced. |\n| `layoutType` grid preset (1-4) | The server auto-injects a USERFILTERS card at index `\"1\"` and rearranges view cards into columns, renumbering the input. | Omit `layoutType`, or send 0, for free form layouts; confirm with a GET afterwards. |\n| `viewName` in a layout card | Identifies an analysis view by display name, not ID. A renamed or deleted view renders as a broken card. | Verify view names through the Reports APIs first. |\n| Resetting the theme | `{\"themes\":{\"default\":\"true\"}}` clears all theme customization in one call. | Use it to undo theme changes without knowing the original values. |\n| Tabbed dashboards | Get Dashboard Metadata and Update Dashboard fail with error 8102. | Check the dashboard type first. |\n| `include` with several sections | `include=themes,layout` returns both sections but omits `objId`, `displayName` and `description`. | Use `include=all` when identity fields are needed, such as for clone workflows. |\n| Scalar types in the response | Theme and settings scalars come back as strings even where the CONFIG accepts numbers. | Coerce before comparing, and send back the form the CONFIG documents. |"
     }
   ],
@@ -28,48 +26,9 @@
         "tags": [
           "Reports"
         ],
-        "x-zenesis-title": "Create Analysis View",
         "summary": "Create Analysis View",
-        "description": "Creates a new analysis view - a chart, a pivot table or a summary view - in the specified workspace, based on a referenced base table. The view is configured through the CONFIG JSON parameter, which specifies the report type, the axis columns, the filters and the visualization settings.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or a Workspace Admin, or a Shared User, or a Group Member, or any user with Create Report permission on the workspace.",
+        "description": "Creates a new analysis view - a chart, a pivot table or a summary view - in the specified workspace, based on a referenced base table. The view is configured through the CONFIG JSON parameter, which specifies the report type, the axis columns, the filters and the visualization settings.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or a Workspace Admin, or a Shared User, or a Group Member, or any user with Create Report permission on the workspace.\n\n**Notes**\n\n> Note:\n>\n> This is a workspace-scoped API. The **ZANALYTICS-ORGID** header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format **orgid/workspacename** (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n\n> Note:\n>\n> The CONFIG parameter must be sent as a URL encoded JSON string in a form field named **CONFIG**, with the content type **application/x-www-form-urlencoded**.\n\n> Note:\n>\n> Axis type casing differs between request and response. The Create and Update samples use camelCase (**xAxis**, **yAxis**, **colorAxis**), while Get Report Metadata returns the lowercase forms (**xaxis**, **yaxis**, **coloraxis**, **sizeaxis**, **textaxis**, **groupby**, **summarize**), which the documentation states are the canonical values. When building a Create or Update CONFIG from a Get Report Metadata response, copy the axis type values verbatim.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7103 | Workspace not found. | Provide a valid workspace ID in the URL. |\n| 7104 | The specified base table does not exist in the workspace. | Ensure baseTableName matches an existing table in the workspace. |\n| 7111 | A view with the given title already exists in the workspace. | Choose a title that is unique within the workspace. |\n| 7301 | User does not have permission to create a report. | Ensure the user is an Account Admin, Organization Admin, Workspace Admin, Shared User, Group Member, or has Create Report permission on the workspace. |\n| 8021 | Invalid view type specified. | Set reportType to chart, pivot or summary. |\n| 8050 | Invalid value provided. | Check that all CONFIG field values are within the allowed ranges and types. |\n| 8075 | Invalid chart type parameter. | Provide a valid chartType value, such as bar, line or pie. |\n| 8119 | Invalid value for attribute. | Verify that all attribute values in axisColumns, filters and settings conform to the allowed constraints. |\n| 8252 | Invalid report type. | Ensure reportType is chart, pivot or summary. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token in the Authorization header. |",
         "operationId": "createReport",
-        "x-zenesis-sections": {
-          "apiRequest": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "orgIdHeader",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a workspace-scoped API. The <b>ZANALYTICS-ORGID</b> header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format <b>orgid/workspacename</b> (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n</span></blockquote>"
-            }
-          },
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "configUrlEncoded",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter must be sent as a URL encoded JSON string in a form field named <b>CONFIG</b>, with the content type <b>application/x-www-form-urlencoded</b>.\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "chartOnlyAttributes",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<b>chartType</b>, <b>isAxisMerge</b> and <b>mergeAxisInfo</b> apply only when <b>reportType</b> is chart. <b>chartType</b> is required for chart views, and <b>mergeAxisInfo</b> must be supplied whenever <b>isAxisMerge</b> is true.\n</span></blockquote>"
-            },
-            "3": {
-              "type": "editor",
-              "x-zenesis-shared-note": "axisTypeCasing",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nAxis type casing differs between request and response. The Create and Update samples use camelCase (<b>xAxis</b>, <b>yAxis</b>, <b>colorAxis</b>), while Get Report Metadata returns the lowercase forms (<b>xaxis</b>, <b>yaxis</b>, <b>coloraxis</b>, <b>sizeaxis</b>, <b>textaxis</b>, <b>groupby</b>, <b>summarize</b>), which the documentation states are the canonical values. When building a Create or Update CONFIG from a Get Report Metadata response, copy the axis type values verbatim.\n</span></blockquote>"
-            },
-            "4": {
-              "type": "editor",
-              "x-zenesis-shared-note": "configSizeLimit",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter has a maximum serialized size of 10 MB. Ensure that the nested arrays - <b>axisColumns</b>, <b>mergeAxisInfo</b>, <b>filters</b> and <b>userFilters</b> - do not push the total CONFIG payload beyond this limit.\n</span></blockquote>"
-            }
-          },
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "reportCloneWorkflow",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe <b>reportConfig</b> object returned by Get Report Metadata is structurally identical to the Create CONFIG, so it can be used directly as a clone template. Change <b>title</b> to a value that is unique in the workspace, keep <b>baseTableName</b>, and verify that every <b>columnName</b> and <b>tableName</b> exists in the target workspace's base table before posting.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "name": "ZANALYTICS-ORGID",
@@ -118,8 +77,8 @@
               },
               "examples": {
                 "barChartRankingFilter": {
-                  "description": "Bar chart",
-                  "summary": "Creates a bar chart of sales by product, restricted to the top five products by average cost.",
+                  "description": "Creates a bar chart of sales by product, restricted to the top five products by average cost.",
+                  "summary": "Bar chart",
                   "value": {
                     "CONFIG": {
                       "baseTableName": "Sales",
@@ -164,8 +123,8 @@
                   }
                 },
                 "pivotWithWindowFunctions": {
-                  "description": "Pivot table",
-                  "summary": "Creates a pivot table of product by year with percentage-of-total and percentage-of-column calculations, and explicit layout and theme settings.",
+                  "description": "Creates a pivot table of product by year with percentage-of-total and percentage-of-column calculations, and explicit layout and theme settings.",
+                  "summary": "Pivot table",
                   "value": {
                     "CONFIG": {
                       "baseTableName": "Sales",
@@ -226,8 +185,8 @@
                   }
                 },
                 "comboChartMergedAxes": {
-                  "description": "Merged axes chart",
-                  "summary": "Creates a combo chart whose two y-axes are merged onto a single scale, with a multi-select product user filter, placed in a specific folder.",
+                  "description": "Creates a combo chart whose two y-axes are merged onto a single scale, with a multi-select product user filter, placed in a specific folder.",
+                  "summary": "Merged axes chart",
                   "value": {
                     "CONFIG": {
                       "baseTableName": "Sales",
@@ -306,8 +265,8 @@
                 },
                 "examples": {
                   "chartCreated": {
-                    "description": "Chart created",
-                    "summary": "A chart view was created and its view ID returned.",
+                    "description": "A chart view was created and its view ID returned.",
+                    "summary": "Chart created",
                     "value": {
                       "status": "success",
                       "summary": "Chart view created successfully.",
@@ -317,8 +276,8 @@
                     }
                   },
                   "pivotCreated": {
-                    "description": "Pivot created",
-                    "summary": "A pivot view was created and its view ID returned.",
+                    "description": "A pivot view was created and its view ID returned.",
+                    "summary": "Pivot created",
                     "value": {
                       "status": "success",
                       "summary": "Pivot view created successfully.",
@@ -328,8 +287,8 @@
                     }
                   },
                   "summaryCreated": {
-                    "description": "Summary created",
-                    "summary": "A summary view was created and its view ID returned.",
+                    "description": "A summary view was created and its view ID returned.",
+                    "summary": "Summary created",
                     "value": {
                       "status": "success",
                       "summary": "Summary view created successfully.",
@@ -340,61 +299,9 @@
                   }
                 }
               }
-            },
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7103",
-                "description": "Workspace not found.",
-                "resolution": "Provide a valid workspace ID in the URL."
-              },
-              {
-                "name": "7104",
-                "description": "The specified base table does not exist in the workspace.",
-                "resolution": "Ensure baseTableName matches an existing table in the workspace."
-              },
-              {
-                "name": "7111",
-                "description": "A view with the given title already exists in the workspace.",
-                "resolution": "Choose a title that is unique within the workspace."
-              },
-              {
-                "name": "7301",
-                "description": "User does not have permission to create a report.",
-                "resolution": "Ensure the user is an Account Admin, Organization Admin, Workspace Admin, Shared User, Group Member, or has Create Report permission on the workspace."
-              },
-              {
-                "name": "8021",
-                "description": "Invalid view type specified.",
-                "resolution": "Set reportType to chart, pivot or summary."
-              },
-              {
-                "name": "8050",
-                "description": "Invalid value provided.",
-                "resolution": "Check that all CONFIG field values are within the allowed ranges and types."
-              },
-              {
-                "name": "8075",
-                "description": "Invalid chart type parameter.",
-                "resolution": "Provide a valid chartType value, such as bar, line or pie."
-              },
-              {
-                "name": "8119",
-                "description": "Invalid value for attribute.",
-                "resolution": "Verify that all attribute values in axisColumns, filters and settings conform to the allowed constraints."
-              },
-              {
-                "name": "8252",
-                "description": "Invalid report type.",
-                "resolution": "Ensure reportType is chart, pivot or summary."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token in the Authorization header."
-              }
-            ]
+            }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -408,60 +315,9 @@
         "tags": [
           "Reports"
         ],
-        "x-zenesis-title": "Update Analysis View",
         "summary": "Update Analysis View",
-        "description": "Resets and updates the configuration of an existing analysis view in the specified workspace. The whole view configuration - axis columns, filters, user filters, chart type and settings - is replaced with the values provided in the CONFIG parameter, so anything that is omitted reverts to its empty default. Fetch the current configuration with Get Report Metadata, modify it, and send the complete object back.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or a Shared User, or a Group Member, or any user with Design Modify permission on the view.",
+        "description": "Resets and updates the configuration of an existing analysis view in the specified workspace. The whole view configuration - axis columns, filters, user filters, chart type and settings - is replaced with the values provided in the CONFIG parameter, so anything that is omitted reverts to its empty default. Fetch the current configuration with Get Report Metadata, modify it, and send the complete object back.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or a Shared User, or a Group Member, or any user with Design Modify permission on the view.\n\n**Notes**\n\n> Note:\n>\n> This is a workspace-scoped API. The **ZANALYTICS-ORGID** header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format **orgid/workspacename** (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n\n> Note:\n>\n> The CONFIG parameter must be sent as a URL encoded JSON string in a form field named **CONFIG**, with the content type **application/x-www-form-urlencoded**.\n\n> Note:\n>\n> The following fields cannot be changed through Update Analysis View:\n> - **title** - silently ignored; the existing display name is always preserved.\n> - **folderId** - the request fails if the value differs from the view's current folder. Omit it entirely.\n> - **reportType** - must match the existing view type. A mismatch fails with error code 8021.\n> - **baseTableName** - derived from the view's stored parent reference. Sending it is harmless but has no effect.\n\n> Note:\n>\n> Axis type casing differs between request and response. The Create and Update samples use camelCase (**xAxis**, **yAxis**, **colorAxis**), while Get Report Metadata returns the lowercase forms (**xaxis**, **yaxis**, **coloraxis**, **sizeaxis**, **textaxis**, **groupby**, **summarize**), which the documentation states are the canonical values. When building a Create or Update CONFIG from a Get Report Metadata response, copy the axis type values verbatim.\n\n> Note:\n>\n> This API returns no response body on success - only an HTTP 204 No Content status. There is no JSON payload to parse; check the HTTP status code alone. Only failure responses carry a JSON error payload.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7103 | Workspace not found. | Provide a valid workspace ID in the URL. |\n| 7104 | The specified view does not exist. | Ensure the view ID in the URL corresponds to an existing analysis view. |\n| 7111 | A view with the given title already exists in the workspace. | Choose a title that is unique within the workspace. |\n| 7301 | User does not have permission to update this view. | Ensure the user is an Account Admin, Organization Admin, View Owner, Shared User, Group Member, or has Design Modify permission on the view. |\n| 8021 | Invalid view type specified. | Set reportType to chart, pivot or summary. It must match the existing view type. |\n| 8050 | Invalid value provided. | Check that all CONFIG field values are within the allowed ranges and types. |\n| 8075 | Invalid chart type parameter. | Provide a valid chartType value, such as bar, line or pie. |\n| 8100 | Operation not supported for this analysis view widget. | Ensure the update operation is valid for the current view type. |\n| 8119 | Invalid value for attribute. | Verify that all attribute values in axisColumns, filters and settings conform to the allowed constraints. |\n| 8252 | Invalid report type. | Ensure reportType is chart, pivot or summary. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token in the Authorization header. |",
         "operationId": "updateReport",
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "reportFullReset",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nUpdate Analysis View performs a full configuration reset, not a patch.<ul><li>Every axis column, filter, user filter and settings entry is replaced with the values sent in the CONFIG.</li><li>Fields that are not provided revert to their empty defaults - omitting <b>axisColumns</b>, <b>filters</b> or <b>userFilters</b> clears them.</li><li><b>description</b> is cleared if it is omitted.</li><li>Always fetch the current state with Get Report Metadata, modify it, then send the complete configuration back.</li></ul>\n</span></blockquote>"
-            }
-          },
-          "apiRequest": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "orgIdHeader",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a workspace-scoped API. The <b>ZANALYTICS-ORGID</b> header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format <b>orgid/workspacename</b> (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n</span></blockquote>"
-            }
-          },
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "configUrlEncoded",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter must be sent as a URL encoded JSON string in a form field named <b>CONFIG</b>, with the content type <b>application/x-www-form-urlencoded</b>.\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "reportReadOnlyFields",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe following fields cannot be changed through Update Analysis View:<ul><li><b>title</b> - silently ignored; the existing display name is always preserved.</li><li><b>folderId</b> - the request fails if the value differs from the view's current folder. Omit it entirely.</li><li><b>reportType</b> - must match the existing view type. A mismatch fails with error code 8021.</li><li><b>baseTableName</b> - derived from the view's stored parent reference. Sending it is harmless but has no effect.</li></ul>\n</span></blockquote>"
-            },
-            "3": {
-              "type": "editor",
-              "x-zenesis-shared-note": "chartOnlyAttributes",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<b>chartType</b>, <b>isAxisMerge</b> and <b>mergeAxisInfo</b> apply only when <b>reportType</b> is chart. <b>chartType</b> is required for chart views, and <b>mergeAxisInfo</b> must be supplied whenever <b>isAxisMerge</b> is true.\n</span></blockquote>"
-            },
-            "4": {
-              "type": "editor",
-              "x-zenesis-shared-note": "axisTypeCasing",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nAxis type casing differs between request and response. The Create and Update samples use camelCase (<b>xAxis</b>, <b>yAxis</b>, <b>colorAxis</b>), while Get Report Metadata returns the lowercase forms (<b>xaxis</b>, <b>yaxis</b>, <b>coloraxis</b>, <b>sizeaxis</b>, <b>textaxis</b>, <b>groupby</b>, <b>summarize</b>), which the documentation states are the canonical values. When building a Create or Update CONFIG from a Get Report Metadata response, copy the axis type values verbatim.\n</span></blockquote>"
-            },
-            "5": {
-              "type": "editor",
-              "x-zenesis-shared-note": "configSizeLimit",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter has a maximum serialized size of 10 MB. Ensure that the nested arrays - <b>axisColumns</b>, <b>mergeAxisInfo</b>, <b>filters</b> and <b>userFilters</b> - do not push the total CONFIG payload beyond this limit.\n</span></blockquote>"
-            }
-          },
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "updateNoResponseBody",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis API returns no response body on success - only an HTTP 204 No Content status. There is no JSON payload to parse; check the HTTP status code alone. Only failure responses carry a JSON error payload.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "name": "ZANALYTICS-ORGID",
@@ -522,8 +378,8 @@
               },
               "examples": {
                 "changeChartType": {
-                  "description": "Chart type change",
-                  "summary": "Switches the view to a line chart and replaces its axis columns with a month-year x-axis and two measures.",
+                  "description": "Switches the view to a line chart and replaces its axis columns with a month-year x-axis and two measures.",
+                  "summary": "Chart type change",
                   "value": {
                     "CONFIG": {
                       "reportType": "chart",
@@ -553,8 +409,8 @@
                   }
                 },
                 "pivotWithFilter": {
-                  "description": "Pivot filter update",
-                  "summary": "Replaces the axis configuration of a pivot view, applies a year filter and sets the layout and theme.",
+                  "description": "Replaces the axis configuration of a pivot view, applies a year filter and sets the layout and theme.",
+                  "summary": "Pivot filter update",
                   "value": {
                     "CONFIG": {
                       "reportType": "pivot",
@@ -604,8 +460,8 @@
                   }
                 },
                 "enableAxisMerge": {
-                  "description": "Enable axis merge",
-                  "summary": "Turns on axis merge across two of the y-axes of a combo chart and applies a custom theme.",
+                  "description": "Turns on axis merge across two of the y-axes of a combo chart and applies a custom theme.",
+                  "summary": "Enable axis merge",
                   "value": {
                     "CONFIG": {
                       "reportType": "chart",
@@ -670,66 +526,9 @@
         ],
         "responses": {
           "204": {
-            "description": "The analysis view was updated successfully. No response body is returned.",
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7103",
-                "description": "Workspace not found.",
-                "resolution": "Provide a valid workspace ID in the URL."
-              },
-              {
-                "name": "7104",
-                "description": "The specified view does not exist.",
-                "resolution": "Ensure the view ID in the URL corresponds to an existing analysis view."
-              },
-              {
-                "name": "7111",
-                "description": "A view with the given title already exists in the workspace.",
-                "resolution": "Choose a title that is unique within the workspace."
-              },
-              {
-                "name": "7301",
-                "description": "User does not have permission to update this view.",
-                "resolution": "Ensure the user is an Account Admin, Organization Admin, View Owner, Shared User, Group Member, or has Design Modify permission on the view."
-              },
-              {
-                "name": "8021",
-                "description": "Invalid view type specified.",
-                "resolution": "Set reportType to chart, pivot or summary. It must match the existing view type."
-              },
-              {
-                "name": "8050",
-                "description": "Invalid value provided.",
-                "resolution": "Check that all CONFIG field values are within the allowed ranges and types."
-              },
-              {
-                "name": "8075",
-                "description": "Invalid chart type parameter.",
-                "resolution": "Provide a valid chartType value, such as bar, line or pie."
-              },
-              {
-                "name": "8100",
-                "description": "Operation not supported for this analysis view widget.",
-                "resolution": "Ensure the update operation is valid for the current view type."
-              },
-              {
-                "name": "8119",
-                "description": "Invalid value for attribute.",
-                "resolution": "Verify that all attribute values in axisColumns, filters and settings conform to the allowed constraints."
-              },
-              {
-                "name": "8252",
-                "description": "Invalid report type.",
-                "resolution": "Ensure reportType is chart, pivot or summary."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token in the Authorization header."
-              }
-            ]
+            "description": "The analysis view was updated successfully. No response body is returned."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -743,36 +542,9 @@
         "tags": [
           "Reports"
         ],
-        "x-zenesis-title": "Get Report Metadata",
         "summary": "Get Report Metadata",
-        "description": "Retrieves the full configuration metadata of an existing analysis view - a chart, a pivot table or a summary view - in the specified workspace. The response carries the report type, the chart sub-type, the axis column definitions, the applied filters and the visualization settings exactly as they are stored.\n\nThe returned `reportConfig` is structurally identical to the Create Analysis View CONFIG, which makes this API the first step of any safe update or clone workflow.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or any user with Design Modify permission on the view.",
+        "description": "Retrieves the full configuration metadata of an existing analysis view - a chart, a pivot table or a summary view - in the specified workspace. The response carries the report type, the chart sub-type, the axis column definitions, the applied filters and the visualization settings exactly as they are stored.\n\nThe returned `reportConfig` is structurally identical to the Create Analysis View CONFIG, which makes this API the first step of any safe update or clone workflow.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or any user with Design Modify permission on the view.\n\n**Notes**\n\n> Note:\n>\n> This is a workspace-scoped API. The **ZANALYTICS-ORGID** header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format **orgid/workspacename** (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7103 | Workspace not found. | Provide a valid workspace ID in the URL. |\n| 7104 | The specified view does not exist in the workspace. | Ensure the view ID in the URL corresponds to an existing analysis view. |\n| 7301 | User does not have permission to view this report's metadata. | Ensure the user is an Account Admin, Organization Admin, View Owner, or has Design Modify permission on the view. |\n| 8021 | Invalid view type for the requested operation. | Ensure the target view is an analysis view - a chart, pivot or summary view. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token in the Authorization header. |",
         "operationId": "getReportMetadata",
-        "x-zenesis-sections": {
-          "apiRequest": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "orgIdHeader",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a workspace-scoped API. The <b>ZANALYTICS-ORGID</b> header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format <b>orgid/workspacename</b> (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n</span></blockquote>"
-            }
-          },
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "axisTypeCasing",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nAxis type casing differs between request and response. The Create and Update samples use camelCase (<b>xAxis</b>, <b>yAxis</b>, <b>colorAxis</b>), while Get Report Metadata returns the lowercase forms (<b>xaxis</b>, <b>yaxis</b>, <b>coloraxis</b>, <b>sizeaxis</b>, <b>textaxis</b>, <b>groupby</b>, <b>summarize</b>), which the documentation states are the canonical values. When building a Create or Update CONFIG from a Get Report Metadata response, copy the axis type values verbatim.\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "reportFullReset",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nUpdate Analysis View performs a full configuration reset, not a patch.<ul><li>Every axis column, filter, user filter and settings entry is replaced with the values sent in the CONFIG.</li><li>Fields that are not provided revert to their empty defaults - omitting <b>axisColumns</b>, <b>filters</b> or <b>userFilters</b> clears them.</li><li><b>description</b> is cleared if it is omitted.</li><li>Always fetch the current state with Get Report Metadata, modify it, then send the complete configuration back.</li></ul>\n</span></blockquote>"
-            },
-            "3": {
-              "type": "editor",
-              "x-zenesis-shared-note": "reportCloneWorkflow",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe <b>reportConfig</b> object returned by Get Report Metadata is structurally identical to the Create CONFIG, so it can be used directly as a clone template. Change <b>title</b> to a value that is unique in the workspace, keep <b>baseTableName</b>, and verify that every <b>columnName</b> and <b>tableName</b> exists in the target workspace's base table before posting.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "name": "ZANALYTICS-ORGID",
@@ -828,8 +600,8 @@
                 },
                 "examples": {
                   "barChartMetadata": {
-                    "description": "Simple bar chart",
-                    "summary": "A chart view with a single dimension on the x-axis and a single aggregated measure on the y-axis - the minimum reportConfig structure.",
+                    "description": "A chart view with a single dimension on the x-axis and a single aggregated measure on the y-axis - the minimum reportConfig structure.",
+                    "summary": "Simple bar chart",
                     "value": {
                       "status": "success",
                       "summary": "Get analysis view metadata",
@@ -860,8 +632,8 @@
                     }
                   },
                   "bubbleChartMetadata": {
-                    "description": "Bubble chart",
-                    "summary": "A bubble chart using three axis types, where the sizeaxis entry drives the bubble size.",
+                    "description": "A bubble chart using three axis types, where the sizeaxis entry drives the bubble size.",
+                    "summary": "Bubble chart",
                     "value": {
                       "status": "success",
                       "summary": "Get analysis view metadata",
@@ -898,8 +670,8 @@
                     }
                   },
                   "colorAxisMetadata": {
-                    "description": "Color grouped chart",
-                    "summary": "A stacked bar chart that splits the bars by a categorical dimension through a coloraxis entry.",
+                    "description": "A stacked bar chart that splits the bars by a categorical dimension through a coloraxis entry.",
+                    "summary": "Color grouped chart",
                     "value": {
                       "status": "success",
                       "summary": "Get analysis view metadata",
@@ -936,8 +708,8 @@
                     }
                   },
                   "filteredChartMetadata": {
-                    "description": "Filtered chart",
-                    "summary": "A chart saved with an active year filter, showing how the filters array is returned.",
+                    "description": "A chart saved with an active year filter, showing how the filters array is returned.",
+                    "summary": "Filtered chart",
                     "value": {
                       "status": "success",
                       "summary": "Get analysis view metadata",
@@ -980,8 +752,8 @@
                     }
                   },
                   "mergedAxisMetadata": {
-                    "description": "Merged axes chart",
-                    "summary": "A combo chart with axis merge active, where isAxisMerge is true and both y-axis columns are listed.",
+                    "description": "A combo chart with axis merge active, where isAxisMerge is true and both y-axis columns are listed.",
+                    "summary": "Merged axes chart",
                     "value": {
                       "status": "success",
                       "summary": "Get analysis view metadata",
@@ -1018,8 +790,8 @@
                     }
                   },
                   "wildcardFilterMetadata": {
-                    "description": "Wildcard filters",
-                    "summary": "A chart saved with two wildcard filters on different columns, showing multiple entries in the filters array.",
+                    "description": "A chart saved with two wildcard filters on different columns, showing multiple entries in the filters array.",
+                    "summary": "Wildcard filters",
                     "value": {
                       "status": "success",
                       "summary": "Get analysis view metadata",
@@ -1068,8 +840,8 @@
                     }
                   },
                   "heatMapMetadata": {
-                    "description": "Heat map chart",
-                    "summary": "A heat map where the color axis carries the aggregated measure rather than a grouping dimension.",
+                    "description": "A heat map where the color axis carries the aggregated measure rather than a grouping dimension.",
+                    "summary": "Heat map chart",
                     "value": {
                       "status": "success",
                       "summary": "Get analysis view metadata",
@@ -1107,36 +879,9 @@
                   }
                 }
               }
-            },
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7103",
-                "description": "Workspace not found.",
-                "resolution": "Provide a valid workspace ID in the URL."
-              },
-              {
-                "name": "7104",
-                "description": "The specified view does not exist in the workspace.",
-                "resolution": "Ensure the view ID in the URL corresponds to an existing analysis view."
-              },
-              {
-                "name": "7301",
-                "description": "User does not have permission to view this report's metadata.",
-                "resolution": "Ensure the user is an Account Admin, Organization Admin, View Owner, or has Design Modify permission on the view."
-              },
-              {
-                "name": "8021",
-                "description": "Invalid view type for the requested operation.",
-                "resolution": "Ensure the target view is an analysis view - a chart, pivot or summary view."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token in the Authorization header."
-              }
-            ]
+            }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1150,24 +895,9 @@
         "tags": [
           "Dashboard"
         ],
-        "x-zenesis-title": "Get All Dashboards",
         "summary": "Get All Dashboards",
-        "description": "Returns all dashboards accessible to the authenticated user - both those owned by the user and those shared with them - across every organization and workspace. The response groups the results into two separate lists, `ownedViews` and `sharedViews`.\n\nThis API has no request parameters; all context is derived from the OAuth token. The authenticated user may be any active Zoho Analytics user.",
+        "description": "Returns all dashboards accessible to the authenticated user - both those owned by the user and those shared with them - across every organization and workspace. The response groups the results into two separate lists, `ownedViews` and `sharedViews`.\n\nThis API has no request parameters; all context is derived from the OAuth token. The authenticated user may be any active Zoho Analytics user.\n\n**Notes**\n\n> Note:\n>\n> Get Shared Dashboards is available on custom domains. Get All Dashboards and Get Owned Dashboards are disabled on custom domains. The workspace-scoped dashboard APIs are accessible on custom domains subject to additional permission checks.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7301 | User does not have permission to retrieve dashboards. | Ensure the request uses a valid OAuth token for an active Zoho Analytics user. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token in the Authorization header. |",
         "operationId": "getDashboards",
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "userScopeListing",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a user service level API - it returns dashboards across every organization the caller belongs to.<ul><li>The <b>ZANALYTICS-ORGID</b> header is not required.</li><li>The OAuth token must be issued with user level scope.</li></ul>\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardCustomDomain",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nGet Shared Dashboards is available on custom domains. Get All Dashboards and Get Owned Dashboards are disabled on custom domains. The workspace-scoped dashboard APIs are accessible on custom domains subject to additional permission checks.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [],
         "security": [
           {
@@ -1186,8 +916,8 @@
                 },
                 "examples": {
                   "ownedAndShared": {
-                    "description": "Owned and shared",
-                    "summary": "The user owns two dashboards and has one more shared with them.",
+                    "description": "The user owns two dashboards and has one more shared with them.",
+                    "summary": "Owned and shared",
                     "value": {
                       "status": "success",
                       "summary": "Get all dashboards",
@@ -1248,8 +978,8 @@
                     }
                   },
                   "ownedOnly": {
-                    "description": "Owned only",
-                    "summary": "The user owns one dashboard and nothing has been shared with them, so sharedViews comes back empty.",
+                    "description": "The user owns one dashboard and nothing has been shared with them, so sharedViews comes back empty.",
+                    "summary": "Owned only",
                     "value": {
                       "status": "success",
                       "summary": "Get all dashboards",
@@ -1277,8 +1007,8 @@
                     }
                   },
                   "noDashboards": {
-                    "description": "No dashboards",
-                    "summary": "The user has no dashboards at all and both lists come back empty.",
+                    "description": "The user has no dashboards at all and both lists come back empty.",
+                    "summary": "No dashboards",
                     "value": {
                       "status": "success",
                       "summary": "Get all dashboards",
@@ -1290,21 +1020,9 @@
                   }
                 }
               }
-            },
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7301",
-                "description": "User does not have permission to retrieve dashboards.",
-                "resolution": "Ensure the request uses a valid OAuth token for an active Zoho Analytics user."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token in the Authorization header."
-              }
-            ]
+            }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1318,24 +1036,9 @@
         "tags": [
           "Dashboard"
         ],
-        "x-zenesis-title": "Get Owned Dashboards",
         "summary": "Get Owned Dashboards",
-        "description": "Returns the list of dashboards owned by the authenticated user across every organization, as a single `views` array.\n\nThis API has no request parameters; all context is derived from the OAuth token. The authenticated user must be an Account Admin.",
+        "description": "Returns the list of dashboards owned by the authenticated user across every organization, as a single `views` array.\n\nThis API has no request parameters; all context is derived from the OAuth token. The authenticated user must be an Account Admin.\n\n**Notes**\n\n> Note:\n>\n> Get Shared Dashboards is available on custom domains. Get All Dashboards and Get Owned Dashboards are disabled on custom domains. The workspace-scoped dashboard APIs are accessible on custom domains subject to additional permission checks.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7301 | User does not have permission to retrieve owned dashboards. | Ensure the authenticated user is an Account Admin. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token in the Authorization header. |",
         "operationId": "getOwnedDashboards",
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "userScopeListing",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a user service level API - it returns dashboards across every organization the caller belongs to.<ul><li>The <b>ZANALYTICS-ORGID</b> header is not required.</li><li>The OAuth token must be issued with user level scope.</li></ul>\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardCustomDomain",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nGet Shared Dashboards is available on custom domains. Get All Dashboards and Get Owned Dashboards are disabled on custom domains. The workspace-scoped dashboard APIs are accessible on custom domains subject to additional permission checks.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [],
         "security": [
           {
@@ -1354,8 +1057,8 @@
                 },
                 "examples": {
                   "multipleWorkspaces": {
-                    "description": "Multiple workspaces",
-                    "summary": "The Account Admin owns dashboards in two different workspaces and organizations.",
+                    "description": "The Account Admin owns dashboards in two different workspaces and organizations.",
+                    "summary": "Multiple workspaces",
                     "value": {
                       "status": "success",
                       "summary": "Get owned dashboards",
@@ -1398,8 +1101,8 @@
                     }
                   },
                   "singleDashboard": {
-                    "description": "Single dashboard",
-                    "summary": "The Account Admin owns one dashboard.",
+                    "description": "The Account Admin owns one dashboard.",
+                    "summary": "Single dashboard",
                     "value": {
                       "status": "success",
                       "summary": "Get owned dashboards",
@@ -1426,8 +1129,8 @@
                     }
                   },
                   "noDashboards": {
-                    "description": "No dashboards",
-                    "summary": "The Account Admin owns no dashboards and the list comes back empty.",
+                    "description": "The Account Admin owns no dashboards and the list comes back empty.",
+                    "summary": "No dashboards",
                     "value": {
                       "status": "success",
                       "summary": "Get owned dashboards",
@@ -1438,21 +1141,9 @@
                   }
                 }
               }
-            },
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7301",
-                "description": "User does not have permission to retrieve owned dashboards.",
-                "resolution": "Ensure the authenticated user is an Account Admin."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token in the Authorization header."
-              }
-            ]
+            }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1466,24 +1157,9 @@
         "tags": [
           "Dashboard"
         ],
-        "x-zenesis-title": "Get Shared Dashboards",
         "summary": "Get Shared Dashboards",
-        "description": "Returns all dashboards that have been shared with the authenticated user across every organization and workspace, as a single `views` array. Unlike Get All Dashboards, this endpoint returns only shared dashboards, and it is also available on custom domains.\n\nThis API has no request parameters; all context is derived from the OAuth token. The authenticated user may be any active Zoho Analytics user.",
+        "description": "Returns all dashboards that have been shared with the authenticated user across every organization and workspace, as a single `views` array. Unlike Get All Dashboards, this endpoint returns only shared dashboards, and it is also available on custom domains.\n\nThis API has no request parameters; all context is derived from the OAuth token. The authenticated user may be any active Zoho Analytics user.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7301 | User does not have permission to retrieve shared dashboards. | Ensure the request uses a valid OAuth token for an active Zoho Analytics user. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token in the Authorization header. |",
         "operationId": "getSharedDashboards",
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "userScopeListing",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a user service level API - it returns dashboards across every organization the caller belongs to.<ul><li>The <b>ZANALYTICS-ORGID</b> header is not required.</li><li>The OAuth token must be issued with user level scope.</li></ul>\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardCustomDomain",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nGet Shared Dashboards is available on custom domains. Get All Dashboards and Get Owned Dashboards are disabled on custom domains. The workspace-scoped dashboard APIs are accessible on custom domains subject to additional permission checks.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [],
         "security": [
           {
@@ -1502,8 +1178,8 @@
                 },
                 "examples": {
                   "multipleShared": {
-                    "description": "Multiple shared",
-                    "summary": "Two dashboards from different organizations have been shared with the user; sharedBy carries the email of each sharer.",
+                    "description": "Two dashboards from different organizations have been shared with the user; sharedBy carries the email of each sharer.",
+                    "summary": "Multiple shared",
                     "value": {
                       "status": "success",
                       "summary": "Get shared dashboards",
@@ -1546,8 +1222,8 @@
                     }
                   },
                   "favoriteShared": {
-                    "description": "Favorite shared",
-                    "summary": "One shared dashboard that the requesting user has marked as a favorite.",
+                    "description": "One shared dashboard that the requesting user has marked as a favorite.",
+                    "summary": "Favorite shared",
                     "value": {
                       "status": "success",
                       "summary": "Get shared dashboards",
@@ -1574,8 +1250,8 @@
                     }
                   },
                   "noDashboards": {
-                    "description": "No dashboards",
-                    "summary": "Nothing has been shared with the user and the list comes back empty.",
+                    "description": "Nothing has been shared with the user and the list comes back empty.",
+                    "summary": "No dashboards",
                     "value": {
                       "status": "success",
                       "summary": "Get shared dashboards",
@@ -1586,21 +1262,9 @@
                   }
                 }
               }
-            },
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7301",
-                "description": "User does not have permission to retrieve shared dashboards.",
-                "resolution": "Ensure the request uses a valid OAuth token for an active Zoho Analytics user."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token in the Authorization header."
-              }
-            ]
+            }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1614,43 +1278,9 @@
         "tags": [
           "Dashboard"
         ],
-        "x-zenesis-title": "Create Dashboard",
         "summary": "Create Dashboard",
-        "description": "Creates a new dashboard in the specified workspace. The dashboard is defined through the CONFIG JSON parameter, which carries the display name, the layout card map and, optionally, the visual theme and the behaviour settings.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or a Workspace Admin, or a Shared User, or a Group Member, or any user with Create Report permission on the workspace.",
+        "description": "Creates a new dashboard in the specified workspace. The dashboard is defined through the CONFIG JSON parameter, which carries the display name, the layout card map and, optionally, the visual theme and the behaviour settings.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or a Workspace Admin, or a Shared User, or a Group Member, or any user with Create Report permission on the workspace.\n\n**Notes**\n\n> Note:\n>\n> This is a workspace-scoped API. The **ZANALYTICS-ORGID** header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format **orgid/workspacename** (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n\n> Note:\n>\n> A VIEW card identifies an analysis view by its display name in **viewName**, not by its ID. If the referenced view is renamed or deleted the card renders as broken, and when cloning across workspaces the **viewName** values must be updated to match views that exist in the target workspace.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7103 | Workspace not found. | Verify that the workspace ID in the URL is correct and accessible to the user. |\n| 7111 | A dashboard with the same name already exists in the workspace. | Use a different displayName value. |\n| 7301 | User does not have permission to create a dashboard. | Ensure the user is an Account Admin, Organization Admin, Workspace Admin, Shared User, Group Member, or has Create Report permission. |\n| 8072 | The target object is not a valid dashboard. | Verify the request parameters and ensure the workspace supports dashboard creation. |\n| 8119 | One or more CONFIG field values are invalid, such as an invalid color or an out-of-range number. | Review the CONFIG JSON and correct the invalid values. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token with the ZohoAnalytics.modeling.create scope. |",
         "operationId": "createDashboard",
-        "x-zenesis-sections": {
-          "apiRequest": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "orgIdHeader",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a workspace-scoped API. The <b>ZANALYTICS-ORGID</b> header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format <b>orgid/workspacename</b> (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n</span></blockquote>"
-            }
-          },
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "configUrlEncoded",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter must be sent as a URL encoded JSON string in a form field named <b>CONFIG</b>, with the content type <b>application/x-www-form-urlencoded</b>.\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardViewNameByName",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nA VIEW card identifies an analysis view by its display name in <b>viewName</b>, not by its ID. If the referenced view is renamed or deleted the card renders as broken, and when cloning across workspaces the <b>viewName</b> values must be updated to match views that exist in the target workspace.\n</span></blockquote>"
-            },
-            "3": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardLayoutTypePreset",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nWhen <b>layoutType</b> is set to a grid preset (1 to 4), the server auto-injects a USERFILTERS card at position \"1\" and rearranges the view cards into columns, so the card indices that were sent may be renumbered. Omit <b>layoutType</b>, or set it to 0, for a free form layout, and call Get Dashboard Metadata afterwards to confirm the layout that was actually stored.\n</span></blockquote>"
-            }
-          },
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardIdEquivalence",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<b>dashboardConfig.objId</b> in the metadata response, <b>data.dashboardId</b> in the Create Dashboard response and <b>viewId</b> in the listing APIs are the same value under three different field names. Any of them can be used as the dashboard ID in the URL path.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "name": "ZANALYTICS-ORGID",
@@ -1699,8 +1329,8 @@
               },
               "examples": {
                 "minimalDashboard": {
-                  "description": "Minimal dashboard",
-                  "summary": "Creates a free form dashboard holding two view cards side by side, with the default theme.",
+                  "description": "Creates a free form dashboard holding two view cards side by side, with the default theme.",
+                  "summary": "Minimal dashboard",
                   "value": {
                     "CONFIG": {
                       "displayName": "Sales Overview",
@@ -1729,8 +1359,8 @@
                   }
                 },
                 "gradientThemeDashboard": {
-                  "description": "Gradient theme",
-                  "summary": "Creates a dashboard with a linear gradient background, custom card styling, a global user filter and exports restricted to CSV.",
+                  "description": "Creates a dashboard with a linear gradient background, custom card styling, a global user filter and exports restricted to CSV.",
+                  "summary": "Gradient theme",
                   "value": {
                     "CONFIG": {
                       "displayName": "Dashboard_Gradient_Linear_3",
@@ -1803,8 +1433,8 @@
                   }
                 },
                 "imageThemeDashboard": {
-                  "description": "Image theme",
-                  "summary": "Creates a dashboard with an image background alongside an HTML card, an image card and a view card.",
+                  "description": "Creates a dashboard with an image background alongside an HTML card, an image card and a view card.",
+                  "summary": "Image theme",
                   "value": {
                     "CONFIG": {
                       "displayName": "Dashboard_Image_Theme_6",
@@ -1893,8 +1523,8 @@
                 },
                 "examples": {
                   "dashboardCreated": {
-                    "description": "Dashboard created",
-                    "summary": "The dashboard was created; the response returns its ID and the display name as stored.",
+                    "description": "The dashboard was created; the response returns its ID and the display name as stored.",
+                    "summary": "Dashboard created",
                     "value": {
                       "status": "success",
                       "summary": "Create dashboard",
@@ -1906,41 +1536,9 @@
                   }
                 }
               }
-            },
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7103",
-                "description": "Workspace not found.",
-                "resolution": "Verify that the workspace ID in the URL is correct and accessible to the user."
-              },
-              {
-                "name": "7111",
-                "description": "A dashboard with the same name already exists in the workspace.",
-                "resolution": "Use a different displayName value."
-              },
-              {
-                "name": "7301",
-                "description": "User does not have permission to create a dashboard.",
-                "resolution": "Ensure the user is an Account Admin, Organization Admin, Workspace Admin, Shared User, Group Member, or has Create Report permission."
-              },
-              {
-                "name": "8072",
-                "description": "The target object is not a valid dashboard.",
-                "resolution": "Verify the request parameters and ensure the workspace supports dashboard creation."
-              },
-              {
-                "name": "8119",
-                "description": "One or more CONFIG field values are invalid, such as an invalid color or an out-of-range number.",
-                "resolution": "Review the CONFIG JSON and correct the invalid values."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token with the ZohoAnalytics.modeling.create scope."
-              }
-            ]
+            }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1954,55 +1552,9 @@
         "tags": [
           "Dashboard"
         ],
-        "x-zenesis-title": "Get Dashboard Metadata",
         "summary": "Get Dashboard Metadata",
-        "description": "Retrieves the stored configuration of a dashboard in the specified workspace - its identity attributes, the visual theme, the layout card map and the behaviour settings. The optional CONFIG parameter narrows the response to specific sections.\n\nThis is the first step of any safe update: fetch the section to be changed, merge the change into it, then send the complete section back through Update Dashboard.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or any user with Read Only permission on the dashboard.",
+        "description": "Retrieves the stored configuration of a dashboard in the specified workspace - its identity attributes, the visual theme, the layout card map and the behaviour settings. The optional CONFIG parameter narrows the response to specific sections.\n\nThis is the first step of any safe update: fetch the section to be changed, merge the change into it, then send the complete section back through Update Dashboard.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or any user with Read Only permission on the dashboard.\n\n**Notes**\n\n> Note:\n>\n> This is a workspace-scoped API. The **ZANALYTICS-ORGID** header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format **orgid/workspacename** (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n\n> Note:\n>\n> **dashboardConfig.objId** in the metadata response, **data.dashboardId** in the Create Dashboard response and **viewId** in the listing APIs are the same value under three different field names. Any of them can be used as the dashboard ID in the URL path.\n\n> Note:\n>\n> Tabbed dashboards are not supported by the V2 API. Calling this API on a tabbed dashboard fails with error code 8102.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7103 | Workspace not found. | Verify the workspace ID in the URL. |\n| 7104 | Dashboard not found. | Verify that the dashboard ID exists and belongs to the specified workspace. |\n| 7301 | User does not have permission to view this dashboard. | Ensure the user is an Account Admin, Organization Admin, View Owner, or has Read Only permission on the dashboard. |\n| 8072 | The target object is not a valid dashboard. | Verify that the dashboard ID refers to a dashboard rather than a report or another view type. |\n| 8102 | Dashboard view type not supported for this operation. | The dashboard may be a tabbed dashboard, which is not supported through this API. |\n| 8119 | Invalid value supplied for the include attribute. | Use one or more of all, themes, layout and settings. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token with the ZohoAnalytics.modeling.read scope. |",
         "operationId": "getDashboardMetadata",
-        "x-zenesis-sections": {
-          "apiRequest": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "orgIdHeader",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a workspace-scoped API. The <b>ZANALYTICS-ORGID</b> header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format <b>orgid/workspacename</b> (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n</span></blockquote>"
-            }
-          },
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardIncludeSemantics",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe <b>include</b> attribute controls which sections are returned.<ul><li><b>all</b>, or omitting CONFIG altogether, returns objId, displayName, description, themes, layout and settings.</li><li>A specific section such as themes returns only that section, without the objId, displayName and description identity fields.</li><li>Several sections can be requested as a comma separated list, for example themes,layout.</li></ul>\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "configGetUrlEncoded",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nAs this is a GET request, the CONFIG value must be stringified and URL encoded before it is sent.\n</span></blockquote>"
-            }
-          },
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardStringScalars",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe metadata response serializes theme and settings scalars as strings even where the CONFIG accepts numbers - for example a <b>layoutType</b> sent as 6 is returned as \"6\", and a card <b>opacity</b> sent as 0.2 is returned as \"0.2\". Only the layout card geometry (<b>width</b>, <b>height</b>, <b>left</b>, <b>top</b>) is returned as numbers. Sections that were never customized are omitted from the response entirely.\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardIdEquivalence",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<b>dashboardConfig.objId</b> in the metadata response, <b>data.dashboardId</b> in the Create Dashboard response and <b>viewId</b> in the listing APIs are the same value under three different field names. Any of them can be used as the dashboard ID in the URL path.\n</span></blockquote>"
-            },
-            "3": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardSectionReplace",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nUpdate Dashboard replaces a whole section rather than merging into it. When <b>layout</b>, <b>themes</b> or <b>settings</b> is included, every stored row for that section is deleted and exactly what was sent is stored.<ul><li>Sending only some settings keys reverts all other settings to their system defaults.</li><li>A section that is absent from the CONFIG is left unchanged, so it is safe to omit sections that are not being modified.</li><li>Fetch the section with Get Dashboard Metadata, merge the change into it, then send the complete section back.</li></ul>\n</span></blockquote>"
-            }
-          },
-          "apiResponseCodes": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardTabbedUnsupported",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nTabbed dashboards are not supported by the V2 API. Calling this API on a tabbed dashboard fails with error code 8102.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "name": "ZANALYTICS-ORGID",
@@ -2052,22 +1604,22 @@
             },
             "examples": {
               "fullMetadata": {
-                "description": "Full metadata",
-                "summary": "Returns every section together with the objId, displayName and description identity fields.",
+                "description": "Returns every section together with the objId, displayName and description identity fields.",
+                "summary": "Full metadata",
                 "value": {
                   "include": "all"
                 }
               },
               "layoutOnly": {
-                "description": "Layout only",
-                "summary": "Returns just the layout card map, which is the section to fetch before appending a card.",
+                "description": "Returns just the layout card map, which is the section to fetch before appending a card.",
+                "summary": "Layout only",
                 "value": {
                   "include": "layout"
                 }
               },
               "themesAndSettings": {
-                "description": "Themes and settings",
-                "summary": "Returns two sections at once through a comma separated list.",
+                "description": "Returns two sections at once through a comma separated list.",
+                "summary": "Themes and settings",
                 "value": {
                   "include": "themes,settings"
                 }
@@ -2092,8 +1644,8 @@
                 },
                 "examples": {
                   "defaultThemeDashboard": {
-                    "description": "Default theme",
-                    "summary": "A free form dashboard on the default theme, holding a user filter card and a view card.",
+                    "description": "A free form dashboard on the default theme, holding a user filter card and a view card.",
+                    "summary": "Default theme",
                     "value": {
                       "status": "success",
                       "summary": "Get dashboard metadata",
@@ -2153,8 +1705,8 @@
                     }
                   },
                   "htmlCardDashboard": {
-                    "description": "HTML card",
-                    "summary": "A dashboard whose first card renders styled HTML markup above an embedded pivot view.",
+                    "description": "A dashboard whose first card renders styled HTML markup above an embedded pivot view.",
+                    "summary": "HTML card",
                     "value": {
                       "status": "success",
                       "summary": "Get dashboard metadata",
@@ -2204,8 +1756,8 @@
                     }
                   },
                   "imageCardDashboard": {
-                    "description": "Image card",
-                    "summary": "A dashboard on a solid theme, pairing an image card with a view card.",
+                    "description": "A dashboard on a solid theme, pairing an image card with a view card.",
+                    "summary": "Image card",
                     "value": {
                       "status": "success",
                       "summary": "Get dashboard metadata",
@@ -2260,8 +1812,8 @@
                     }
                   },
                   "gradientThemeDashboard": {
-                    "description": "Gradient theme",
-                    "summary": "A dashboard on a linear gradient theme with full card styling and exports restricted to CSV, showing how theme scalars are returned as strings.",
+                    "description": "A dashboard on a linear gradient theme with full card styling and exports restricted to CSV, showing how theme scalars are returned as strings.",
+                    "summary": "Gradient theme",
                     "value": {
                       "status": "success",
                       "summary": "Get dashboard metadata",
@@ -2360,8 +1912,8 @@
                     }
                   },
                   "solidThemeDashboard": {
-                    "description": "Solid theme",
-                    "summary": "A dashboard on a solid theme with card borders and a chart palette, and a single view card.",
+                    "description": "A dashboard on a solid theme with card borders and a chart palette, and a single view card.",
+                    "summary": "Solid theme",
                     "value": {
                       "status": "success",
                       "summary": "Get dashboard metadata",
@@ -2437,46 +1989,9 @@
                   }
                 }
               }
-            },
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7103",
-                "description": "Workspace not found.",
-                "resolution": "Verify the workspace ID in the URL."
-              },
-              {
-                "name": "7104",
-                "description": "Dashboard not found.",
-                "resolution": "Verify that the dashboard ID exists and belongs to the specified workspace."
-              },
-              {
-                "name": "7301",
-                "description": "User does not have permission to view this dashboard.",
-                "resolution": "Ensure the user is an Account Admin, Organization Admin, View Owner, or has Read Only permission on the dashboard."
-              },
-              {
-                "name": "8072",
-                "description": "The target object is not a valid dashboard.",
-                "resolution": "Verify that the dashboard ID refers to a dashboard rather than a report or another view type."
-              },
-              {
-                "name": "8102",
-                "description": "Dashboard view type not supported for this operation.",
-                "resolution": "The dashboard may be a tabbed dashboard, which is not supported through this API."
-              },
-              {
-                "name": "8119",
-                "description": "Invalid value supplied for the include attribute.",
-                "resolution": "Use one or more of all, themes, layout and settings."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token with the ZohoAnalytics.modeling.read scope."
-              }
-            ]
+            }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2490,57 +2005,9 @@
         "tags": [
           "Dashboard"
         ],
-        "x-zenesis-title": "Update Dashboard",
         "summary": "Update Dashboard",
-        "description": "Updates an existing dashboard in the specified workspace. Every attribute of the CONFIG is optional and a section that is left out is not touched, but a section that is sent replaces the stored one wholesale rather than merging into it. Fetch the section with Get Dashboard Metadata, merge the change into it, then send the complete section back.\n\n`displayName` and `description` are not part of this CONFIG - a dedicated rename API is needed to change the dashboard name.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or any user with Design Modify permission on the dashboard.",
+        "description": "Updates an existing dashboard in the specified workspace. Every attribute of the CONFIG is optional and a section that is left out is not touched, but a section that is sent replaces the stored one wholesale rather than merging into it. Fetch the section with Get Dashboard Metadata, merge the change into it, then send the complete section back.\n\n`displayName` and `description` are not part of this CONFIG - a dedicated rename API is needed to change the dashboard name.\n\nThe authenticated user must be an Account Admin or an Organization Admin, or the View Owner, or any user with Design Modify permission on the dashboard.\n\n**Notes**\n\n> Note:\n>\n> This is a workspace-scoped API. The **ZANALYTICS-ORGID** header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format **orgid/workspacename** (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n\n> Note:\n>\n> The CONFIG parameter must be sent as a URL encoded JSON string in a form field named **CONFIG**, with the content type **application/x-www-form-urlencoded**.\n\n> Note:\n>\n> A VIEW card identifies an analysis view by its display name in **viewName**, not by its ID. If the referenced view is renamed or deleted the card renders as broken, and when cloning across workspaces the **viewName** values must be updated to match views that exist in the target workspace.\n\n> Note:\n>\n> This API returns no response body on success - only an HTTP 204 No Content status. There is no JSON payload to parse; check the HTTP status code alone. Only failure responses carry a JSON error payload.\n\n> Note:\n>\n> Tabbed dashboards are not supported by the V2 API. Calling this API on a tabbed dashboard fails with error code 8102.\n\n**Error codes**\n\n| Code | Meaning | Resolution |\n| --- | --- | --- |\n| 7103 | Workspace not found. | Verify the workspace ID in the URL. |\n| 7104 | Dashboard not found. | Verify that the dashboard ID exists and belongs to the specified workspace. |\n| 7301 | User does not have permission to update this dashboard. | Ensure the user is an Account Admin, Organization Admin, View Owner, or has Design Modify permission on the dashboard. |\n| 8072 | The target object is not a valid dashboard. | Verify that the dashboard ID refers to a dashboard. |\n| 8102 | Dashboard view type not supported for this operation. | Tabbed dashboards cannot be updated through this API. |\n| 8119 | One or more CONFIG field values are invalid, such as an out-of-range number or an invalid color. | Review the CONFIG JSON and correct the invalid values. |\n| 8535 | Invalid OAuth token. | Provide a valid, non-expired OAuth token with the ZohoAnalytics.modeling.update scope. |",
         "operationId": "updateDashboard",
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardSectionReplace",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nUpdate Dashboard replaces a whole section rather than merging into it. When <b>layout</b>, <b>themes</b> or <b>settings</b> is included, every stored row for that section is deleted and exactly what was sent is stored.<ul><li>Sending only some settings keys reverts all other settings to their system defaults.</li><li>A section that is absent from the CONFIG is left unchanged, so it is safe to omit sections that are not being modified.</li><li>Fetch the section with Get Dashboard Metadata, merge the change into it, then send the complete section back.</li></ul>\n</span></blockquote>"
-            }
-          },
-          "apiRequest": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "orgIdHeader",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a workspace-scoped API. The <b>ZANALYTICS-ORGID</b> header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format <b>orgid/workspacename</b> (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n</span></blockquote>"
-            }
-          },
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "configUrlEncoded",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter must be sent as a URL encoded JSON string in a form field named <b>CONFIG</b>, with the content type <b>application/x-www-form-urlencoded</b>.\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardViewNameByName",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nA VIEW card identifies an analysis view by its display name in <b>viewName</b>, not by its ID. If the referenced view is renamed or deleted the card renders as broken, and when cloning across workspaces the <b>viewName</b> values must be updated to match views that exist in the target workspace.\n</span></blockquote>"
-            },
-            "3": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardLayoutTypePreset",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nWhen <b>layoutType</b> is set to a grid preset (1 to 4), the server auto-injects a USERFILTERS card at position \"1\" and rearranges the view cards into columns, so the card indices that were sent may be renumbered. Omit <b>layoutType</b>, or set it to 0, for a free form layout, and call Get Dashboard Metadata afterwards to confirm the layout that was actually stored.\n</span></blockquote>"
-            }
-          },
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "updateNoResponseBody",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis API returns no response body on success - only an HTTP 204 No Content status. There is no JSON payload to parse; check the HTTP status code alone. Only failure responses carry a JSON error payload.\n</span></blockquote>"
-            }
-          },
-          "apiResponseCodes": {
-            "1": {
-              "type": "editor",
-              "x-zenesis-shared-note": "dashboardTabbedUnsupported",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nTabbed dashboards are not supported by the V2 API. Calling this API on a tabbed dashboard fails with error code 8102.\n</span></blockquote>"
-            }
-          }
-        },
         "parameters": [
           {
             "name": "ZANALYTICS-ORGID",
@@ -2601,8 +2068,8 @@
               },
               "examples": {
                 "layoutUpdate": {
-                  "description": "Layout replacement",
-                  "summary": "Replaces the whole layout with three cards. Any card that is not listed here is removed from the dashboard.",
+                  "description": "Replaces the whole layout with three cards. Any card that is not listed here is removed from the dashboard.",
+                  "summary": "Layout replacement",
                   "value": {
                     "CONFIG": {
                       "layout": {
@@ -2636,8 +2103,8 @@
                   }
                 },
                 "themeUpdate": {
-                  "description": "Theme replacement",
-                  "summary": "Switches the dashboard to a solid dark theme with custom card borders and font colors, leaving the layout and the settings untouched.",
+                  "description": "Switches the dashboard to a solid dark theme with custom card borders and font colors, leaving the layout and the settings untouched.",
+                  "summary": "Theme replacement",
                   "value": {
                     "CONFIG": {
                       "themes": {
@@ -2670,8 +2137,8 @@
                   }
                 },
                 "settingsUpdate": {
-                  "description": "Settings replacement",
-                  "summary": "Restricts the export formats and turns on the global user filter. Every settings attribute that is omitted here reverts to its system default.",
+                  "description": "Restricts the export formats and turns on the global user filter. Every settings attribute that is omitted here reverts to its system default.",
+                  "summary": "Settings replacement",
                   "value": {
                     "CONFIG": {
                       "settings": {
@@ -2690,8 +2157,8 @@
                   }
                 },
                 "resetTheme": {
-                  "description": "Theme reset",
-                  "summary": "Clears every theme customization and restores the system default theme in a single call.",
+                  "description": "Clears every theme customization and restores the system default theme in a single call.",
+                  "summary": "Theme reset",
                   "value": {
                     "CONFIG": {
                       "themes": {
@@ -2713,46 +2180,9 @@
         ],
         "responses": {
           "204": {
-            "description": "The dashboard was updated successfully. No response body is returned.",
-            "x-zenesis-statuscodes": [
-              {
-                "name": "7103",
-                "description": "Workspace not found.",
-                "resolution": "Verify the workspace ID in the URL."
-              },
-              {
-                "name": "7104",
-                "description": "Dashboard not found.",
-                "resolution": "Verify that the dashboard ID exists and belongs to the specified workspace."
-              },
-              {
-                "name": "7301",
-                "description": "User does not have permission to update this dashboard.",
-                "resolution": "Ensure the user is an Account Admin, Organization Admin, View Owner, or has Design Modify permission on the dashboard."
-              },
-              {
-                "name": "8072",
-                "description": "The target object is not a valid dashboard.",
-                "resolution": "Verify that the dashboard ID refers to a dashboard."
-              },
-              {
-                "name": "8102",
-                "description": "Dashboard view type not supported for this operation.",
-                "resolution": "Tabbed dashboards cannot be updated through this API."
-              },
-              {
-                "name": "8119",
-                "description": "One or more CONFIG field values are invalid, such as an out-of-range number or an invalid color.",
-                "resolution": "Review the CONFIG JSON and correct the invalid values."
-              },
-              {
-                "name": "8535",
-                "description": "Invalid OAuth token.",
-                "resolution": "Provide a valid, non-expired OAuth token with the ZohoAnalytics.modeling.update scope."
-              }
-            ]
+            "description": "The dashboard was updated successfully. No response body is returned."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2763,30 +2193,6 @@
     }
   },
   "components": {
-    "x-zenesis-shared-notes": {
-      "description": "Canonical text of the notes that apply to more than one API in this module, distilled from the Appendices of the Reports and Dashboards help pages. Each operation carries a materialised copy of the relevant entries inside its x-zenesis-sections, tagged with x-zenesis-shared-note naming the key it came from. Edit a note here first, then propagate it to the operations that reference it.",
-      "notes": {
-        "axisTypeCasing": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nAxis type casing differs between request and response. The Create and Update samples use camelCase (<b>xAxis</b>, <b>yAxis</b>, <b>colorAxis</b>), while Get Report Metadata returns the lowercase forms (<b>xaxis</b>, <b>yaxis</b>, <b>coloraxis</b>, <b>sizeaxis</b>, <b>textaxis</b>, <b>groupby</b>, <b>summarize</b>), which the documentation states are the canonical values. When building a Create or Update CONFIG from a Get Report Metadata response, copy the axis type values verbatim.\n</span></blockquote>",
-        "chartOnlyAttributes": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<b>chartType</b>, <b>isAxisMerge</b> and <b>mergeAxisInfo</b> apply only when <b>reportType</b> is chart. <b>chartType</b> is required for chart views, and <b>mergeAxisInfo</b> must be supplied whenever <b>isAxisMerge</b> is true.\n</span></blockquote>",
-        "configGetUrlEncoded": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nAs this is a GET request, the CONFIG value must be stringified and URL encoded before it is sent.\n</span></blockquote>",
-        "configSizeLimit": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter has a maximum serialized size of 10 MB. Ensure that the nested arrays - <b>axisColumns</b>, <b>mergeAxisInfo</b>, <b>filters</b> and <b>userFilters</b> - do not push the total CONFIG payload beyond this limit.\n</span></blockquote>",
-        "configUrlEncoded": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe CONFIG parameter must be sent as a URL encoded JSON string in a form field named <b>CONFIG</b>, with the content type <b>application/x-www-form-urlencoded</b>.\n</span></blockquote>",
-        "dashboardCustomDomain": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nGet Shared Dashboards is available on custom domains. Get All Dashboards and Get Owned Dashboards are disabled on custom domains. The workspace-scoped dashboard APIs are accessible on custom domains subject to additional permission checks.\n</span></blockquote>",
-        "dashboardIdEquivalence": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<b>dashboardConfig.objId</b> in the metadata response, <b>data.dashboardId</b> in the Create Dashboard response and <b>viewId</b> in the listing APIs are the same value under three different field names. Any of them can be used as the dashboard ID in the URL path.\n</span></blockquote>",
-        "dashboardIncludeSemantics": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe <b>include</b> attribute controls which sections are returned.<ul><li><b>all</b>, or omitting CONFIG altogether, returns objId, displayName, description, themes, layout and settings.</li><li>A specific section such as themes returns only that section, without the objId, displayName and description identity fields.</li><li>Several sections can be requested as a comma separated list, for example themes,layout.</li></ul>\n</span></blockquote>",
-        "dashboardLayoutTypePreset": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nWhen <b>layoutType</b> is set to a grid preset (1 to 4), the server auto-injects a USERFILTERS card at position \"1\" and rearranges the view cards into columns, so the card indices that were sent may be renumbered. Omit <b>layoutType</b>, or set it to 0, for a free form layout, and call Get Dashboard Metadata afterwards to confirm the layout that was actually stored.\n</span></blockquote>",
-        "dashboardSectionReplace": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nUpdate Dashboard replaces a whole section rather than merging into it. When <b>layout</b>, <b>themes</b> or <b>settings</b> is included, every stored row for that section is deleted and exactly what was sent is stored.<ul><li>Sending only some settings keys reverts all other settings to their system defaults.</li><li>A section that is absent from the CONFIG is left unchanged, so it is safe to omit sections that are not being modified.</li><li>Fetch the section with Get Dashboard Metadata, merge the change into it, then send the complete section back.</li></ul>\n</span></blockquote>",
-        "dashboardStringScalars": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe metadata response serializes theme and settings scalars as strings even where the CONFIG accepts numbers - for example a <b>layoutType</b> sent as 6 is returned as \"6\", and a card <b>opacity</b> sent as 0.2 is returned as \"0.2\". Only the layout card geometry (<b>width</b>, <b>height</b>, <b>left</b>, <b>top</b>) is returned as numbers. Sections that were never customized are omitted from the response entirely.\n</span></blockquote>",
-        "dashboardTabbedUnsupported": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nTabbed dashboards are not supported by the V2 API. Calling this API on a tabbed dashboard fails with error code 8102.\n</span></blockquote>",
-        "dashboardViewNameByName": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nA VIEW card identifies an analysis view by its display name in <b>viewName</b>, not by its ID. If the referenced view is renamed or deleted the card renders as broken, and when cloning across workspaces the <b>viewName</b> values must be updated to match views that exist in the target workspace.\n</span></blockquote>",
-        "orgIdHeader": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a workspace-scoped API. The <b>ZANALYTICS-ORGID</b> header carrying the organization ID that owns the workspace is mandatory. A workspaceKey in the format <b>orgid/workspacename</b> (for example, 700000123456/Sales_Analytics) may be used in place of the numeric workspace ID in the URL path.\n</span></blockquote>",
-        "reportCloneWorkflow": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe <b>reportConfig</b> object returned by Get Report Metadata is structurally identical to the Create CONFIG, so it can be used directly as a clone template. Change <b>title</b> to a value that is unique in the workspace, keep <b>baseTableName</b>, and verify that every <b>columnName</b> and <b>tableName</b> exists in the target workspace's base table before posting.\n</span></blockquote>",
-        "reportFullReset": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nUpdate Analysis View performs a full configuration reset, not a patch.<ul><li>Every axis column, filter, user filter and settings entry is replaced with the values sent in the CONFIG.</li><li>Fields that are not provided revert to their empty defaults - omitting <b>axisColumns</b>, <b>filters</b> or <b>userFilters</b> clears them.</li><li><b>description</b> is cleared if it is omitted.</li><li>Always fetch the current state with Get Report Metadata, modify it, then send the complete configuration back.</li></ul>\n</span></blockquote>",
-        "reportReadOnlyFields": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe following fields cannot be changed through Update Analysis View:<ul><li><b>title</b> - silently ignored; the existing display name is always preserved.</li><li><b>folderId</b> - the request fails if the value differs from the view's current folder. Omit it entirely.</li><li><b>reportType</b> - must match the existing view type. A mismatch fails with error code 8021.</li><li><b>baseTableName</b> - derived from the view's stored parent reference. Sending it is harmless but has no effect.</li></ul>\n</span></blockquote>",
-        "updateNoResponseBody": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis API returns no response body on success - only an HTTP 204 No Content status. There is no JSON payload to parse; check the HTTP status code alone. Only failure responses carry a JSON error payload.\n</span></blockquote>",
-        "userScopeListing": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThis is a user service level API - it returns dashboards across every organization the caller belongs to.<ul><li>The <b>ZANALYTICS-ORGID</b> header is not required.</li><li>The OAuth token must be issued with user level scope.</li></ul>\n</span></blockquote>"
-      }
-    },
     "parameters": {},
     "securitySchemes": {
       "iam-oauth2-schema": {
@@ -2829,20 +2235,20 @@
               "summarize",
               "custom"
             ],
-            "x-zenesis-enums-desc": [
-              "Horizontal axis",
-              "Vertical axis",
-              "Color segments",
-              "Bubble size",
-              "Text label",
-              "Hover tooltip",
-              "Pivot row",
-              "Pivot column",
-              "Pivot measure",
-              "Summary grouping",
-              "Summary measure",
-              "Custom axis"
-            ]
+            "x-enumDescriptions": {
+              "xAxis": "Horizontal axis",
+              "yAxis": "Vertical axis",
+              "colorAxis": "Color segments",
+              "sizeaxis": "Bubble size",
+              "textAxis": "Text label",
+              "tooltip": "Hover tooltip",
+              "row": "Pivot row",
+              "column": "Pivot column",
+              "data": "Pivot measure",
+              "groupBy": "Summary grouping",
+              "summarize": "Summary measure",
+              "custom": "Custom axis"
+            }
           },
           "columnName": {
             "type": "string",
@@ -2909,28 +2315,28 @@
               "dateTime",
               "seasonal"
             ],
-            "x-zenesis-enums-desc": [
-              "Raw value",
-              "Sum",
-              "Average",
-              "Row count",
-              "Unique count",
-              "Minimum",
-              "Maximum",
-              "Standard deviation",
-              "Variance",
-              "Percentile",
-              "As dimension",
-              "Range bucket",
-              "Geographic mapping",
-              "By year",
-              "By quarter",
-              "By month",
-              "By month-year",
-              "Absolute quarter",
-              "Full datetime",
-              "Seasonal period"
-            ]
+            "x-enumDescriptions": {
+              "actual": "Raw value",
+              "sum": "Sum",
+              "average": "Average",
+              "count": "Row count",
+              "distinctCount": "Unique count",
+              "min": "Minimum",
+              "max": "Maximum",
+              "stdDev": "Standard deviation",
+              "variance": "Variance",
+              "percentile": "Percentile",
+              "dimension": "As dimension",
+              "range": "Range bucket",
+              "geo": "Geographic mapping",
+              "year": "By year",
+              "quarter": "By quarter",
+              "month": "By month",
+              "monthYear": "By month-year",
+              "absQuarter": "Absolute quarter",
+              "dateTime": "Full datetime",
+              "seasonal": "Seasonal period"
+            }
           },
           "geoRole": {
             "type": "string",
@@ -2940,11 +2346,11 @@
               "longitude",
               "location"
             ],
-            "x-zenesis-enums-desc": [
-              "Latitude coordinate",
-              "Longitude coordinate",
-              "Text location"
-            ]
+            "x-enumDescriptions": {
+              "latitude": "Latitude coordinate",
+              "longitude": "Longitude coordinate",
+              "location": "Text location"
+            }
           },
           "rangeSize": {
             "type": "number",
@@ -2960,10 +2366,10 @@
               "asc",
               "desc"
             ],
-            "x-zenesis-enums-desc": [
-              "Ascending",
-              "Descending"
-            ]
+            "x-enumDescriptions": {
+              "asc": "Ascending",
+              "desc": "Descending"
+            }
           },
           "format": {
             "$ref": "#/components/schemas/ColumnFormat"
@@ -2974,6 +2380,14 @@
         },
         "required": [
           "type"
+        ],
+        "examples": [
+          {
+            "type": "xAxis",
+            "columnName": "Product",
+            "tableName": "Sales",
+            "operation": "actual"
+          }
         ]
       },
       "AxisColumns": {
@@ -3047,9 +2461,13 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
-              "Off",
-              "On"
+            "x-enumDescriptions": {
+              "0": "Off",
+              "1": "On"
+            },
+            "x-enum-varnames": [
+              "OFF",
+              "ON"
             ]
           },
           "decimalPlaces": {
@@ -3068,9 +2486,13 @@
               0,
               1
             ],
-            "x-zenesis-enums-desc": [
-              "Period",
-              "Comma"
+            "x-enumDescriptions": {
+              "0": "Period",
+              "1": "Comma"
+            },
+            "x-enum-varnames": [
+              "PERIOD",
+              "COMMA"
             ]
           },
           "showSymbol": {
@@ -3098,11 +2520,17 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
-              "None",
-              "Thousands",
-              "Millions",
-              "Billions"
+            "x-enumDescriptions": {
+              "0": "None",
+              "1": "Thousands",
+              "2": "Millions",
+              "3": "Billions"
+            },
+            "x-enum-varnames": [
+              "NONE",
+              "THOUSANDS",
+              "MILLIONS",
+              "BILLIONS"
             ]
           },
           "unitsList": {
@@ -3211,28 +2639,28 @@
               "dateTime",
               "seasonal"
             ],
-            "x-zenesis-enums-desc": [
-              "Raw value",
-              "Sum",
-              "Average",
-              "Row count",
-              "Unique count",
-              "Minimum",
-              "Maximum",
-              "Standard deviation",
-              "Variance",
-              "Percentile",
-              "As dimension",
-              "Range bucket",
-              "Geographic mapping",
-              "By year",
-              "By quarter",
-              "By month",
-              "By month-year",
-              "Absolute quarter",
-              "Full datetime",
-              "Seasonal period"
-            ]
+            "x-enumDescriptions": {
+              "actual": "Raw value",
+              "sum": "Sum",
+              "average": "Average",
+              "count": "Row count",
+              "distinctCount": "Unique count",
+              "min": "Minimum",
+              "max": "Maximum",
+              "stdDev": "Standard deviation",
+              "variance": "Variance",
+              "percentile": "Percentile",
+              "dimension": "As dimension",
+              "range": "Range bucket",
+              "geo": "Geographic mapping",
+              "year": "By year",
+              "quarter": "By quarter",
+              "month": "By month",
+              "monthYear": "By month-year",
+              "absQuarter": "Absolute quarter",
+              "dateTime": "Full datetime",
+              "seasonal": "Seasonal period"
+            }
           },
           "percentileVal": {
             "type": "integer",
@@ -3440,28 +2868,28 @@
               "dateTime",
               "seasonal"
             ],
-            "x-zenesis-enums-desc": [
-              "Raw value",
-              "Sum",
-              "Average",
-              "Row count",
-              "Unique count",
-              "Minimum",
-              "Maximum",
-              "Standard deviation",
-              "Variance",
-              "Percentile",
-              "As dimension",
-              "Range bucket",
-              "Geographic mapping",
-              "By year",
-              "By quarter",
-              "By month",
-              "By month-year",
-              "Absolute quarter",
-              "Full datetime",
-              "Seasonal period"
-            ]
+            "x-enumDescriptions": {
+              "actual": "Raw value",
+              "sum": "Sum",
+              "average": "Average",
+              "count": "Row count",
+              "distinctCount": "Unique count",
+              "min": "Minimum",
+              "max": "Maximum",
+              "stdDev": "Standard deviation",
+              "variance": "Variance",
+              "percentile": "Percentile",
+              "dimension": "As dimension",
+              "range": "Range bucket",
+              "geo": "Geographic mapping",
+              "year": "By year",
+              "quarter": "By quarter",
+              "month": "By month",
+              "monthYear": "By month-year",
+              "absQuarter": "Absolute quarter",
+              "dateTime": "Full datetime",
+              "seasonal": "Seasonal period"
+            }
           },
           "filterType": {
             "type": "string",
@@ -3518,7 +2946,20 @@
           "additionalDetails": {
             "$ref": "#/components/schemas/FilterAdditionalDetails"
           }
-        }
+        },
+        "examples": [
+          {
+            "columnName": "Cost",
+            "tableName": "Sales",
+            "operation": "average",
+            "filterType": "ranking",
+            "values": [
+              "Top 5"
+            ],
+            "rankingColumn": "Product Category",
+            "exclude": false
+          }
+        ]
       },
       "FilterValues": {
         "type": "array",
@@ -3697,28 +3138,28 @@
               "dateTime",
               "seasonal"
             ],
-            "x-zenesis-enums-desc": [
-              "Raw value",
-              "Sum",
-              "Average",
-              "Row count",
-              "Unique count",
-              "Minimum",
-              "Maximum",
-              "Standard deviation",
-              "Variance",
-              "Percentile",
-              "As dimension",
-              "Range bucket",
-              "Geographic mapping",
-              "By year",
-              "By quarter",
-              "By month",
-              "By month-year",
-              "Absolute quarter",
-              "Full datetime",
-              "Seasonal period"
-            ]
+            "x-enumDescriptions": {
+              "actual": "Raw value",
+              "sum": "Sum",
+              "average": "Average",
+              "count": "Row count",
+              "distinctCount": "Unique count",
+              "min": "Minimum",
+              "max": "Maximum",
+              "stdDev": "Standard deviation",
+              "variance": "Variance",
+              "percentile": "Percentile",
+              "dimension": "As dimension",
+              "range": "Range bucket",
+              "geo": "Geographic mapping",
+              "year": "By year",
+              "quarter": "By quarter",
+              "month": "By month",
+              "monthYear": "By month-year",
+              "absQuarter": "Absolute quarter",
+              "dateTime": "Full datetime",
+              "seasonal": "Seasonal period"
+            }
           },
           "compType": {
             "type": "string",
@@ -3729,12 +3170,12 @@
               "slider",
               "dateRange"
             ],
-            "x-zenesis-enums-desc": [
-              "Dropdown selector",
-              "Checklist selector",
-              "Range slider",
-              "Date picker"
-            ]
+            "x-enumDescriptions": {
+              "singleSelect": "Dropdown selector",
+              "multiSelect": "Checklist selector",
+              "slider": "Range slider",
+              "dateRange": "Date picker"
+            }
           },
           "filterType": {
             "type": "string",
@@ -3789,11 +3230,11 @@
               "ListOnlyRelevantValues",
               "ListRelevantValues"
             ],
-            "x-zenesis-enums-desc": [
-              "All values",
-              "Relevant only",
-              "Context-aware"
-            ]
+            "x-enumDescriptions": {
+              "ListAllValues": "All values",
+              "ListOnlyRelevantValues": "Relevant only",
+              "ListRelevantValues": "Context-aware"
+            }
           }
         }
       },
@@ -3890,10 +3331,15 @@
               2,
               3
             ],
-            "x-zenesis-enums-desc": [
-              "Compact",
-              "Normal",
-              "Relaxed"
+            "x-enumDescriptions": {
+              "1": "Compact",
+              "2": "Normal",
+              "3": "Relaxed"
+            },
+            "x-enum-varnames": [
+              "COMPACT",
+              "NORMAL",
+              "RELAXED"
             ]
           },
           "compactIndent": {
@@ -4092,11 +3538,11 @@
               "pivot",
               "summary"
             ],
-            "x-zenesis-enums-desc": [
-              "Chart view",
-              "Pivot table",
-              "Summary view"
-            ]
+            "x-enumDescriptions": {
+              "chart": "Chart view",
+              "pivot": "Pivot table",
+              "summary": "Summary view"
+            }
           },
           "title": {
             "type": "string",
@@ -4212,6 +3658,48 @@
         "required": [
           "baseTableName",
           "reportType"
+        ],
+        "examples": [
+          {
+            "baseTableName": "Sales",
+            "reportType": "chart",
+            "chartType": "bar",
+            "title": "Top Products by Average Cost",
+            "description": "Bar chart filtered to top 5 products by average cost",
+            "axisColumns": [
+              {
+                "type": "xAxis",
+                "columnName": "Product",
+                "tableName": "Sales",
+                "operation": "actual"
+              },
+              {
+                "type": "yAxis",
+                "columnName": "Sales",
+                "tableName": "Sales",
+                "operation": "sum"
+              },
+              {
+                "type": "yAxis",
+                "columnName": "Date",
+                "tableName": "Sales",
+                "operation": "count"
+              }
+            ],
+            "filters": [
+              {
+                "columnName": "Cost",
+                "tableName": "Sales",
+                "operation": "average",
+                "filterType": "ranking",
+                "values": [
+                  "Top 5"
+                ],
+                "rankingColumn": "Product Category",
+                "exclude": false
+              }
+            ]
+          }
         ]
       },
       "UpdateReportConfig": {
@@ -4235,11 +3723,11 @@
               "pivot",
               "summary"
             ],
-            "x-zenesis-enums-desc": [
-              "Chart view",
-              "Pivot table",
-              "Summary view"
-            ]
+            "x-enumDescriptions": {
+              "chart": "Chart view",
+              "pivot": "Pivot table",
+              "summary": "Summary view"
+            }
           },
           "description": {
             "type": "string",
@@ -4331,6 +3819,33 @@
         },
         "required": [
           "reportType"
+        ],
+        "examples": [
+          {
+            "reportType": "chart",
+            "chartType": "line",
+            "description": "Rolling 12-month trend",
+            "axisColumns": [
+              {
+                "type": "xAxis",
+                "columnName": "Date",
+                "tableName": "Sales",
+                "operation": "monthYear"
+              },
+              {
+                "type": "yAxis",
+                "columnName": "Sales",
+                "tableName": "Sales",
+                "operation": "sum"
+              },
+              {
+                "type": "yAxis",
+                "columnName": "Cost",
+                "tableName": "Sales",
+                "operation": "sum"
+              }
+            ]
+          }
         ]
       },
       "CreateReportResponse": {
@@ -4345,10 +3860,10 @@
               "success",
               "failure"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded",
-              "Request failed"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded",
+              "failure": "Request failed"
+            }
           },
           "summary": {
             "type": "string",
@@ -4360,7 +3875,16 @@
           "data": {
             "$ref": "#/components/schemas/CreateReportResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Chart view created successfully.",
+            "data": {
+              "viewId": "466206000000105001"
+            }
+          }
+        ]
       },
       "CreateReportResponseData": {
         "type": "object",
@@ -4374,7 +3898,12 @@
               "466206000000105001"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "viewId": "466206000000105001"
+          }
+        ]
       },
       "GetReportMetadataResponse": {
         "type": "object",
@@ -4388,10 +3917,10 @@
               "success",
               "failure"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded",
-              "Request failed"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded",
+              "failure": "Request failed"
+            }
           },
           "summary": {
             "type": "string",
@@ -4403,7 +3932,37 @@
           "data": {
             "$ref": "#/components/schemas/GetReportMetadataResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get analysis view metadata",
+            "data": {
+              "reportConfig": {
+                "title": "Bar Chart Report",
+                "description": "Vertical bar chart",
+                "reportType": "chart",
+                "chartType": "bar",
+                "baseTableName": "Sales",
+                "isAxisMerge": false,
+                "axisColumns": [
+                  {
+                    "type": "xaxis",
+                    "columnName": "Product",
+                    "tableName": "Sales",
+                    "operation": "actual"
+                  },
+                  {
+                    "type": "yaxis",
+                    "columnName": "Sales",
+                    "tableName": "Sales",
+                    "operation": "sum"
+                  }
+                ]
+              }
+            }
+          }
+        ]
       },
       "GetReportMetadataResponseData": {
         "type": "object",
@@ -4413,7 +3972,33 @@
           "reportConfig": {
             "$ref": "#/components/schemas/ReportConfigMetadata"
           }
-        }
+        },
+        "examples": [
+          {
+            "reportConfig": {
+              "title": "Bar Chart Report",
+              "description": "Vertical bar chart",
+              "reportType": "chart",
+              "chartType": "bar",
+              "baseTableName": "Sales",
+              "isAxisMerge": false,
+              "axisColumns": [
+                {
+                  "type": "xaxis",
+                  "columnName": "Product",
+                  "tableName": "Sales",
+                  "operation": "actual"
+                },
+                {
+                  "type": "yaxis",
+                  "columnName": "Sales",
+                  "tableName": "Sales",
+                  "operation": "sum"
+                }
+              ]
+            }
+          }
+        ]
       },
       "ReportConfigMetadata": {
         "type": "object",
@@ -4442,11 +4027,11 @@
               "pivot",
               "summary"
             ],
-            "x-zenesis-enums-desc": [
-              "Chart view",
-              "Pivot table",
-              "Summary view"
-            ]
+            "x-enumDescriptions": {
+              "chart": "Chart view",
+              "pivot": "Pivot table",
+              "summary": "Summary view"
+            }
           },
           "chartType": {
             "type": "string",
@@ -4482,7 +4067,31 @@
           "settings": {
             "$ref": "#/components/schemas/ViewSettings"
           }
-        }
+        },
+        "examples": [
+          {
+            "title": "Bar Chart Report",
+            "description": "Vertical bar chart",
+            "reportType": "chart",
+            "chartType": "bar",
+            "baseTableName": "Sales",
+            "isAxisMerge": false,
+            "axisColumns": [
+              {
+                "type": "xaxis",
+                "columnName": "Product",
+                "tableName": "Sales",
+                "operation": "actual"
+              },
+              {
+                "type": "yaxis",
+                "columnName": "Sales",
+                "tableName": "Sales",
+                "operation": "sum"
+              }
+            ]
+          }
+        ]
       },
       "ReportMetadataAxisColumns": {
         "type": "array",
@@ -4530,20 +4139,20 @@
               "summarize",
               "custom"
             ],
-            "x-zenesis-enums-desc": [
-              "Horizontal axis",
-              "Vertical axis",
-              "Color segments",
-              "Bubble size",
-              "Text label",
-              "Hover tooltip",
-              "Pivot row",
-              "Pivot column",
-              "Pivot measure",
-              "Summary grouping",
-              "Summary measure",
-              "Custom axis"
-            ]
+            "x-enumDescriptions": {
+              "xaxis": "Horizontal axis",
+              "yaxis": "Vertical axis",
+              "coloraxis": "Color segments",
+              "sizeaxis": "Bubble size",
+              "textaxis": "Text label",
+              "tooltip": "Hover tooltip",
+              "row": "Pivot row",
+              "column": "Pivot column",
+              "data": "Pivot measure",
+              "groupby": "Summary grouping",
+              "summarize": "Summary measure",
+              "custom": "Custom axis"
+            }
           },
           "columnName": {
             "type": "string",
@@ -4591,28 +4200,28 @@
               "dateTime",
               "seasonal"
             ],
-            "x-zenesis-enums-desc": [
-              "Raw value",
-              "Sum",
-              "Average",
-              "Row count",
-              "Unique count",
-              "Minimum",
-              "Maximum",
-              "Standard deviation",
-              "Variance",
-              "Percentile",
-              "As dimension",
-              "Range bucket",
-              "Geographic mapping",
-              "By year",
-              "By quarter",
-              "By month",
-              "By month-year",
-              "Absolute quarter",
-              "Full datetime",
-              "Seasonal period"
-            ]
+            "x-enumDescriptions": {
+              "actual": "Raw value",
+              "sum": "Sum",
+              "average": "Average",
+              "count": "Row count",
+              "distinctCount": "Unique count",
+              "min": "Minimum",
+              "max": "Maximum",
+              "stdDev": "Standard deviation",
+              "variance": "Variance",
+              "percentile": "Percentile",
+              "dimension": "As dimension",
+              "range": "Range bucket",
+              "geo": "Geographic mapping",
+              "year": "By year",
+              "quarter": "By quarter",
+              "month": "By month",
+              "monthYear": "By month-year",
+              "absQuarter": "Absolute quarter",
+              "dateTime": "Full datetime",
+              "seasonal": "Seasonal period"
+            }
           },
           "geoRole": {
             "type": "string",
@@ -4622,11 +4231,11 @@
               "longitude",
               "location"
             ],
-            "x-zenesis-enums-desc": [
-              "Latitude coordinate",
-              "Longitude coordinate",
-              "Text location"
-            ]
+            "x-enumDescriptions": {
+              "latitude": "Latitude coordinate",
+              "longitude": "Longitude coordinate",
+              "location": "Text location"
+            }
           },
           "format": {
             "$ref": "#/components/schemas/ColumnFormat"
@@ -4634,7 +4243,15 @@
           "windowFunction": {
             "$ref": "#/components/schemas/WindowFunction"
           }
-        }
+        },
+        "examples": [
+          {
+            "type": "xaxis",
+            "columnName": "Product",
+            "tableName": "Sales",
+            "operation": "actual"
+          }
+        ]
       },
       "DashboardSummary": {
         "type": "object",
@@ -4740,7 +4357,25 @@
               "700000123456"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "viewId": "466206000000105001",
+            "viewName": "Executive Sales Dashboard",
+            "viewDesc": "High-level sales KPIs for the executive team",
+            "viewType": "Dashboard",
+            "parentViewId": "",
+            "folderId": "466206000000071005",
+            "createdTime": "1719820800000",
+            "createdBy": "alice@example.com",
+            "lastModifiedTime": "1722499200000",
+            "lastModifiedBy": "alice@example.com",
+            "isFavorite": true,
+            "sharedBy": "",
+            "workspaceId": "466206000000071000",
+            "orgId": "700000123456"
+          }
+        ]
       },
       "DashboardSummaries": {
         "type": "array",
@@ -4748,7 +4383,43 @@
         "description": "JSONArray of dashboard summaries.",
         "items": {
           "$ref": "#/components/schemas/DashboardSummary"
-        }
+        },
+        "examples": [
+          [
+            {
+              "viewId": "466206000000105001",
+              "viewName": "Executive Sales Dashboard",
+              "viewDesc": "High-level sales KPIs for the executive team",
+              "viewType": "Dashboard",
+              "parentViewId": "",
+              "folderId": "466206000000071005",
+              "createdTime": "1719820800000",
+              "createdBy": "alice@example.com",
+              "lastModifiedTime": "1722499200000",
+              "lastModifiedBy": "alice@example.com",
+              "isFavorite": true,
+              "sharedBy": "",
+              "workspaceId": "466206000000071000",
+              "orgId": "700000123456"
+            },
+            {
+              "viewId": "466206000000108003",
+              "viewName": "Marketing Campaign Overview",
+              "viewDesc": "",
+              "viewType": "Dashboard",
+              "parentViewId": "",
+              "folderId": "466206000000071000",
+              "createdTime": "1720080000000",
+              "createdBy": "alice@example.com",
+              "lastModifiedTime": "1720080000000",
+              "lastModifiedBy": "alice@example.com",
+              "isFavorite": false,
+              "sharedBy": "",
+              "workspaceId": "466206000000071000",
+              "orgId": "700000123456"
+            }
+          ]
+        ]
       },
       "GetDashboardsResponse": {
         "type": "object",
@@ -4762,10 +4433,10 @@
               "success",
               "failure"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded",
-              "Request failed"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded",
+              "failure": "Request failed"
+            }
           },
           "summary": {
             "type": "string",
@@ -4777,7 +4448,67 @@
           "data": {
             "$ref": "#/components/schemas/GetDashboardsResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get all dashboards",
+            "data": {
+              "ownedViews": [
+                {
+                  "viewId": "466206000000105001",
+                  "viewName": "Executive Sales Dashboard",
+                  "viewDesc": "High-level sales KPIs for the executive team",
+                  "viewType": "Dashboard",
+                  "parentViewId": "",
+                  "folderId": "466206000000071005",
+                  "createdTime": "1719820800000",
+                  "createdBy": "alice@example.com",
+                  "lastModifiedTime": "1722499200000",
+                  "lastModifiedBy": "alice@example.com",
+                  "isFavorite": true,
+                  "sharedBy": "",
+                  "workspaceId": "466206000000071000",
+                  "orgId": "700000123456"
+                },
+                {
+                  "viewId": "466206000000108003",
+                  "viewName": "Marketing Campaign Overview",
+                  "viewDesc": "",
+                  "viewType": "Dashboard",
+                  "parentViewId": "",
+                  "folderId": "466206000000071000",
+                  "createdTime": "1720080000000",
+                  "createdBy": "alice@example.com",
+                  "lastModifiedTime": "1720080000000",
+                  "lastModifiedBy": "alice@example.com",
+                  "isFavorite": false,
+                  "sharedBy": "",
+                  "workspaceId": "466206000000071000",
+                  "orgId": "700000123456"
+                }
+              ],
+              "sharedViews": [
+                {
+                  "viewId": "466206000000200010",
+                  "viewName": "Finance Overview",
+                  "viewDesc": "Finance team quarterly dashboard",
+                  "viewType": "Dashboard",
+                  "parentViewId": "",
+                  "folderId": "466206000000190001",
+                  "createdTime": "1718640000000",
+                  "createdBy": "bob@example.com",
+                  "lastModifiedTime": "1721001600000",
+                  "lastModifiedBy": "bob@example.com",
+                  "isFavorite": false,
+                  "sharedBy": "bob@example.com",
+                  "workspaceId": "466206000000190000",
+                  "orgId": "700000123456"
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetDashboardsResponseData": {
         "type": "object",
@@ -4790,7 +4521,63 @@
           "sharedViews": {
             "$ref": "#/components/schemas/DashboardSummaries"
           }
-        }
+        },
+        "examples": [
+          {
+            "ownedViews": [
+              {
+                "viewId": "466206000000105001",
+                "viewName": "Executive Sales Dashboard",
+                "viewDesc": "High-level sales KPIs for the executive team",
+                "viewType": "Dashboard",
+                "parentViewId": "",
+                "folderId": "466206000000071005",
+                "createdTime": "1719820800000",
+                "createdBy": "alice@example.com",
+                "lastModifiedTime": "1722499200000",
+                "lastModifiedBy": "alice@example.com",
+                "isFavorite": true,
+                "sharedBy": "",
+                "workspaceId": "466206000000071000",
+                "orgId": "700000123456"
+              },
+              {
+                "viewId": "466206000000108003",
+                "viewName": "Marketing Campaign Overview",
+                "viewDesc": "",
+                "viewType": "Dashboard",
+                "parentViewId": "",
+                "folderId": "466206000000071000",
+                "createdTime": "1720080000000",
+                "createdBy": "alice@example.com",
+                "lastModifiedTime": "1720080000000",
+                "lastModifiedBy": "alice@example.com",
+                "isFavorite": false,
+                "sharedBy": "",
+                "workspaceId": "466206000000071000",
+                "orgId": "700000123456"
+              }
+            ],
+            "sharedViews": [
+              {
+                "viewId": "466206000000200010",
+                "viewName": "Finance Overview",
+                "viewDesc": "Finance team quarterly dashboard",
+                "viewType": "Dashboard",
+                "parentViewId": "",
+                "folderId": "466206000000190001",
+                "createdTime": "1718640000000",
+                "createdBy": "bob@example.com",
+                "lastModifiedTime": "1721001600000",
+                "lastModifiedBy": "bob@example.com",
+                "isFavorite": false,
+                "sharedBy": "bob@example.com",
+                "workspaceId": "466206000000190000",
+                "orgId": "700000123456"
+              }
+            ]
+          }
+        ]
       },
       "GetDashboardListResponse": {
         "type": "object",
@@ -4804,10 +4591,10 @@
               "success",
               "failure"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded",
-              "Request failed"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded",
+              "failure": "Request failed"
+            }
           },
           "summary": {
             "type": "string",
@@ -4819,7 +4606,49 @@
           "data": {
             "$ref": "#/components/schemas/GetDashboardListResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get owned dashboards",
+            "data": {
+              "views": [
+                {
+                  "viewId": "466206000000105001",
+                  "viewName": "Executive Sales Dashboard",
+                  "viewDesc": "High-level sales KPIs for the executive team",
+                  "viewType": "Dashboard",
+                  "parentViewId": "",
+                  "folderId": "466206000000071005",
+                  "createdTime": "1719820800000",
+                  "createdBy": "alice@example.com",
+                  "lastModifiedTime": "1722499200000",
+                  "lastModifiedBy": "alice@example.com",
+                  "isFavorite": true,
+                  "sharedBy": "",
+                  "workspaceId": "466206000000071000",
+                  "orgId": "700000123456"
+                },
+                {
+                  "viewId": "466206000000305020",
+                  "viewName": "HR Headcount Overview",
+                  "viewDesc": "",
+                  "viewType": "Dashboard",
+                  "parentViewId": "",
+                  "folderId": "466206000000300000",
+                  "createdTime": "1716912000000",
+                  "createdBy": "admin@example.com",
+                  "lastModifiedTime": "1720339200000",
+                  "lastModifiedBy": "admin@example.com",
+                  "isFavorite": false,
+                  "sharedBy": "",
+                  "workspaceId": "466206000000300000",
+                  "orgId": "700000998877"
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetDashboardListResponseData": {
         "type": "object",
@@ -4829,7 +4658,45 @@
           "views": {
             "$ref": "#/components/schemas/DashboardSummaries"
           }
-        }
+        },
+        "examples": [
+          {
+            "views": [
+              {
+                "viewId": "466206000000105001",
+                "viewName": "Executive Sales Dashboard",
+                "viewDesc": "High-level sales KPIs for the executive team",
+                "viewType": "Dashboard",
+                "parentViewId": "",
+                "folderId": "466206000000071005",
+                "createdTime": "1719820800000",
+                "createdBy": "alice@example.com",
+                "lastModifiedTime": "1722499200000",
+                "lastModifiedBy": "alice@example.com",
+                "isFavorite": true,
+                "sharedBy": "",
+                "workspaceId": "466206000000071000",
+                "orgId": "700000123456"
+              },
+              {
+                "viewId": "466206000000305020",
+                "viewName": "HR Headcount Overview",
+                "viewDesc": "",
+                "viewType": "Dashboard",
+                "parentViewId": "",
+                "folderId": "466206000000300000",
+                "createdTime": "1716912000000",
+                "createdBy": "admin@example.com",
+                "lastModifiedTime": "1720339200000",
+                "lastModifiedBy": "admin@example.com",
+                "isFavorite": false,
+                "sharedBy": "",
+                "workspaceId": "466206000000300000",
+                "orgId": "700000998877"
+              }
+            ]
+          }
+        ]
       },
       "DashboardLayout": {
         "type": "object",
@@ -4878,16 +4745,16 @@
               "USERFILTERS",
               "DELETED"
             ],
-            "x-zenesis-enums-desc": [
-              "Analysis view",
-              "HTML content",
-              "Title text",
-              "Paragraph text",
-              "Image card",
-              "Embedded URL",
-              "User filters",
-              "Removed card"
-            ]
+            "x-enumDescriptions": {
+              "VIEW": "Analysis view",
+              "HTML": "HTML content",
+              "TITLE": "Title text",
+              "PARA": "Paragraph text",
+              "IMAGE": "Image card",
+              "EMBED": "Embedded URL",
+              "USERFILTERS": "User filters",
+              "DELETED": "Removed card"
+            }
           },
           "width": {
             "type": "integer",
@@ -4975,10 +4842,10 @@
               "true",
               "unset"
             ],
-            "x-zenesis-enums-desc": [
-              "Reset theme",
-              "Keep theme"
-            ]
+            "x-enumDescriptions": {
+              "true": "Reset theme",
+              "unset": "Keep theme"
+            }
           },
           "type": {
             "type": "string",
@@ -5188,10 +5055,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Flipped",
-              "Not flipped"
-            ]
+            "x-enumDescriptions": {
+              "true": "Flipped",
+              "false": "Not flipped"
+            }
           },
           "fitType": {
             "type": "string",
@@ -5201,11 +5068,11 @@
               "2",
               "3"
             ],
-            "x-zenesis-enums-desc": [
-              "Cover",
-              "Contain",
-              "Stretch"
-            ]
+            "x-enumDescriptions": {
+              "1": "Cover",
+              "2": "Contain",
+              "3": "Stretch"
+            }
           }
         }
       },
@@ -5312,9 +5179,13 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
-              "Themed palette",
-              "Custom palette"
+            "x-enumDescriptions": {
+              "1": "Themed palette",
+              "2": "Custom palette"
+            },
+            "x-enum-varnames": [
+              "THEMED_PALETTE",
+              "CUSTOM_PALETTE"
             ]
           },
           "border": {
@@ -5374,9 +5245,13 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
-              "No effect",
-              "Apply effect"
+            "x-enumDescriptions": {
+              "1": "No effect",
+              "2": "Apply effect"
+            },
+            "x-enum-varnames": [
+              "NO_EFFECT",
+              "APPLY_EFFECT"
             ]
           },
           "type": {
@@ -5430,10 +5305,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "enableGlobalValueUF": {
             "type": "string",
@@ -5443,10 +5318,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "smartAlignCharts": {
             "type": "string",
@@ -5456,10 +5331,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "allowExport": {
             "$ref": "#/components/schemas/DashboardAllowExport"
@@ -5472,10 +5347,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "allowEmbedInsights": {
             "type": "string",
@@ -5485,10 +5360,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "enableSortMenu": {
             "type": "string",
@@ -5498,10 +5373,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "reportAsFilter": {
             "type": "string",
@@ -5511,10 +5386,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "hideColumnOptions": {
             "type": "string",
@@ -5524,10 +5399,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "allowVUD": {
             "type": "string",
@@ -5537,10 +5412,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "allowInsights": {
             "type": "string",
@@ -5550,10 +5425,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "fitToWidth": {
             "type": "string",
@@ -5563,10 +5438,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "layoutType": {
             "type": "string",
@@ -5580,14 +5455,14 @@
               "a4_797",
               "a3_1123"
             ],
-            "x-zenesis-enums-desc": [
-              "Browser width",
-              "Custom width",
-              "Tabloid size",
-              "Letter size",
-              "A4 size",
-              "A3 size"
-            ]
+            "x-enumDescriptions": {
+              "web": "Browser width",
+              "custom_width": "Custom width",
+              "tabloid_1056": "Tabloid size",
+              "letter_816": "Letter size",
+              "a4_797": "A4 size",
+              "a3_1123": "A3 size"
+            }
           },
           "layoutWidth": {
             "type": "string",
@@ -5605,10 +5480,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "applyImmediateUF": {
             "type": "string",
@@ -5618,10 +5493,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "timeSlicer": {
             "type": "string",
@@ -5631,10 +5506,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "mapSync": {
             "type": "string",
@@ -5644,10 +5519,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           }
         },
         "examples": [
@@ -5680,10 +5555,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "excel": {
             "type": "string",
@@ -5693,10 +5568,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "html": {
             "type": "string",
@@ -5706,10 +5581,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "image": {
             "type": "string",
@@ -5719,10 +5594,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "pdf": {
             "type": "string",
@@ -5732,10 +5607,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           },
           "zohoSheet": {
             "type": "string",
@@ -5745,10 +5620,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Enabled",
-              "Disabled"
-            ]
+            "x-enumDescriptions": {
+              "true": "Enabled",
+              "false": "Disabled"
+            }
           }
         },
         "examples": [
@@ -5798,12 +5673,19 @@
               3,
               4
             ],
-            "x-zenesis-enums-desc": [
-              "Free form",
-              "Single column",
-              "Two columns",
-              "Three columns",
-              "Four columns"
+            "x-enumDescriptions": {
+              "0": "Free form",
+              "1": "Single column",
+              "2": "Two columns",
+              "3": "Three columns",
+              "4": "Four columns"
+            },
+            "x-enum-varnames": [
+              "FREE_FORM",
+              "SINGLE_COLUMN",
+              "TWO_COLUMNS",
+              "THREE_COLUMNS",
+              "FOUR_COLUMNS"
             ]
           },
           "themes": {
@@ -5816,6 +5698,32 @@
         "required": [
           "displayName",
           "layout"
+        ],
+        "examples": [
+          {
+            "displayName": "Sales Overview",
+            "description": "Monthly sales KPIs",
+            "layout": {
+              "1": {
+                "type": "VIEW",
+                "width": 40,
+                "height": 20,
+                "left": 0,
+                "top": 0,
+                "viewName": "Monthly_Sales_Chart",
+                "properties": {}
+              },
+              "2": {
+                "type": "VIEW",
+                "width": 40,
+                "height": 20,
+                "left": 40,
+                "top": 0,
+                "viewName": "Sales_Pivot",
+                "properties": {}
+              }
+            }
+          }
         ]
       },
       "UpdateDashboardConfig": {
@@ -5833,12 +5741,19 @@
               3,
               4
             ],
-            "x-zenesis-enums-desc": [
-              "Free form",
-              "Single column",
-              "Two columns",
-              "Three columns",
-              "Four columns"
+            "x-enumDescriptions": {
+              "0": "Free form",
+              "1": "Single column",
+              "2": "Two columns",
+              "3": "Three columns",
+              "4": "Four columns"
+            },
+            "x-enum-varnames": [
+              "FREE_FORM",
+              "SINGLE_COLUMN",
+              "TWO_COLUMNS",
+              "THREE_COLUMNS",
+              "FOUR_COLUMNS"
             ]
           },
           "layout": {
@@ -5850,7 +5765,38 @@
           "settings": {
             "$ref": "#/components/schemas/DashboardSettings"
           }
-        }
+        },
+        "examples": [
+          {
+            "layout": {
+              "1": {
+                "type": "VIEW",
+                "width": 40,
+                "height": 20,
+                "left": 0,
+                "top": 0,
+                "viewName": "Sales_Chart",
+                "properties": {}
+              },
+              "2": {
+                "type": "VIEW",
+                "width": 40,
+                "height": 20,
+                "left": 40,
+                "top": 0,
+                "viewName": "Revenue_Pivot",
+                "properties": {}
+              },
+              "3": {
+                "type": "USERFILTERS",
+                "width": 80,
+                "height": 3,
+                "left": 0,
+                "top": 20
+              }
+            }
+          }
+        ]
       },
       "GetDashboardMetadataConfig": {
         "type": "object",
@@ -5865,7 +5811,12 @@
               "themes,settings"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "include": "all"
+          }
+        ]
       },
       "CreateDashboardResponse": {
         "type": "object",
@@ -5879,10 +5830,10 @@
               "success",
               "failure"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded",
-              "Request failed"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded",
+              "failure": "Request failed"
+            }
           },
           "summary": {
             "type": "string",
@@ -5894,7 +5845,17 @@
           "data": {
             "$ref": "#/components/schemas/CreateDashboardResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create dashboard",
+            "data": {
+              "dashboardId": "320873000000597763",
+              "displayName": "Sales Overview"
+            }
+          }
+        ]
       },
       "CreateDashboardResponseData": {
         "type": "object",
@@ -5915,7 +5876,13 @@
               "Sales Overview"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "dashboardId": "320873000000597763",
+            "displayName": "Sales Overview"
+          }
+        ]
       },
       "GetDashboardMetadataResponse": {
         "type": "object",
@@ -5929,10 +5896,10 @@
               "success",
               "failure"
             ],
-            "x-zenesis-enums-desc": [
-              "Request succeeded",
-              "Request failed"
-            ]
+            "x-enumDescriptions": {
+              "success": "Request succeeded",
+              "failure": "Request failed"
+            }
           },
           "summary": {
             "type": "string",
@@ -5944,7 +5911,66 @@
           "data": {
             "$ref": "#/components/schemas/GetDashboardMetadataResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get dashboard metadata",
+            "data": {
+              "dashboardConfig": {
+                "objId": "320873000000597763",
+                "displayName": "Dashboard_Freeform_19",
+                "description": "",
+                "themes": {
+                  "default": "true",
+                  "layoutType": "2"
+                },
+                "settings": {
+                  "enableGlobalUF": "false",
+                  "smartAlignCharts": "true",
+                  "allowExport": {
+                    "pdf": "true",
+                    "excel": "true",
+                    "zohoSheet": "true",
+                    "image": "true",
+                    "csv": "true",
+                    "html": "true"
+                  },
+                  "showContextualOptions": "true",
+                  "allowEmbedInsights": "true",
+                  "enableSortMenu": "true",
+                  "reportAsFilter": "false",
+                  "hideColumnOptions": "true",
+                  "layoutWidth": "1279",
+                  "allowVUD": "true",
+                  "allowInsights": "true",
+                  "fitToWidth": "true",
+                  "layoutType": "web",
+                  "allowDrillDown": "true",
+                  "applyImmediateUF": "true",
+                  "timeSlicer": "false"
+                },
+                "layout": {
+                  "1": {
+                    "type": "USERFILTERS",
+                    "width": 80,
+                    "height": 3,
+                    "left": 0,
+                    "top": 0
+                  },
+                  "2": {
+                    "type": "VIEW",
+                    "width": 80,
+                    "height": 20,
+                    "left": 0,
+                    "top": 3,
+                    "viewName": "Sales_Report"
+                  }
+                }
+              }
+            }
+          }
+        ]
       },
       "GetDashboardMetadataResponseData": {
         "type": "object",
@@ -5954,7 +5980,62 @@
           "dashboardConfig": {
             "$ref": "#/components/schemas/DashboardConfigMetadata"
           }
-        }
+        },
+        "examples": [
+          {
+            "dashboardConfig": {
+              "objId": "320873000000597763",
+              "displayName": "Dashboard_Freeform_19",
+              "description": "",
+              "themes": {
+                "default": "true",
+                "layoutType": "2"
+              },
+              "settings": {
+                "enableGlobalUF": "false",
+                "smartAlignCharts": "true",
+                "allowExport": {
+                  "pdf": "true",
+                  "excel": "true",
+                  "zohoSheet": "true",
+                  "image": "true",
+                  "csv": "true",
+                  "html": "true"
+                },
+                "showContextualOptions": "true",
+                "allowEmbedInsights": "true",
+                "enableSortMenu": "true",
+                "reportAsFilter": "false",
+                "hideColumnOptions": "true",
+                "layoutWidth": "1279",
+                "allowVUD": "true",
+                "allowInsights": "true",
+                "fitToWidth": "true",
+                "layoutType": "web",
+                "allowDrillDown": "true",
+                "applyImmediateUF": "true",
+                "timeSlicer": "false"
+              },
+              "layout": {
+                "1": {
+                  "type": "USERFILTERS",
+                  "width": 80,
+                  "height": 3,
+                  "left": 0,
+                  "top": 0
+                },
+                "2": {
+                  "type": "VIEW",
+                  "width": 80,
+                  "height": 20,
+                  "left": 0,
+                  "top": 3,
+                  "viewName": "Sales_Report"
+                }
+              }
+            }
+          }
+        ]
       },
       "DashboardConfigMetadata": {
         "type": "object",
@@ -5991,7 +6072,60 @@
           "layout": {
             "$ref": "#/components/schemas/DashboardLayout"
           }
-        }
+        },
+        "examples": [
+          {
+            "objId": "320873000000597763",
+            "displayName": "Dashboard_Freeform_19",
+            "description": "",
+            "themes": {
+              "default": "true",
+              "layoutType": "2"
+            },
+            "settings": {
+              "enableGlobalUF": "false",
+              "smartAlignCharts": "true",
+              "allowExport": {
+                "pdf": "true",
+                "excel": "true",
+                "zohoSheet": "true",
+                "image": "true",
+                "csv": "true",
+                "html": "true"
+              },
+              "showContextualOptions": "true",
+              "allowEmbedInsights": "true",
+              "enableSortMenu": "true",
+              "reportAsFilter": "false",
+              "hideColumnOptions": "true",
+              "layoutWidth": "1279",
+              "allowVUD": "true",
+              "allowInsights": "true",
+              "fitToWidth": "true",
+              "layoutType": "web",
+              "allowDrillDown": "true",
+              "applyImmediateUF": "true",
+              "timeSlicer": "false"
+            },
+            "layout": {
+              "1": {
+                "type": "USERFILTERS",
+                "width": 80,
+                "height": 3,
+                "left": 0,
+                "top": 0
+              },
+              "2": {
+                "type": "VIEW",
+                "width": 80,
+                "height": 20,
+                "left": 0,
+                "top": 3,
+                "viewName": "Sales_Report"
+              }
+            }
+          }
+        ]
       },
       "DashboardThemesMetadata": {
         "type": "object",
@@ -6005,10 +6139,10 @@
               "true",
               "unset"
             ],
-            "x-zenesis-enums-desc": [
-              "Reset theme",
-              "Keep theme"
-            ]
+            "x-enumDescriptions": {
+              "true": "Reset theme",
+              "unset": "Keep theme"
+            }
           },
           "type": {
             "type": "string",
@@ -6196,10 +6330,10 @@
               "true",
               "false"
             ],
-            "x-zenesis-enums-desc": [
-              "Flipped",
-              "Not flipped"
-            ]
+            "x-enumDescriptions": {
+              "true": "Flipped",
+              "false": "Not flipped"
+            }
           },
           "fitType": {
             "type": "string",
@@ -6209,11 +6343,11 @@
               "2",
               "3"
             ],
-            "x-zenesis-enums-desc": [
-              "Cover",
-              "Contain",
-              "Stretch"
-            ]
+            "x-enumDescriptions": {
+              "1": "Cover",
+              "2": "Contain",
+              "3": "Stretch"
+            }
           }
         }
       },
@@ -6310,10 +6444,10 @@
               "1",
               "2"
             ],
-            "x-zenesis-enums-desc": [
-              "Themed palette",
-              "Custom palette"
-            ]
+            "x-enumDescriptions": {
+              "1": "Themed palette",
+              "2": "Custom palette"
+            }
           },
           "border": {
             "$ref": "#/components/schemas/DashboardCardBorder"
@@ -6351,10 +6485,10 @@
               "1",
               "2"
             ],
-            "x-zenesis-enums-desc": [
-              "No effect",
-              "Apply effect"
-            ]
+            "x-enumDescriptions": {
+              "1": "No effect",
+              "2": "Apply effect"
+            }
           },
           "type": {
             "type": "string",

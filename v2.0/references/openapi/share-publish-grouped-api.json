@@ -34,7 +34,6 @@
         "tags": [
           "Sharing"
         ],
-        "x-zenesis-title": "Get Workspace Shared Details",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -63,8 +62,8 @@
                 },
                 "examples": {
                   "userShare": {
-                    "description": "User share",
-                    "summary": "Workspace in which the views are shared directly with individual users, and one dashboard is published publicly.",
+                    "description": "Workspace in which the views are shared directly with individual users, and one dashboard is published publicly.",
+                    "summary": "User share",
                     "value": {
                       "status": "success",
                       "summary": "Get share info",
@@ -140,8 +139,8 @@
                     }
                   },
                   "groupShare": {
-                    "description": "Group share",
-                    "summary": "Workspace in which the views are shared with a group, and one report is shared through a private link.",
+                    "description": "Workspace in which the views are shared with a group, and one report is shared through a private link.",
+                    "summary": "Group share",
                     "value": {
                       "status": "success",
                       "summary": "Get share info",
@@ -226,19 +225,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li><code>publicShareInfo</code> and <code>privateLinkShareInfo</code> are always returned, with an empty <code>views</code> array when nothing is published publicly or through a private link.</li><li>The <code>emailId</code> returned inside <code>publicShareInfo</code> and <code>privateLinkShareInfo</code> is a fixed placeholder, not a real user.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -246,7 +237,6 @@
         "tags": [
           "Sharing"
         ],
-        "x-zenesis-title": "Share Views",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -287,8 +277,8 @@
               },
               "examples": {
                 "shareWithUsers": {
-                  "description": "Share with users",
-                  "summary": "Shares the listed views with the specified users, granting read and export permission.",
+                  "description": "Shares the listed views with the specified users, granting read and export permission.",
+                  "summary": "Share with users",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -307,8 +297,8 @@
                   }
                 },
                 "shareWithGroups": {
-                  "description": "Share with groups",
-                  "summary": "Shares the listed views with the specified groups instead of individual users.",
+                  "description": "Shares the listed views with the specified groups instead of individual users.",
+                  "summary": "Share with groups",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -328,8 +318,8 @@
                   }
                 },
                 "filteredShare": {
-                  "description": "Filtered share",
-                  "summary": "Shares a report with a filter criteria, so that the shared user sees only the East region data.",
+                  "description": "Shares a report with a filter criteria, so that the shared user sees only the East region data.",
+                  "summary": "Filtered share",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -347,8 +337,8 @@
                   }
                 },
                 "columnRestrictedShare": {
-                  "description": "Column restricted share",
-                  "summary": "Shares a view but restricts the shared columns and the columns visible in the underlying data.",
+                  "description": "Shares a view but restricts the shared columns and the columns visible in the underlying data.",
+                  "summary": "Column restricted share",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -390,19 +380,11 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li><code>vudColumns</code> is applicable only when the <code>vud</code> permission is set to true.</li><li><code>drillColumns</code> is applicable only when the <code>drillDown</code> permission is set to true.</li><li><code>inheritParentFilterCriteria</code> is applicable only for reports, not for tables.</li><li><code>validateSystemTags</code> is applicable only when System Tags are enabled for your organization.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -410,7 +392,6 @@
         "tags": [
           "Sharing"
         ],
-        "x-zenesis-title": "Remove Share",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -451,8 +432,8 @@
               },
               "examples": {
                 "removeSpecificViews": {
-                  "description": "Remove specific views",
-                  "summary": "Removes the sharing of the listed views for the specified users.",
+                  "description": "Removes the sharing of the listed views for the specified users.",
+                  "summary": "Remove specific views",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -467,8 +448,8 @@
                   }
                 },
                 "removeAllSharedViews": {
-                  "description": "Remove all views",
-                  "summary": "Removes every view currently shared with the specified users.",
+                  "description": "Removes every view currently shared with the specified users.",
+                  "summary": "Remove all views",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -479,8 +460,8 @@
                   }
                 },
                 "removeGroupShare": {
-                  "description": "Remove group share",
-                  "summary": "Removes the sharing of the listed views for the specified groups.",
+                  "description": "Removes the sharing of the listed views for the specified groups.",
+                  "summary": "Remove group share",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -503,19 +484,11 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>Specify either <code>viewIds</code> to remove the sharing of particular views, or set <code>removeAllViews</code> to true to remove every view shared with the specified users.</li><li><code>domainName</code> is required only when the shared views have to be removed from a white label domain.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       }
@@ -525,7 +498,6 @@
         "tags": [
           "Sharing"
         ],
-        "x-zenesis-title": "Update Shared Details For View",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -569,8 +541,8 @@
               },
               "examples": {
                 "updateUserPermissions": {
-                  "description": "Update user permissions",
-                  "summary": "Grants export and underlying data permission to the users the view is already shared with.",
+                  "description": "Grants export and underlying data permission to the users the view is already shared with.",
+                  "summary": "Update user permissions",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -586,8 +558,8 @@
                   }
                 },
                 "updateGroupPermissions": {
-                  "description": "Update group permissions",
-                  "summary": "Updates the sharing configuration of the view for the specified groups.",
+                  "description": "Updates the sharing configuration of the view for the specified groups.",
+                  "summary": "Update group permissions",
                   "value": {
                     "CONFIG": {
                       "groupIds": [
@@ -601,8 +573,8 @@
                   }
                 },
                 "updateFilterCriteria": {
-                  "description": "Update filter criteria",
-                  "summary": "Replaces the filter criteria applied on the shared report and restricts the columns shared.",
+                  "description": "Replaces the filter criteria applied on the shared report and restricts the columns shared.",
+                  "summary": "Update filter criteria",
                   "value": {
                     "CONFIG": {
                       "emailIds": [
@@ -633,19 +605,11 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>At least one of <code>emailIds</code> or <code>groupIds</code> must be specified, to identify the users or the groups whose sharing configuration has to be updated.</li><li><code>vudColumns</code> is applicable only when the <code>vud</code> permission is set to true.</li><li><code>drillColumns</code> is applicable only when the <code>drillDown</code> permission is set to true.</li><li><code>inheritParentFilterCriteria</code> is applicable only for reports, not for tables.</li><li><code>validateSystemTags</code> is applicable only when System Tags are enabled for your organization.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       }
@@ -655,7 +619,6 @@
         "tags": [
           "Sharing"
         ],
-        "x-zenesis-title": "Get Shared Details For Views",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -685,8 +648,8 @@
             },
             "examples": {
               "singleView": {
-                "description": "Single view",
-                "summary": "Fetches the shared details of one view.",
+                "description": "Fetches the shared details of one view.",
+                "summary": "Single view",
                 "value": {
                   "viewIds": [
                     "1767024000013486001"
@@ -694,8 +657,8 @@
                 }
               },
               "multipleViews": {
-                "description": "Multiple views",
-                "summary": "Fetches the shared details of several views in one call.",
+                "description": "Fetches the shared details of several views in one call.",
+                "summary": "Multiple views",
                 "value": {
                   "viewIds": [
                     "1767024000013486001",
@@ -716,8 +679,8 @@
                 },
                 "examples": {
                   "userShare": {
-                    "description": "User share",
-                    "summary": "View shared with an individual user, with a filter criteria and a restricted set of shared columns.",
+                    "description": "View shared with an individual user, with a filter criteria and a restricted set of shared columns.",
+                    "summary": "User share",
                     "value": {
                       "status": "success",
                       "summary": "Get shared details for views",
@@ -771,8 +734,8 @@
                     }
                   },
                   "groupShare": {
-                    "description": "Group share",
-                    "summary": "View shared with a group, with the underlying data and drill down options limited to specific columns.",
+                    "description": "View shared with a group, with the underlying data and drill down options limited to specific columns.",
+                    "summary": "Group share",
                     "value": {
                       "status": "success",
                       "summary": "Get shared details for views",
@@ -830,19 +793,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>As this is a GET request, the CONFIG value must be stringified and URL encoded before it is sent.</li><li>When <code>viewIds</code> is omitted, no view is selected and the shared details are not returned.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       }
@@ -852,7 +807,6 @@
         "tags": [
           "Sharing"
         ],
-        "x-zenesis-title": "Get User Permissions",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -861,7 +815,7 @@
           }
         ],
         "summary": "Get User Permissions",
-        "description": "Returns the permissions that the requesting user holds on the specified view. The permissions returned are the effective ones, whether they were granted directly to the user or inherited through a group.",
+        "description": "Returns the permissions that the requesting user holds on the specified view. The permissions returned are the effective ones, whether they were granted directly to the user or inherited through a group.\n\n**Notes**\n\n> Note:\n>\n> - The permissions are returned for the user whose access token is used in the request, not for an arbitrary user.\n> - The endpoint path retains the `mypermissions` segment.",
         "operationId": "getUserPermissions",
         "parameters": [
           {
@@ -884,8 +838,8 @@
                 },
                 "examples": {
                   "readOnlyAccess": {
-                    "description": "Read only access",
-                    "summary": "User who can only view the report, with no export or underlying data access.",
+                    "description": "User who can only view the report, with no export or underlying data access.",
+                    "summary": "Read only access",
                     "value": {
                       "status": "success",
                       "summary": "Get user permissions",
@@ -914,8 +868,8 @@
                     }
                   },
                   "fullAccess": {
-                    "description": "Full access",
-                    "summary": "User who owns the table and therefore holds every permission on it.",
+                    "description": "User who owns the table and therefore holds every permission on it.",
+                    "summary": "Full access",
                     "value": {
                       "status": "success",
                       "summary": "Get user permissions",
@@ -947,19 +901,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>The permissions are returned for the user whose access token is used in the request, not for an arbitrary user.</li><li>The endpoint path retains the <code>mypermissions</code> segment.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       }
@@ -969,7 +915,6 @@
         "tags": [
           "Publish"
         ],
-        "x-zenesis-title": "Make Views Public",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1010,8 +955,8 @@
               },
               "examples": {
                 "publicOnWeb": {
-                  "description": "Public on web",
-                  "summary": "Publishes the view to anyone on the web, with export permission granted.",
+                  "description": "Publishes the view to anyone on the web, with export permission granted.",
+                  "summary": "Public on web",
                   "value": {
                     "CONFIG": {
                       "publicPermLevel": 1,
@@ -1022,8 +967,8 @@
                   }
                 },
                 "organizationOnly": {
-                  "description": "Organization only",
-                  "summary": "Publishes the view to everyone in the Zoho Analytics organization, with underlying data access.",
+                  "description": "Publishes the view to everyone in the Zoho Analytics organization, with underlying data access.",
+                  "summary": "Organization only",
                   "value": {
                     "CONFIG": {
                       "publicPermLevel": 2,
@@ -1035,8 +980,8 @@
                   }
                 },
                 "filteredPublic": {
-                  "description": "Filtered public",
-                  "summary": "Publishes the view so that only the East region rows and a restricted set of columns are visible.",
+                  "description": "Publishes the view so that only the East region rows and a restricted set of columns are visible.",
+                  "summary": "Filtered public",
                   "value": {
                     "CONFIG": {
                       "publicPermLevel": 1,
@@ -1080,8 +1025,8 @@
                 },
                 "examples": {
                   "publicUrl": {
-                    "description": "Public URL",
-                    "summary": "Public URL generated for the view that has just been published.",
+                    "description": "Public URL generated for the view that has just been published.",
+                    "summary": "Public URL",
                     "value": {
                       "status": "success",
                       "summary": "Make view public",
@@ -1094,19 +1039,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li><code>CONFIG</code> may be omitted entirely. When it is, the view is published with the default settings.</li><li><code>vudColumns</code> is applicable only when the <code>vud</code> permission is set to true.</li><li><code>drillColumns</code> is applicable only when the <code>drillDown</code> permission is set to true.</li><li><code>inheritParentFilterCriteria</code> is applicable only for reports, not for tables.</li><li><code>validateSystemTags</code> is applicable only when System Tags are enabled for your organization.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -1114,7 +1051,6 @@
         "tags": [
           "Publish"
         ],
-        "x-zenesis-title": "Remove Public Permission",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1140,7 +1076,7 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1154,7 +1090,6 @@
         "tags": [
           "Publish"
         ],
-        "x-zenesis-title": "Create Private URL",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1163,7 +1098,7 @@
           }
         ],
         "summary": "Create Private URL",
-        "description": "Creates a private URL for the specified view and returns it. The private URL can be protected with a password and given a validity period, and the permissions granted through it are controlled by the config.",
+        "description": "Creates a private URL for the specified view and returns it. The private URL can be protected with a password and given a validity period, and the permissions granted through it are controlled by the config.\n\n**Notes**\n\n> Note:\n>\n> - `CONFIG` may be omitted entirely. When it is, a private URL is created with the default settings.\n> - `password` and `removePassword` are mutually exclusive, as are `expiryDate` and `removeExpiryDate`.\n> - `vudColumns` is applicable only when the `vud` permission is set to true.\n> - `drillColumns` is applicable only when the `drillDown` permission is set to true.\n> - Setting `regenerateKey` to true disables the private link that was issued previously.",
         "operationId": "createPrivateUrl",
         "parameters": [
           {
@@ -1195,8 +1130,8 @@
               },
               "examples": {
                 "basicPrivateUrl": {
-                  "description": "Basic private URL",
-                  "summary": "Creates a private URL that grants export permission and applies no further restrictions.",
+                  "description": "Creates a private URL that grants export permission and applies no further restrictions.",
+                  "summary": "Basic private URL",
                   "value": {
                     "CONFIG": {
                       "permissions": {
@@ -1206,8 +1141,8 @@
                   }
                 },
                 "passwordProtected": {
-                  "description": "Password protected",
-                  "summary": "Creates a private URL protected with a password and valid until the given expiry date.",
+                  "description": "Creates a private URL protected with a password and valid until the given expiry date.",
+                  "summary": "Password protected",
                   "value": {
                     "CONFIG": {
                       "permissions": {
@@ -1221,8 +1156,8 @@
                   }
                 },
                 "regeneratedKey": {
-                  "description": "Regenerate key",
-                  "summary": "Generates a new private key, disabling the private link that was issued previously.",
+                  "description": "Generates a new private key, disabling the private link that was issued previously.",
+                  "summary": "Regenerate key",
                   "value": {
                     "CONFIG": {
                       "regenerateKey": true,
@@ -1233,8 +1168,8 @@
                   }
                 },
                 "filteredPrivateUrl": {
-                  "description": "Filtered private URL",
-                  "summary": "Creates a private URL through which only the East region rows and a restricted set of columns are visible.",
+                  "description": "Creates a private URL through which only the East region rows and a restricted set of columns are visible.",
+                  "summary": "Filtered private URL",
                   "value": {
                     "CONFIG": {
                       "criteria": "\"SalesTable\".\"Region\"='East'",
@@ -1276,8 +1211,8 @@
                 },
                 "examples": {
                   "privateUrl": {
-                    "description": "Private URL",
-                    "summary": "Private URL generated for the view, ending with the newly issued private key.",
+                    "description": "Private URL generated for the view, ending with the newly issued private key.",
+                    "summary": "Private URL",
                     "value": {
                       "status": "success",
                       "summary": "Create private url",
@@ -1290,19 +1225,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li><code>CONFIG</code> may be omitted entirely. When it is, a private URL is created with the default settings.</li><li><code>password</code> and <code>removePassword</code> are mutually exclusive, as are <code>expiryDate</code> and <code>removeExpiryDate</code>.</li><li><code>vudColumns</code> is applicable only when the <code>vud</code> permission is set to true.</li><li><code>drillColumns</code> is applicable only when the <code>drillDown</code> permission is set to true.</li><li>Setting <code>regenerateKey</code> to true disables the private link that was issued previously.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -1310,7 +1237,6 @@
         "tags": [
           "Publish"
         ],
-        "x-zenesis-title": "Get Private URL",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1343,13 +1269,13 @@
             },
             "examples": {
               "defaultDomain": {
-                "description": "Default domain",
-                "summary": "Returns the private URL on the default Zoho Analytics domain.",
+                "description": "Returns the private URL on the default Zoho Analytics domain.",
+                "summary": "Default domain",
                 "value": {}
               },
               "customDomain": {
-                "description": "Custom domain",
-                "summary": "Returns the private URL on the configured white label domain.",
+                "description": "Returns the private URL on the configured white label domain.",
+                "summary": "Custom domain",
                 "value": {
                   "domainName": "analytics.example.com"
                 }
@@ -1367,8 +1293,8 @@
                 },
                 "examples": {
                   "privateUrl": {
-                    "description": "Private URL",
-                    "summary": "Private URL currently in effect for the view.",
+                    "description": "Private URL currently in effect for the view.",
+                    "summary": "Private URL",
                     "value": {
                       "status": "success",
                       "summary": "Get private url",
@@ -1381,19 +1307,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>As this is a GET request, the CONFIG value must be stringified and URL encoded before it is sent.</li><li><code>CONFIG</code> may be omitted entirely, in which case the private URL is returned on the default domain.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -1401,7 +1319,6 @@
         "tags": [
           "Publish"
         ],
-        "x-zenesis-title": "Remove Private Access",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1427,7 +1344,7 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -1441,7 +1358,6 @@
         "tags": [
           "Publish"
         ],
-        "x-zenesis-title": "Get Publish Configurations",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1473,8 +1389,8 @@
                 },
                 "examples": {
                   "publicView": {
-                    "description": "Public view",
-                    "summary": "View published on the web, with no private link configured.",
+                    "description": "View published on the web, with no private link configured.",
+                    "summary": "Public view",
                     "value": {
                       "status": "success",
                       "summary": "Get publish configurations",
@@ -1513,8 +1429,8 @@
                     }
                   },
                   "privateLinkView": {
-                    "description": "Private link view",
-                    "summary": "View shared through a password protected private link, with a filter criteria applied on the published URL.",
+                    "description": "View shared through a password protected private link, with a filter criteria applied on the published URL.",
+                    "summary": "Private link view",
                     "value": {
                       "status": "success",
                       "summary": "Get publish configurations",
@@ -1556,19 +1472,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiResponseParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>In <code>privateLinkConfig</code>, a <code>password</code> or <code>expiryDate</code> of <code>-1</code> means that no password or validity period is set.</li><li><code>legendPosition</code> and <code>includeShowHideOption</code> are returned by this API but cannot be set through Update Publish Configurations.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -1576,7 +1484,6 @@
         "tags": [
           "Publish"
         ],
-        "x-zenesis-title": "Update Publish Configurations",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1585,7 +1492,7 @@
           }
         ],
         "summary": "Update Publish Configurations",
-        "description": "Updates the publish configurations of the specified view. These settings control how the view is rendered when it is accessed in the embedded, public, or private link mode.",
+        "description": "Updates the publish configurations of the specified view. These settings control how the view is rendered when it is accessed in the embedded, public, or private link mode.\n\n**Notes**\n\n> Note:\n>\n> - Only the attributes sent in the config are updated; the ones omitted retain their current values.\n> - `autoRefresh` takes the interval in minutes. Send `-1` to disable the automatic refresh.\n> - `isListed` applies to the workspace, not to the individual view.",
         "operationId": "updatePublishConfigurations",
         "parameters": [
           {
@@ -1620,8 +1527,8 @@
               },
               "examples": {
                 "minimalEmbed": {
-                  "description": "Minimal embed",
-                  "summary": "Renders the view on its own, without the title, description, or toolbar.",
+                  "description": "Renders the view on its own, without the title, description, or toolbar.",
+                  "summary": "Minimal embed",
                   "value": {
                     "CONFIG": {
                       "includeTitle": false,
@@ -1631,8 +1538,8 @@
                   }
                 },
                 "fullToolbar": {
-                  "description": "Full toolbar",
-                  "summary": "Renders the view with the toolbar, search box, data type symbols, and the Ask Zia bot.",
+                  "description": "Renders the view with the toolbar, search box, data type symbols, and the Ask Zia bot.",
+                  "summary": "Full toolbar",
                   "value": {
                     "CONFIG": {
                       "includeToolBar": true,
@@ -1643,8 +1550,8 @@
                   }
                 },
                 "filteredEmbed": {
-                  "description": "Filtered embed",
-                  "summary": "Applies a filter criteria on the published URL and refreshes the view every thirty minutes.",
+                  "description": "Applies a filter criteria on the published URL and refreshes the view every thirty minutes.",
+                  "summary": "Filtered embed",
                   "value": {
                     "CONFIG": {
                       "URLCriteria": "\"SalesTable\".\"Region\"='East'",
@@ -1663,19 +1570,11 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>Only the attributes sent in the config are updated; the ones omitted retain their current values.</li><li><code>autoRefresh</code> takes the interval in minutes. Send <code>-1</code> to disable the automatic refresh.</li><li><code>isListed</code> applies to the workspace, not to the individual view.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       }
@@ -1685,7 +1584,6 @@
         "tags": [
           "Embed"
         ],
-        "x-zenesis-title": "Get Embed URL",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1718,13 +1616,13 @@
             },
             "examples": {
               "defaultEmbed": {
-                "description": "Default embed",
-                "summary": "Returns an embed URL with the default rendering options and a one hour validity period.",
+                "description": "Returns an embed URL with the default rendering options and a one hour validity period.",
+                "summary": "Default embed",
                 "value": {}
               },
               "filteredEmbed": {
-                "description": "Filtered embed",
-                "summary": "Returns an embed URL through which only the East region rows are visible, with export permission granted.",
+                "description": "Returns an embed URL through which only the East region rows are visible, with export permission granted.",
+                "summary": "Filtered embed",
                 "value": {
                   "criteria": "\"SalesTable\".\"Region\"='East'",
                   "permissions": {
@@ -1734,8 +1632,8 @@
                 }
               },
               "restrictedColumns": {
-                "description": "Restricted columns",
-                "summary": "Returns an embed URL that grants underlying data and drill down access, limited to specific columns.",
+                "description": "Returns an embed URL that grants underlying data and drill down access, limited to specific columns.",
+                "summary": "Restricted columns",
                 "value": {
                   "permissions": {
                     "vud": true,
@@ -1762,8 +1660,8 @@
                 }
               },
               "localizedEmbed": {
-                "description": "Localized embed",
-                "summary": "Returns a long lived embed URL rendered in French on the configured white label domain.",
+                "description": "Returns a long lived embed URL rendered in French on the configured white label domain.",
+                "summary": "Localized embed",
                 "value": {
                   "language": "french",
                   "domainName": "analytics.example.com",
@@ -1785,8 +1683,8 @@
                 },
                 "examples": {
                   "embedUrl": {
-                    "description": "Embed URL",
-                    "summary": "Short-lived embed URL generated for the view, carrying the requested configuration.",
+                    "description": "Short-lived embed URL generated for the view, carrying the requested configuration.",
+                    "summary": "Embed URL",
                     "value": {
                       "status": "success",
                       "summary": "Get embed url",
@@ -1799,25 +1697,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiInfo": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>This API is available only to Embedded Analytics customers.</li><li>The generated URL is short-lived and does not require a login. Anyone holding it has the access granted by the config until the validity period elapses.</li></ul>\n</span></blockquote>"
-            }
-          },
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>As this is a GET request, the CONFIG value must be stringified and URL encoded before it is sent.</li><li><code>CONFIG</code> may be omitted entirely, in which case the embed URL is returned with the default rendering options and a one hour validity period.</li><li><code>vudColumns</code> is applicable only when the <code>vud</code> permission is set to true.</li><li><code>drillColumns</code> is applicable only when the <code>drillDown</code> permission is set to true.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       }
@@ -1827,7 +1711,6 @@
         "tags": [
           "Slideshow Management"
         ],
-        "x-zenesis-title": "Create Slideshow",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1868,8 +1751,8 @@
               },
               "examples": {
                 "loginRequired": {
-                  "description": "Login required",
-                  "summary": "Creates a slideshow that can be opened only by users who are logged in to Zoho Analytics.",
+                  "description": "Creates a slideshow that can be opened only by users who are logged in to Zoho Analytics.",
+                  "summary": "Login required",
                   "value": {
                     "CONFIG": {
                       "slideName": "Sales Overview",
@@ -1882,8 +1765,8 @@
                   }
                 },
                 "publicSlideshow": {
-                  "description": "Public slideshow",
-                  "summary": "Creates a slideshow that can be opened without logging in to Zoho Analytics.",
+                  "description": "Creates a slideshow that can be opened without logging in to Zoho Analytics.",
+                  "summary": "Public slideshow",
                   "value": {
                     "CONFIG": {
                       "slideName": "Quarterly Highlights",
@@ -1910,8 +1793,8 @@
                 },
                 "examples": {
                   "slideshowCreated": {
-                    "description": "Slideshow created",
-                    "summary": "ID and URL of the slideshow that has just been created.",
+                    "description": "ID and URL of the slideshow that has just been created.",
+                    "summary": "Slideshow created",
                     "value": {
                       "status": "success",
                       "summary": "Create slideshow",
@@ -1925,19 +1808,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>The order of the IDs in <code>viewIds</code> determines the order in which the views appear in the slideshow.</li><li><code>validateSystemTags</code> is applicable only when System Tags are enabled for your organization.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -1945,7 +1820,6 @@
         "tags": [
           "Slideshow Management"
         ],
-        "x-zenesis-title": "Get Slideshows",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -1974,8 +1848,8 @@
                 },
                 "examples": {
                   "multipleSlideshows": {
-                    "description": "Multiple slideshows",
-                    "summary": "Workspace holding two slideshows, one requiring a login and one open without it.",
+                    "description": "Workspace holding two slideshows, one requiring a login and one open without it.",
+                    "summary": "Multiple slideshows",
                     "value": {
                       "status": "success",
                       "summary": "Get slideshows",
@@ -1996,8 +1870,8 @@
                     }
                   },
                   "noSlideshows": {
-                    "description": "No slideshows",
-                    "summary": "Workspace in which no slideshow has been created yet.",
+                    "description": "Workspace in which no slideshow has been created yet.",
+                    "summary": "No slideshows",
                     "value": {
                       "status": "success",
                       "summary": "Get slideshows",
@@ -2010,7 +1884,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2024,7 +1898,6 @@
         "tags": [
           "Slideshow Management"
         ],
-        "x-zenesis-title": "Update Slideshow",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2068,8 +1941,8 @@
               },
               "examples": {
                 "renameSlideshow": {
-                  "description": "Rename slideshow",
-                  "summary": "Changes only the name of the slideshow, leaving its views and access type as they are.",
+                  "description": "Changes only the name of the slideshow, leaving its views and access type as they are.",
+                  "summary": "Rename slideshow",
                   "value": {
                     "CONFIG": {
                       "slideName": "Sales Overview 2026"
@@ -2077,8 +1950,8 @@
                   }
                 },
                 "replaceViews": {
-                  "description": "Replace views",
-                  "summary": "Replaces the set of views in the slideshow and opens it up for access without login.",
+                  "description": "Replaces the set of views in the slideshow and opens it up for access without login.",
+                  "summary": "Replace views",
                   "value": {
                     "CONFIG": {
                       "viewIds": [
@@ -2090,8 +1963,8 @@
                   }
                 },
                 "regenerateKey": {
-                  "description": "Regenerate key",
-                  "summary": "Generates a new slide key, disabling the slideshow URL that was issued previously.",
+                  "description": "Generates a new slide key, disabling the slideshow URL that was issued previously.",
+                  "summary": "Regenerate key",
                   "value": {
                     "CONFIG": {
                       "regenerateSlideKey": true
@@ -2106,19 +1979,11 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>Only the attributes sent in the config are updated; the ones omitted retain their current values.</li><li>Sending <code>viewIds</code> replaces the entire set of views in the slideshow rather than adding to it.</li><li>Setting <code>regenerateSlideKey</code> to true disables the slideshow URL that was issued previously.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       },
@@ -2126,7 +1991,6 @@
         "tags": [
           "Slideshow Management"
         ],
-        "x-zenesis-title": "Delete Slideshow",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2152,7 +2016,7 @@
           "204": {
             "description": "No Content"
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2164,7 +2028,6 @@
         "tags": [
           "Slideshow Management"
         ],
-        "x-zenesis-title": "Get Slideshow Details",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2196,8 +2059,8 @@
                 },
                 "examples": {
                   "loginRequired": {
-                    "description": "Login required",
-                    "summary": "Slideshow of three views that can be opened only by users logged in to Zoho Analytics.",
+                    "description": "Slideshow of three views that can be opened only by users logged in to Zoho Analytics.",
+                    "summary": "Login required",
                     "value": {
                       "status": "success",
                       "summary": "Get slideshow details",
@@ -2217,8 +2080,8 @@
                     }
                   },
                   "publicSlideshow": {
-                    "description": "Public slideshow",
-                    "summary": "Slideshow of two views that can be opened without logging in to Zoho Analytics.",
+                    "description": "Slideshow of two views that can be opened without logging in to Zoho Analytics.",
+                    "summary": "Public slideshow",
                     "value": {
                       "status": "success",
                       "summary": "Get slideshow details",
@@ -2240,7 +2103,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -2254,7 +2117,6 @@
         "tags": [
           "Slideshow Management"
         ],
-        "x-zenesis-title": "Get Slideshow URL",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -2287,8 +2149,8 @@
             },
             "examples": {
               "autoplaySlideshow": {
-                "description": "Autoplay slideshow",
-                "summary": "Returns a URL that scrolls through the views automatically every twenty five seconds.",
+                "description": "Returns a URL that scrolls through the views automatically every twenty five seconds.",
+                "summary": "Autoplay slideshow",
                 "value": {
                   "includeTitle": true,
                   "includeDesc": true,
@@ -2299,8 +2161,8 @@
                 }
               },
               "minimalSlideshow": {
-                "description": "Minimal slideshow",
-                "summary": "Returns a URL that renders the views on their own, without the title or description.",
+                "description": "Returns a URL that renders the views on their own, without the title or description.",
+                "summary": "Minimal slideshow",
                 "value": {
                   "includeTitle": false,
                   "includeDesc": false,
@@ -2308,8 +2170,8 @@
                 }
               },
               "customDomainUrl": {
-                "description": "Custom domain",
-                "summary": "Returns the slideshow URL on the configured white label domain.",
+                "description": "Returns the slideshow URL on the configured white label domain.",
+                "summary": "Custom domain",
                 "value": {
                   "withCustomDomain": true,
                   "autoplay": true,
@@ -2329,8 +2191,8 @@
                 },
                 "examples": {
                   "slideshowUrl": {
-                    "description": "Slideshow URL",
-                    "summary": "Slideshow URL carrying the rendering options that were sent in the config.",
+                    "description": "Slideshow URL carrying the rendering options that were sent in the config.",
+                    "summary": "Slideshow URL",
                     "value": {
                       "status": "success",
                       "summary": "Get slideshow url",
@@ -2343,19 +2205,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\n<ul><li>As this is a GET request, the CONFIG value must be stringified and URL encoded before it is sent.</li><li><code>CONFIG</code> may be omitted entirely, in which case the slideshow URL is returned with the default rendering options.</li><li><code>slideInterval</code> must be between 10 and 300 seconds.</li></ul>\n</span></blockquote>"
-            }
           }
         }
       }
@@ -2535,7 +2389,14 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "permissions": {
+              "export": true
+            }
+          }
+        ]
       },
       "CreatePrivateUrlResponse": {
         "type": "object",
@@ -2559,7 +2420,16 @@
           "data": {
             "$ref": "#/components/schemas/PrivateUrlData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create private url",
+            "data": {
+              "privateUrl": "https://analytics.zoho.com/open-view/1767024000003145011/eee1191ea88d52e486aaecf5f748dc56"
+            }
+          }
+        ]
       },
       "CreateSlideshowConfig": {
         "type": "object",
@@ -2585,10 +2455,15 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
-              "With login",
-              "Without login",
-              "Sort"
+            "x-enumDescriptions": {
+              "0": "With login",
+              "1": "Without login",
+              "2": "Sort"
+            },
+            "x-enum-varnames": [
+              "WITH_LOGIN",
+              "WITHOUT_LOGIN",
+              "SORT"
             ]
           },
           "validateSystemTags": {
@@ -2604,6 +2479,16 @@
         "required": [
           "slideName",
           "viewIds"
+        ],
+        "examples": [
+          {
+            "slideName": "Sales Overview",
+            "viewIds": [
+              "1767024000003013087",
+              "1767024000003015001"
+            ],
+            "accessType": 0
+          }
         ]
       },
       "CreateSlideshowData": {
@@ -2625,7 +2510,13 @@
               "https://analytics.zoho.com/ZDBSlideshow.cc?SLIDEID=1767024000003151001&SLIDEKEY=69ba2ec9bfbe548f494bdf798087db41&AUTOPLAY=true&INTERVAL=25&INCLUDETITLE=true&INCLUDEDESC=true&SOCIALWIDGETS=false"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "slideId": "1767024000003151001",
+            "slideUrl": "https://analytics.zoho.com/ZDBSlideshow.cc?SLIDEID=1767024000003151001&SLIDEKEY=69ba2ec9bfbe548f494bdf798087db41&AUTOPLAY=true&INTERVAL=25&INCLUDETITLE=true&INCLUDEDESC=true&SOCIALWIDGETS=false"
+          }
+        ]
       },
       "CreateSlideshowResponse": {
         "type": "object",
@@ -2649,7 +2540,17 @@
           "data": {
             "$ref": "#/components/schemas/CreateSlideshowData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create slideshow",
+            "data": {
+              "slideId": "1767024000003151001",
+              "slideUrl": "https://analytics.zoho.com/ZDBSlideshow.cc?SLIDEID=1767024000003151001&SLIDEKEY=69ba2ec9bfbe548f494bdf798087db41&AUTOPLAY=true&INTERVAL=25&INCLUDETITLE=true&INCLUDEDESC=true&SOCIALWIDGETS=false"
+            }
+          }
+        ]
       },
       "DrillColumns": {
         "type": "array",
@@ -2808,7 +2709,10 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {}
+        ]
       },
       "GetEmbedUrlData": {
         "type": "object",
@@ -2822,7 +2726,12 @@
               "https://analytics.zoho.com/open-view/1767024000003145011?OS=FS&RSCONFIG=******"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "embedUrl": "https://analytics.zoho.com/open-view/1767024000003145011?OS=FS&RSCONFIG=******"
+          }
+        ]
       },
       "GetEmbedUrlResponse": {
         "type": "object",
@@ -2846,7 +2755,16 @@
           "data": {
             "$ref": "#/components/schemas/GetEmbedUrlData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get embed url",
+            "data": {
+              "embedUrl": "https://analytics.zoho.com/open-view/1767024000003145011?OS=FS&RSCONFIG=******"
+            }
+          }
+        ]
       },
       "GetPrivateUrlConfig": {
         "type": "object",
@@ -2869,7 +2787,10 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {}
+        ]
       },
       "GetPrivateUrlResponse": {
         "type": "object",
@@ -2893,7 +2814,16 @@
           "data": {
             "$ref": "#/components/schemas/PrivateUrlData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get private url",
+            "data": {
+              "privateUrl": "https://analytics.zoho.com/open-view/1767024000003145011/eee1191ea88d52e486aaecf5f748dc56"
+            }
+          }
+        ]
       },
       "GetPublishConfigurationsResponse": {
         "type": "object",
@@ -2917,7 +2847,45 @@
           "data": {
             "$ref": "#/components/schemas/PublishConfigurationsData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get publish configurations",
+            "data": {
+              "publicViewConfig": {
+                "publicPermLevel": 1,
+                "isListed": false,
+                "isOrgPublicAllowed": true,
+                "orgName": "Zylker Analytics",
+                "isBussOrgPublicAllowed": true,
+                "businessOrgName": "Zylker Corporation Private Limited"
+              },
+              "privateLinkConfig": {
+                "isPrivate": false,
+                "isExpired": false,
+                "password": "-1",
+                "expiryDate": "-1"
+              },
+              "publishConfig": {
+                "includeTitle": true,
+                "includeDesc": true,
+                "includeToolBar": false,
+                "includeSocialWidgets": false,
+                "includeSearchBox": false,
+                "includeDatatypeSymbol": false,
+                "includeShowHideOption": false,
+                "isInteractive": true,
+                "legendPosition": "RIGHT",
+                "width": 800,
+                "height": 600,
+                "autoRefresh": -1,
+                "URLCriteria": "",
+                "includeAskZia": true
+              }
+            }
+          }
+        ]
       },
       "GetSharedDetailsConfig": {
         "type": "object",
@@ -2927,7 +2895,14 @@
           "viewIds": {
             "$ref": "#/components/schemas/ShareViewIds"
           }
-        }
+        },
+        "examples": [
+          {
+            "viewIds": [
+              "1767024000013486001"
+            ]
+          }
+        ]
       },
       "GetSharedDetailsResponse": {
         "type": "object",
@@ -2951,7 +2926,60 @@
           "data": {
             "$ref": "#/components/schemas/SharedDetailsData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get shared details for views",
+            "data": {
+              "sharedDetails": [
+                {
+                  "viewId": "1767024000013486001",
+                  "shareInfo": [
+                    {
+                      "sharedTo": "user1@example.com",
+                      "sharedBy": "owner@example.com",
+                      "sharedToZuId": "65482910",
+                      "permissionString": "read,export",
+                      "permissions": {
+                        "read": true,
+                        "export": true,
+                        "vud": false,
+                        "addRow": false,
+                        "updateRow": false,
+                        "deleteRow": false,
+                        "deleteAllRows": false,
+                        "importAppend": false,
+                        "importAddOrUpdate": false,
+                        "importDeleteAllAdd": false,
+                        "importDeleteUpdateAdd": false,
+                        "drillDown": false,
+                        "share": false,
+                        "discussion": false,
+                        "insight": false,
+                        "drillThrough": false,
+                        "accessAdminPresets": false,
+                        "createPreset": false
+                      },
+                      "criteria": "\"SalesTable\".\"Region\"='East'",
+                      "inheritParentFilterCriteria": "false",
+                      "isInvalidCriteria": false,
+                      "sharedColumns": [
+                        "Region",
+                        "Sales"
+                      ],
+                      "vudColumns": [],
+                      "drillColumns": [],
+                      "isGroupShare": false,
+                      "publicPermLevel": 0,
+                      "isROUser": false
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetSlideshowDetailsResponse": {
         "type": "object",
@@ -2975,7 +3003,26 @@
           "data": {
             "$ref": "#/components/schemas/SlideshowDetailsData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get slideshow details",
+            "data": {
+              "slideInfo": {
+                "slideId": "1767024000003149001",
+                "slideKey": "9a4c1042011ce02fc4a3182fa75a22a9",
+                "slideName": "Sales Overview",
+                "accessType": 0,
+                "viewIds": [
+                  "1767024000003013087",
+                  "1767024000003015001",
+                  "1767024000003011002"
+                ]
+              }
+            }
+          }
+        ]
       },
       "GetSlideshowUrlConfig": {
         "type": "object",
@@ -3036,7 +3083,17 @@
               25
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "includeTitle": true,
+            "includeDesc": true,
+            "includeSocialWidgets": false,
+            "autoplay": true,
+            "withCustomDomain": false,
+            "slideInterval": 25
+          }
+        ]
       },
       "GetSlideshowUrlResponse": {
         "type": "object",
@@ -3060,7 +3117,16 @@
           "data": {
             "$ref": "#/components/schemas/SlideUrlData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get slideshow url",
+            "data": {
+              "slideUrl": "https://analytics.zoho.com/ZDBSlideshow.cc?SLIDEID=1767024000003139001&SLIDEKEY=9c4a1042011ce02fc4a3182fa75a22a9&AUTOPLAY=true&INTERVAL=25&INCLUDETITLE=true&INCLUDEDESC=true&SOCIALWIDGETS=false"
+            }
+          }
+        ]
       },
       "GetSlideshowsResponse": {
         "type": "object",
@@ -3084,7 +3150,27 @@
           "data": {
             "$ref": "#/components/schemas/SlideshowsData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get slideshows",
+            "data": {
+              "slideshows": [
+                {
+                  "slideName": "Sales Overview",
+                  "slideId": "1767024000003149001",
+                  "accessType": 0
+                },
+                {
+                  "slideName": "Quarterly Highlights",
+                  "slideId": "1767024000003120002",
+                  "accessType": 1
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetUserPermissionsData": {
         "type": "object",
@@ -3094,7 +3180,31 @@
           "permissions": {
             "$ref": "#/components/schemas/ViewPermissions"
           }
-        }
+        },
+        "examples": [
+          {
+            "permissions": {
+              "read": true,
+              "export": false,
+              "vud": false,
+              "addRow": false,
+              "updateRow": false,
+              "deleteRow": false,
+              "deleteAllRows": false,
+              "importAppend": false,
+              "importAddOrUpdate": false,
+              "importDeleteAllAdd": false,
+              "importDeleteUpdateAdd": false,
+              "drillDown": false,
+              "share": false,
+              "discussion": false,
+              "insight": false,
+              "drillThrough": false,
+              "accessAdminPresets": false,
+              "createPreset": false
+            }
+          }
+        ]
       },
       "GetUserPermissionsResponse": {
         "type": "object",
@@ -3118,7 +3228,35 @@
           "data": {
             "$ref": "#/components/schemas/GetUserPermissionsData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get user permissions",
+            "data": {
+              "permissions": {
+                "read": true,
+                "export": false,
+                "vud": false,
+                "addRow": false,
+                "updateRow": false,
+                "deleteRow": false,
+                "deleteAllRows": false,
+                "importAppend": false,
+                "importAddOrUpdate": false,
+                "importDeleteAllAdd": false,
+                "importDeleteUpdateAdd": false,
+                "drillDown": false,
+                "share": false,
+                "discussion": false,
+                "insight": false,
+                "drillThrough": false,
+                "accessAdminPresets": false,
+                "createPreset": false
+              }
+            }
+          }
+        ]
       },
       "GetWorkspaceSharedDetailsResponse": {
         "type": "object",
@@ -3142,7 +3280,82 @@
           "data": {
             "$ref": "#/components/schemas/WorkspaceShareData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get share info",
+            "data": {
+              "userShareInfo": [
+                {
+                  "emailId": "user1@example.com",
+                  "views": [
+                    {
+                      "viewId": "1767024000013486001",
+                      "viewName": "Region Wise Sales",
+                      "sharedBy": "owner@example.com",
+                      "permissions": {
+                        "read": true,
+                        "export": true,
+                        "vud": false,
+                        "addRow": false,
+                        "updateRow": false,
+                        "deleteRow": false,
+                        "deleteAllRows": false,
+                        "importAppend": false,
+                        "importAddOrUpdate": false,
+                        "importDeleteAllAdd": false,
+                        "importDeleteUpdateAdd": false,
+                        "drillDown": false,
+                        "share": false,
+                        "discussion": true,
+                        "insight": true,
+                        "drillThrough": false,
+                        "accessAdminPresets": false,
+                        "createPreset": false
+                      }
+                    }
+                  ]
+                }
+              ],
+              "groupShareInfo": [],
+              "publicShareInfo": {
+                "emailId": "Public Visitor",
+                "views": [
+                  {
+                    "viewId": "1767024000013511013",
+                    "viewName": "Sales Dashboard",
+                    "sharedBy": "owner@example.com",
+                    "permissions": {
+                      "read": true,
+                      "export": false,
+                      "vud": false,
+                      "addRow": false,
+                      "updateRow": false,
+                      "deleteRow": false,
+                      "deleteAllRows": false,
+                      "importAppend": false,
+                      "importAddOrUpdate": false,
+                      "importDeleteAllAdd": false,
+                      "importDeleteUpdateAdd": false,
+                      "drillDown": false,
+                      "share": false,
+                      "discussion": false,
+                      "insight": false,
+                      "drillThrough": false,
+                      "accessAdminPresets": false,
+                      "createPreset": false
+                    }
+                  }
+                ]
+              },
+              "privateLinkShareInfo": {
+                "emailId": "Private Link",
+                "views": []
+              }
+            }
+          }
+        ]
       },
       "GroupShareInfo": {
         "type": "object",
@@ -3241,7 +3454,15 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "publicPermLevel": 1,
+            "permissions": {
+              "export": true
+            }
+          }
+        ]
       },
       "MakeViewsPublicData": {
         "type": "object",
@@ -3255,7 +3476,12 @@
               "https://analytics.zoho.com/open-view/1767024000008125004"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "publicUrl": "https://analytics.zoho.com/open-view/1767024000008125004"
+          }
+        ]
       },
       "MakeViewsPublicResponse": {
         "type": "object",
@@ -3279,7 +3505,16 @@
           "data": {
             "$ref": "#/components/schemas/MakeViewsPublicData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Make view public",
+            "data": {
+              "publicUrl": "https://analytics.zoho.com/open-view/1767024000008125004"
+            }
+          }
+        ]
       },
       "PermissionAttributes": {
         "type": "object",
@@ -3467,7 +3702,15 @@
               "-1"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "isPrivate": false,
+            "isExpired": false,
+            "password": "-1",
+            "expiryDate": "-1"
+          }
+        ]
       },
       "PrivateLinkShareInfo": {
         "type": "object",
@@ -3488,7 +3731,13 @@
               "$ref": "#/components/schemas/ShareViewObject"
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "emailId": "Private Link",
+            "views": []
+          }
+        ]
       },
       "PrivateUrlData": {
         "type": "object",
@@ -3502,7 +3751,12 @@
               "https://analytics.zoho.com/open-view/1767024000003145011/eee1191ea88d52e486aaecf5f748dc56"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "privateUrl": "https://analytics.zoho.com/open-view/1767024000003145011/eee1191ea88d52e486aaecf5f748dc56"
+          }
+        ]
       },
       "PublicShareInfo": {
         "type": "object",
@@ -3523,7 +3777,39 @@
               "$ref": "#/components/schemas/ShareViewObject"
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "emailId": "Public Visitor",
+            "views": [
+              {
+                "viewId": "1767024000013511013",
+                "viewName": "Sales Dashboard",
+                "sharedBy": "owner@example.com",
+                "permissions": {
+                  "read": true,
+                  "export": false,
+                  "vud": false,
+                  "addRow": false,
+                  "updateRow": false,
+                  "deleteRow": false,
+                  "deleteAllRows": false,
+                  "importAppend": false,
+                  "importAddOrUpdate": false,
+                  "importDeleteAllAdd": false,
+                  "importDeleteUpdateAdd": false,
+                  "drillDown": false,
+                  "share": false,
+                  "discussion": false,
+                  "insight": false,
+                  "drillThrough": false,
+                  "accessAdminPresets": false,
+                  "createPreset": false
+                }
+              }
+            ]
+          }
+        ]
       },
       "PublicViewConfig": {
         "type": "object",
@@ -3577,7 +3863,17 @@
               "Zylker Corporation Private Limited"
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "publicPermLevel": 1,
+            "isListed": false,
+            "isOrgPublicAllowed": true,
+            "orgName": "Zylker Analytics",
+            "isBussOrgPublicAllowed": true,
+            "businessOrgName": "Zylker Corporation Private Limited"
+          }
+        ]
       },
       "PublishConfig": {
         "type": "object",
@@ -3699,7 +3995,25 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "includeTitle": true,
+            "includeDesc": true,
+            "includeToolBar": false,
+            "includeSocialWidgets": false,
+            "includeSearchBox": false,
+            "includeDatatypeSymbol": false,
+            "includeShowHideOption": false,
+            "isInteractive": true,
+            "legendPosition": "RIGHT",
+            "width": 800,
+            "height": 600,
+            "autoRefresh": -1,
+            "URLCriteria": "",
+            "includeAskZia": true
+          }
+        ]
       },
       "PublishConfigurationsData": {
         "type": "object",
@@ -3715,7 +4029,41 @@
           "publishConfig": {
             "$ref": "#/components/schemas/PublishConfig"
           }
-        }
+        },
+        "examples": [
+          {
+            "publicViewConfig": {
+              "publicPermLevel": 1,
+              "isListed": false,
+              "isOrgPublicAllowed": true,
+              "orgName": "Zylker Analytics",
+              "isBussOrgPublicAllowed": true,
+              "businessOrgName": "Zylker Corporation Private Limited"
+            },
+            "privateLinkConfig": {
+              "isPrivate": false,
+              "isExpired": false,
+              "password": "-1",
+              "expiryDate": "-1"
+            },
+            "publishConfig": {
+              "includeTitle": true,
+              "includeDesc": true,
+              "includeToolBar": false,
+              "includeSocialWidgets": false,
+              "includeSearchBox": false,
+              "includeDatatypeSymbol": false,
+              "includeShowHideOption": false,
+              "isInteractive": true,
+              "legendPosition": "RIGHT",
+              "width": 800,
+              "height": 600,
+              "autoRefresh": -1,
+              "URLCriteria": "",
+              "includeAskZia": true
+            }
+          }
+        ]
       },
       "PublishPermissionAttributes": {
         "type": "object",
@@ -3798,6 +4146,18 @@
         },
         "required": [
           "emailIds"
+        ],
+        "examples": [
+          {
+            "emailIds": [
+              "user1@example.com",
+              "user2@example.com"
+            ],
+            "viewIds": [
+              "35130000001055717",
+              "35130000001055721"
+            ]
+          }
         ]
       },
       "ShareColumns": {
@@ -3893,7 +4253,34 @@
           "permissions": {
             "$ref": "#/components/schemas/ViewPermissions"
           }
-        }
+        },
+        "examples": [
+          {
+            "viewId": "1767024000013486001",
+            "viewName": "Region Wise Sales",
+            "sharedBy": "owner@example.com",
+            "permissions": {
+              "read": true,
+              "export": true,
+              "vud": false,
+              "addRow": false,
+              "updateRow": false,
+              "deleteRow": false,
+              "deleteAllRows": false,
+              "importAppend": false,
+              "importAddOrUpdate": false,
+              "importDeleteAllAdd": false,
+              "importDeleteUpdateAdd": false,
+              "drillDown": false,
+              "share": false,
+              "discussion": true,
+              "insight": true,
+              "drillThrough": false,
+              "accessAdminPresets": false,
+              "createPreset": false
+            }
+          }
+        ]
       },
       "ShareViewsConfig": {
         "type": "object",
@@ -3996,6 +4383,22 @@
           "emailIds",
           "viewIds",
           "permissions"
+        ],
+        "examples": [
+          {
+            "emailIds": [
+              "user1@example.com",
+              "user2@example.com"
+            ],
+            "viewIds": [
+              "35130000001055717"
+            ],
+            "permissions": {
+              "read": true,
+              "export": true
+            },
+            "inviteMail": true
+          }
         ]
       },
       "SharedDetail": {
@@ -4017,7 +4420,52 @@
               "$ref": "#/components/schemas/SharedInfo"
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "viewId": "1767024000013486001",
+            "shareInfo": [
+              {
+                "sharedTo": "user1@example.com",
+                "sharedBy": "owner@example.com",
+                "sharedToZuId": "65482910",
+                "permissionString": "read,export",
+                "permissions": {
+                  "read": true,
+                  "export": true,
+                  "vud": false,
+                  "addRow": false,
+                  "updateRow": false,
+                  "deleteRow": false,
+                  "deleteAllRows": false,
+                  "importAppend": false,
+                  "importAddOrUpdate": false,
+                  "importDeleteAllAdd": false,
+                  "importDeleteUpdateAdd": false,
+                  "drillDown": false,
+                  "share": false,
+                  "discussion": false,
+                  "insight": false,
+                  "drillThrough": false,
+                  "accessAdminPresets": false,
+                  "createPreset": false
+                },
+                "criteria": "\"SalesTable\".\"Region\"='East'",
+                "inheritParentFilterCriteria": "false",
+                "isInvalidCriteria": false,
+                "sharedColumns": [
+                  "Region",
+                  "Sales"
+                ],
+                "vudColumns": [],
+                "drillColumns": [],
+                "isGroupShare": false,
+                "publicPermLevel": 0,
+                "isROUser": false
+              }
+            ]
+          }
+        ]
       },
       "SharedDetailsData": {
         "type": "object",
@@ -4031,7 +4479,56 @@
               "$ref": "#/components/schemas/SharedDetail"
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "sharedDetails": [
+              {
+                "viewId": "1767024000013486001",
+                "shareInfo": [
+                  {
+                    "sharedTo": "user1@example.com",
+                    "sharedBy": "owner@example.com",
+                    "sharedToZuId": "65482910",
+                    "permissionString": "read,export",
+                    "permissions": {
+                      "read": true,
+                      "export": true,
+                      "vud": false,
+                      "addRow": false,
+                      "updateRow": false,
+                      "deleteRow": false,
+                      "deleteAllRows": false,
+                      "importAppend": false,
+                      "importAddOrUpdate": false,
+                      "importDeleteAllAdd": false,
+                      "importDeleteUpdateAdd": false,
+                      "drillDown": false,
+                      "share": false,
+                      "discussion": false,
+                      "insight": false,
+                      "drillThrough": false,
+                      "accessAdminPresets": false,
+                      "createPreset": false
+                    },
+                    "criteria": "\"SalesTable\".\"Region\"='East'",
+                    "inheritParentFilterCriteria": "false",
+                    "isInvalidCriteria": false,
+                    "sharedColumns": [
+                      "Region",
+                      "Sales"
+                    ],
+                    "vudColumns": [],
+                    "drillColumns": [],
+                    "isGroupShare": false,
+                    "publicPermLevel": 0,
+                    "isROUser": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "SharedInfo": {
         "type": "object",
@@ -4156,7 +4653,47 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "sharedTo": "user1@example.com",
+            "sharedBy": "owner@example.com",
+            "sharedToZuId": "65482910",
+            "permissionString": "read,export",
+            "permissions": {
+              "read": true,
+              "export": true,
+              "vud": false,
+              "addRow": false,
+              "updateRow": false,
+              "deleteRow": false,
+              "deleteAllRows": false,
+              "importAppend": false,
+              "importAddOrUpdate": false,
+              "importDeleteAllAdd": false,
+              "importDeleteUpdateAdd": false,
+              "drillDown": false,
+              "share": false,
+              "discussion": false,
+              "insight": false,
+              "drillThrough": false,
+              "accessAdminPresets": false,
+              "createPreset": false
+            },
+            "criteria": "\"SalesTable\".\"Region\"='East'",
+            "inheritParentFilterCriteria": "false",
+            "isInvalidCriteria": false,
+            "sharedColumns": [
+              "Region",
+              "Sales"
+            ],
+            "vudColumns": [],
+            "drillColumns": [],
+            "isGroupShare": false,
+            "publicPermLevel": 0,
+            "isROUser": false
+          }
+        ]
       },
       "SlideInfo": {
         "type": "object",
@@ -4192,10 +4729,15 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
-              "With login",
-              "Without login",
-              "Sort"
+            "x-enumDescriptions": {
+              "0": "With login",
+              "1": "Without login",
+              "2": "Sort"
+            },
+            "x-enum-varnames": [
+              "WITH_LOGIN",
+              "WITHOUT_LOGIN",
+              "SORT"
             ]
           },
           "viewIds": {
@@ -4208,6 +4750,19 @@
           "slideName",
           "accessType",
           "viewIds"
+        ],
+        "examples": [
+          {
+            "slideId": "1767024000003149001",
+            "slideKey": "9a4c1042011ce02fc4a3182fa75a22a9",
+            "slideName": "Sales Overview",
+            "accessType": 0,
+            "viewIds": [
+              "1767024000003013087",
+              "1767024000003015001",
+              "1767024000003011002"
+            ]
+          }
         ]
       },
       "SlideUrlData": {
@@ -4226,6 +4781,11 @@
         },
         "required": [
           "slideUrl"
+        ],
+        "examples": [
+          {
+            "slideUrl": "https://analytics.zoho.com/ZDBSlideshow.cc?SLIDEID=1767024000003139001&SLIDEKEY=9c4a1042011ce02fc4a3182fa75a22a9&AUTOPLAY=true&INTERVAL=25&INCLUDETITLE=true&INCLUDEDESC=true&SOCIALWIDGETS=false"
+          }
         ]
       },
       "SlideViewIds": {
@@ -4251,7 +4811,22 @@
           "slideInfo": {
             "$ref": "#/components/schemas/SlideInfo"
           }
-        }
+        },
+        "examples": [
+          {
+            "slideInfo": {
+              "slideId": "1767024000003149001",
+              "slideKey": "9a4c1042011ce02fc4a3182fa75a22a9",
+              "slideName": "Sales Overview",
+              "accessType": 0,
+              "viewIds": [
+                "1767024000003013087",
+                "1767024000003015001",
+                "1767024000003011002"
+              ]
+            }
+          }
+        ]
       },
       "SlideshowSummary": {
         "type": "object",
@@ -4280,10 +4855,15 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
-              "With login",
-              "Without login",
-              "Sort"
+            "x-enumDescriptions": {
+              "0": "With login",
+              "1": "Without login",
+              "2": "Sort"
+            },
+            "x-enum-varnames": [
+              "WITH_LOGIN",
+              "WITHOUT_LOGIN",
+              "SORT"
             ]
           }
         },
@@ -4291,6 +4871,13 @@
           "slideName",
           "slideId",
           "accessType"
+        ],
+        "examples": [
+          {
+            "slideName": "Sales Overview",
+            "slideId": "1767024000003149001",
+            "accessType": 0
+          }
         ]
       },
       "SlideshowsData": {
@@ -4305,7 +4892,23 @@
               "$ref": "#/components/schemas/SlideshowSummary"
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "slideshows": [
+              {
+                "slideName": "Sales Overview",
+                "slideId": "1767024000003149001",
+                "accessType": 0
+              },
+              {
+                "slideName": "Quarterly Highlights",
+                "slideId": "1767024000003120002",
+                "accessType": 1
+              }
+            ]
+          }
+        ]
       },
       "UpdatePublishConfigurationsConfig": {
         "type": "object",
@@ -4424,7 +5027,14 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "includeTitle": false,
+            "includeDesc": false,
+            "includeToolBar": false
+          }
+        ]
       },
       "UpdateSharedDetailsConfig": {
         "type": "object",
@@ -4492,6 +5102,19 @@
         },
         "required": [
           "permissions"
+        ],
+        "examples": [
+          {
+            "emailIds": [
+              "user1@example.com",
+              "user2@example.com"
+            ],
+            "permissions": {
+              "read": true,
+              "export": true,
+              "vud": true
+            }
+          }
         ]
       },
       "UpdateSlideshowConfig": {
@@ -4527,10 +5150,15 @@
               1,
               2
             ],
-            "x-zenesis-enums-desc": [
-              "With login",
-              "Without login",
-              "Sort"
+            "x-enumDescriptions": {
+              "0": "With login",
+              "1": "Without login",
+              "2": "Sort"
+            },
+            "x-enum-varnames": [
+              "WITH_LOGIN",
+              "WITHOUT_LOGIN",
+              "SORT"
             ]
           },
           "validateSystemTags": {
@@ -4542,7 +5170,12 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "slideName": "Sales Overview 2026"
+          }
+        ]
       },
       "UserShareInfo": {
         "type": "object",
@@ -4563,7 +5196,39 @@
               "$ref": "#/components/schemas/ShareViewObject"
             }
           }
-        }
+        },
+        "examples": [
+          {
+            "emailId": "user1@example.com",
+            "views": [
+              {
+                "viewId": "1767024000013486001",
+                "viewName": "Region Wise Sales",
+                "sharedBy": "owner@example.com",
+                "permissions": {
+                  "read": true,
+                  "export": true,
+                  "vud": false,
+                  "addRow": false,
+                  "updateRow": false,
+                  "deleteRow": false,
+                  "deleteAllRows": false,
+                  "importAppend": false,
+                  "importAddOrUpdate": false,
+                  "importDeleteAllAdd": false,
+                  "importDeleteUpdateAdd": false,
+                  "drillDown": false,
+                  "share": false,
+                  "discussion": true,
+                  "insight": true,
+                  "drillThrough": false,
+                  "accessAdminPresets": false,
+                  "createPreset": false
+                }
+              }
+            ]
+          }
+        ]
       },
       "VUDColumns": {
         "type": "array",
@@ -4733,7 +5398,29 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "read": true,
+            "export": true,
+            "vud": false,
+            "addRow": false,
+            "updateRow": false,
+            "deleteRow": false,
+            "deleteAllRows": false,
+            "importAppend": false,
+            "importAddOrUpdate": false,
+            "importDeleteAllAdd": false,
+            "importDeleteUpdateAdd": false,
+            "drillDown": false,
+            "share": false,
+            "discussion": true,
+            "insight": true,
+            "drillThrough": false,
+            "accessAdminPresets": false,
+            "createPreset": false
+          }
+        ]
       },
       "WorkspaceShareData": {
         "type": "object",
@@ -4760,7 +5447,78 @@
           "privateLinkShareInfo": {
             "$ref": "#/components/schemas/PrivateLinkShareInfo"
           }
-        }
+        },
+        "examples": [
+          {
+            "userShareInfo": [
+              {
+                "emailId": "user1@example.com",
+                "views": [
+                  {
+                    "viewId": "1767024000013486001",
+                    "viewName": "Region Wise Sales",
+                    "sharedBy": "owner@example.com",
+                    "permissions": {
+                      "read": true,
+                      "export": true,
+                      "vud": false,
+                      "addRow": false,
+                      "updateRow": false,
+                      "deleteRow": false,
+                      "deleteAllRows": false,
+                      "importAppend": false,
+                      "importAddOrUpdate": false,
+                      "importDeleteAllAdd": false,
+                      "importDeleteUpdateAdd": false,
+                      "drillDown": false,
+                      "share": false,
+                      "discussion": true,
+                      "insight": true,
+                      "drillThrough": false,
+                      "accessAdminPresets": false,
+                      "createPreset": false
+                    }
+                  }
+                ]
+              }
+            ],
+            "groupShareInfo": [],
+            "publicShareInfo": {
+              "emailId": "Public Visitor",
+              "views": [
+                {
+                  "viewId": "1767024000013511013",
+                  "viewName": "Sales Dashboard",
+                  "sharedBy": "owner@example.com",
+                  "permissions": {
+                    "read": true,
+                    "export": false,
+                    "vud": false,
+                    "addRow": false,
+                    "updateRow": false,
+                    "deleteRow": false,
+                    "deleteAllRows": false,
+                    "importAppend": false,
+                    "importAddOrUpdate": false,
+                    "importDeleteAllAdd": false,
+                    "importDeleteUpdateAdd": false,
+                    "drillDown": false,
+                    "share": false,
+                    "discussion": false,
+                    "insight": false,
+                    "drillThrough": false,
+                    "accessAdminPresets": false,
+                    "createPreset": false
+                  }
+                }
+              ]
+            },
+            "privateLinkShareInfo": {
+              "emailId": "Private Link",
+              "views": []
+            }
+          }
+        ]
       }
     }
   }

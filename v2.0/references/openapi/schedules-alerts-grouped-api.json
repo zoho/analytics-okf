@@ -25,7 +25,6 @@
         "tags": [
           "Email Schedules"
         ],
-        "x-zenesis-title": "Create Email Schedule",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -63,8 +62,8 @@
               },
               "examples": {
                 "dailyCsvSchedule": {
-                  "description": "Daily CSV schedule",
-                  "summary": "Emails the listed view as a CSV file every day at 09:00.",
+                  "description": "Emails the listed view as a CSV file every day at 09:00.",
+                  "summary": "Daily CSV schedule",
                   "value": {
                     "CONFIG": {
                       "scheduleName": "Daily Sales Snapshot",
@@ -86,8 +85,8 @@
                   }
                 },
                 "weeklyPdfSchedule": {
-                  "description": "Weekly PDF schedule",
-                  "summary": "Emails the views as PDF every Monday and Friday at 14:30, with a carbon copy list and the share criteria applied.",
+                  "description": "Emails the views as PDF every Monday and Friday at 14:30, with a carbon copy list and the share criteria applied.",
+                  "summary": "Weekly PDF schedule",
                   "value": {
                     "CONFIG": {
                       "scheduleName": "Weekly Sales Report",
@@ -128,8 +127,8 @@
                   }
                 },
                 "monthlyImageSchedule": {
-                  "description": "Monthly image schedule",
-                  "summary": "Emails the views as an image on the first and the last day of every month, skipping the System Tag validation.",
+                  "description": "Emails the views as an image on the first and the last day of every month, skipping the System Tag validation.",
+                  "summary": "Monthly image schedule",
                   "value": {
                     "CONFIG": {
                       "scheduleName": "Monthly Revenue Board",
@@ -168,8 +167,8 @@
                 },
                 "examples": {
                   "scheduleCreated": {
-                    "description": "Schedule created",
-                    "summary": "Returns the ID of the newly created email schedule.",
+                    "description": "Returns the ID of the newly created email schedule.",
+                    "summary": "Schedule created",
                     "value": {
                       "status": "success",
                       "summary": "Create Email Schedule",
@@ -182,23 +181,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe attributes inside scheduleDetails apply based on the calendarFrequency value.\n<ul><li>weekDay and weekDays - applicable for weekly schedules.</li><li>weekNumber, monthDay and monthDays - applicable for monthly schedules.</li><li>months - applicable for yearly schedules, along with the relevant day attributes.</li></ul>\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nvalidateSystemTags is applicable only when System Tags are enabled for your organization. When it is set to true, a view listed in viewIds that carries an Outdated tag - applied directly, or inherited through lineage from a parent Data Source or Table - causes the request to be rejected, and no views are shared.\n</span></blockquote>"
-            }
           }
         }
       },
@@ -209,7 +196,6 @@
         "tags": [
           "Email Schedules"
         ],
-        "x-zenesis-title": "Get Email Schedules",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -235,8 +221,8 @@
                 },
                 "examples": {
                   "multipleSchedules": {
-                    "description": "Multiple schedules",
-                    "summary": "A workspace holding both a weekly dashboard schedule and a daily table schedule.",
+                    "description": "A workspace holding both a weekly dashboard schedule and a daily table schedule.",
+                    "summary": "Multiple schedules",
                     "value": {
                       "status": "success",
                       "summary": "Get email schedules",
@@ -270,8 +256,8 @@
                     }
                   },
                   "noSchedules": {
-                    "description": "No schedules",
-                    "summary": "The workspace has no email schedules configured.",
+                    "description": "The workspace has no email schedules configured.",
+                    "summary": "No schedules",
                     "value": {
                       "status": "success",
                       "summary": "Get email schedules",
@@ -284,7 +270,7 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -301,7 +287,6 @@
         "tags": [
           "Email Schedules"
         ],
-        "x-zenesis-title": "Trigger Email Schedule",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -324,7 +309,7 @@
           "204": {
             "description": "Email schedule triggered successfully. No content."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -339,7 +324,6 @@
         "tags": [
           "Email Schedules"
         ],
-        "x-zenesis-title": "Update Email Schedule",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -380,8 +364,8 @@
               },
               "examples": {
                 "changeFrequency": {
-                  "description": "Change frequency",
-                  "summary": "Renames the schedule and switches it to run every day at 10:30.",
+                  "description": "Renames the schedule and switches it to run every day at 10:30.",
+                  "summary": "Change frequency",
                   "value": {
                     "CONFIG": {
                       "scheduleName": "Daily Sales Overview",
@@ -395,8 +379,8 @@
                   }
                 },
                 "updateRecipients": {
-                  "description": "Update recipients",
-                  "summary": "Keeps a yearly frequency and replaces the recipient, group and carbon copy lists.",
+                  "description": "Keeps a yearly frequency and replaces the recipient, group and carbon copy lists.",
+                  "summary": "Update recipients",
                   "value": {
                     "CONFIG": {
                       "scheduleName": "Annual Revenue Report",
@@ -443,8 +427,8 @@
                 },
                 "examples": {
                   "scheduleUpdated": {
-                    "description": "Schedule updated",
-                    "summary": "Returns the ID of the email schedule that was updated.",
+                    "description": "Returns the ID of the email schedule that was updated.",
+                    "summary": "Schedule updated",
                     "value": {
                       "status": "success",
                       "summary": "Update email schedule",
@@ -457,23 +441,11 @@
               }
             }
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/UnexpectedErrorResponse"
-          }
-        },
-        "x-zenesis-sections": {
-          "apiRequestParameters": {
-            "1": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nThe attributes inside scheduleDetails apply based on the calendarFrequency value.\n<ul><li>weekDay and weekDays - applicable for weekly schedules.</li><li>weekNumber, monthDay and monthDays - applicable for monthly schedules.</li><li>months - applicable for yearly schedules, along with the relevant day attributes.</li></ul>\n</span></blockquote>"
-            },
-            "2": {
-              "type": "editor",
-              "value": "<blockquote>Note:<br>\n<span style=\"font-weight:normal;\">\nvalidateSystemTags is applicable only when System Tags are enabled for your organization. When it is set to true, a view shared by this schedule that carries an Outdated tag - applied directly, or inherited through lineage from a parent Data Source or Table - causes the request to be rejected, and no views are shared.\n</span></blockquote>"
-            }
           }
         }
       },
@@ -484,7 +456,6 @@
         "tags": [
           "Email Schedules"
         ],
-        "x-zenesis-title": "Delete Email Schedule",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -507,7 +478,7 @@
           "204": {
             "description": "Email schedule deleted successfully. No content."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -524,7 +495,6 @@
         "tags": [
           "Email Schedules"
         ],
-        "x-zenesis-title": "Change Email Schedule Status",
         "security": [
           {
             "iam-oauth2-schema": [
@@ -565,8 +535,8 @@
               },
               "examples": {
                 "activateSchedule": {
-                  "description": "Activate schedule",
-                  "summary": "Resumes a schedule that is currently deactivated.",
+                  "description": "Resumes a schedule that is currently deactivated.",
+                  "summary": "Activate schedule",
                   "value": {
                     "CONFIG": {
                       "operation": "activate"
@@ -574,8 +544,8 @@
                   }
                 },
                 "deactivateSchedule": {
-                  "description": "Deactivate schedule",
-                  "summary": "Pauses the schedule without deleting its configuration.",
+                  "description": "Pauses the schedule without deleting its configuration.",
+                  "summary": "Deactivate schedule",
                   "value": {
                     "CONFIG": {
                       "operation": "deactivate"
@@ -590,7 +560,7 @@
           "204": {
             "description": "Email schedule status updated successfully. No content."
           },
-                    "4XX": {
+          "4XX": {
             "$ref": "https://raw.githubusercontent.com/zoho/analytics-oas/refs/heads/main/v2.0/common/zoho-analytics-api-common.json#/components/responses/CommonErrorResponse"
           },
           "500": {
@@ -664,12 +634,17 @@
               "activate",
               "deactivate"
             ],
-            "x-zenesis-enums-desc": [
-              "Enable schedule",
-              "Disable schedule"
-            ]
+            "x-enumDescriptions": {
+              "activate": "Enable schedule",
+              "deactivate": "Disable schedule"
+            }
           }
-        }
+        },
+        "examples": [
+          {
+            "operation": "activate"
+          }
+        ]
       },
       "CreateEmailScheduleConfig": {
         "type": "object",
@@ -699,13 +674,13 @@
               "pdf",
               "html"
             ],
-            "x-zenesis-enums-desc": [
-              "CSV file",
-              "Excel file",
-              "Image file",
-              "PDF file",
-              "HTML file"
-            ]
+            "x-enumDescriptions": {
+              "csv": "CSV file",
+              "xls": "Excel file",
+              "img": "Image file",
+              "pdf": "PDF file",
+              "html": "HTML file"
+            }
           },
           "scheduleDetails": {
             "$ref": "#/components/schemas/ScheduleDetails"
@@ -754,7 +729,26 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "scheduleName": "Daily Sales Snapshot",
+            "viewIds": [
+              "1234567890123"
+            ],
+            "exportType": "csv",
+            "scheduleDetails": {
+              "calendarFrequency": "daily",
+              "hour": 9,
+              "minute": 0
+            },
+            "emailIds": [
+              "user1@zylker.com"
+            ],
+            "subject": "Daily Sales Snapshot",
+            "message": "Please find the attached sales snapshot."
+          }
+        ]
       },
       "ScheduleViewIds": {
         "type": "array",
@@ -827,14 +821,23 @@
               6,
               7
             ],
-            "x-zenesis-enums-desc": [
-              "Sunday",
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday"
+            "x-enumDescriptions": {
+              "1": "Sunday",
+              "2": "Monday",
+              "3": "Tuesday",
+              "4": "Wednesday",
+              "5": "Thursday",
+              "6": "Friday",
+              "7": "Saturday"
+            },
+            "x-enum-varnames": [
+              "SUNDAY",
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY"
             ]
           },
           "weekDays": {
@@ -850,12 +853,19 @@
               4,
               5
             ],
-            "x-zenesis-enums-desc": [
-              "First week",
-              "Second week",
-              "Third week",
-              "Fourth week",
-              "Fifth week"
+            "x-enumDescriptions": {
+              "1": "First week",
+              "2": "Second week",
+              "3": "Third week",
+              "4": "Fourth week",
+              "5": "Fifth week"
+            },
+            "x-enum-varnames": [
+              "FIRST_WEEK",
+              "SECOND_WEEK",
+              "THIRD_WEEK",
+              "FOURTH_WEEK",
+              "FIFTH_WEEK"
             ]
           },
           "monthDay": {
@@ -899,14 +909,23 @@
             6,
             7
           ],
-          "x-zenesis-enums-desc": [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
+          "x-enumDescriptions": {
+            "1": "Sunday",
+            "2": "Monday",
+            "3": "Tuesday",
+            "4": "Wednesday",
+            "5": "Thursday",
+            "6": "Friday",
+            "7": "Saturday"
+          },
+          "x-enum-varnames": [
+            "SUNDAY",
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY"
           ]
         },
         "examples": [
@@ -955,19 +974,33 @@
             11,
             12
           ],
-          "x-zenesis-enums-desc": [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
+          "x-enumDescriptions": {
+            "1": "January",
+            "2": "February",
+            "3": "March",
+            "4": "April",
+            "5": "May",
+            "6": "June",
+            "7": "July",
+            "8": "August",
+            "9": "September",
+            "10": "October",
+            "11": "November",
+            "12": "December"
+          },
+          "x-enum-varnames": [
+            "JANUARY",
+            "FEBRUARY",
+            "MARCH",
+            "APRIL",
+            "MAY",
+            "JUNE",
+            "JULY",
+            "AUGUST",
+            "SEPTEMBER",
+            "OCTOBER",
+            "NOVEMBER",
+            "DECEMBER"
           ]
         },
         "examples": [
@@ -1076,7 +1109,16 @@
           "data": {
             "$ref": "#/components/schemas/EmailScheduleIdData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Create Email Schedule",
+            "data": {
+              "scheduleId": "1767024000010886001"
+            }
+          }
+        ]
       },
       "EmailScheduleIdData": {
         "type": "object",
@@ -1110,7 +1152,40 @@
           "data": {
             "$ref": "#/components/schemas/GetEmailSchedulesResponseData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Get email schedules",
+            "data": {
+              "emailSchedules": [
+                {
+                  "scheduleId": "176702400010815003",
+                  "scheduleName": "Dashboard_1",
+                  "schedulePeriod": "weekly on Friday at 14:10 IST",
+                  "schedulesConsumed": 1,
+                  "isEnabled": true,
+                  "createdBy": "user_1@zoho.com",
+                  "views": [
+                    "176702400010388124",
+                    "176702400010388129"
+                  ]
+                },
+                {
+                  "scheduleId": "176702400010815001",
+                  "scheduleName": "Table_1",
+                  "schedulePeriod": "daily at 14:10 IST",
+                  "schedulesConsumed": 1,
+                  "isEnabled": true,
+                  "createdBy": "user_1@zoho.com",
+                  "views": [
+                    "176702400010503569"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
       },
       "GetEmailSchedulesResponseData": {
         "type": "object",
@@ -1120,7 +1195,36 @@
           "emailSchedules": {
             "$ref": "#/components/schemas/EmailSchedules"
           }
-        }
+        },
+        "examples": [
+          {
+            "emailSchedules": [
+              {
+                "scheduleId": "176702400010815003",
+                "scheduleName": "Dashboard_1",
+                "schedulePeriod": "weekly on Friday at 14:10 IST",
+                "schedulesConsumed": 1,
+                "isEnabled": true,
+                "createdBy": "user_1@zoho.com",
+                "views": [
+                  "176702400010388124",
+                  "176702400010388129"
+                ]
+              },
+              {
+                "scheduleId": "176702400010815001",
+                "scheduleName": "Table_1",
+                "schedulePeriod": "daily at 14:10 IST",
+                "schedulesConsumed": 1,
+                "isEnabled": true,
+                "createdBy": "user_1@zoho.com",
+                "views": [
+                  "176702400010503569"
+                ]
+              }
+            ]
+          }
+        ]
       },
       "EmailSchedules": {
         "type": "array",
@@ -1182,7 +1286,21 @@
           "views": {
             "$ref": "#/components/schemas/ScheduleViews"
           }
-        }
+        },
+        "examples": [
+          {
+            "scheduleId": "176702400010815003",
+            "scheduleName": "Dashboard_1",
+            "schedulePeriod": "weekly on Friday at 14:10 IST",
+            "schedulesConsumed": 1,
+            "isEnabled": true,
+            "createdBy": "user_1@zoho.com",
+            "views": [
+              "176702400010388124",
+              "176702400010388129"
+            ]
+          }
+        ]
       },
       "ScheduleViews": {
         "type": "array",
@@ -1241,7 +1359,18 @@
               false
             ]
           }
-        }
+        },
+        "examples": [
+          {
+            "scheduleName": "Daily Sales Overview",
+            "scheduleDetails": {
+              "calendarFrequency": "daily",
+              "hour": 10,
+              "minute": 30
+            },
+            "subject": "Daily Sales Overview"
+          }
+        ]
       },
       "UpdateEmailScheduleResponse": {
         "type": "object",
@@ -1259,7 +1388,16 @@
           "data": {
             "$ref": "#/components/schemas/EmailScheduleIdData"
           }
-        }
+        },
+        "examples": [
+          {
+            "status": "success",
+            "summary": "Update email schedule",
+            "data": {
+              "scheduleId": "1767024000010887001"
+            }
+          }
+        ]
       }
     }
   }

@@ -1,14 +1,14 @@
 ---
 type: Error Catalog
 title: Error code catalog
-description: "Every documented Zoho Analytics REST API v2 error code (278 codes) with its meaning, typical HTTP status, resolution and the operations that raise it."
+description: "Every documented Zoho Analytics REST API v2 error code (317 codes) with its meaning, typical HTTP status, resolution and the operations that raise it."
 tags:
   - zoho-analytics
   - rest-api-v2
   - errors
   - error-codes
   - troubleshooting
-error_code_count: 278
+error_code_count: 317
 envelope: "{\"status\":\"failure\",\"summary\":\"<ERROR_CONSTANT>\",\"data\":{\"errorCode\":<int>,\"errorMessage\":\"<text>\"}}"
 sources:
   - id: group-org-info-and-settings
@@ -218,6 +218,8 @@ How to use this catalog:
 | [6121](#error-6121) | `EXCEEDING_USR_PLN_PRIVATE_LINKS` | 400 | The organization has used all private links allowed by its plan. | 1 |
 | [6122](#error-6122) | `EXCEEDING_USR_PLN_PRIVATE_LINKS_DM` | 400 | Same limit, reported to a non-super-admin caller. | 1 |
 | [7005](#error-7005) | `COMMON_INTERNAL_SERVER_ERROR` | 500 | Unexpected error on the Zoho Analytics server while processing an otherwise valid request. Not caused by the request payload. | 1 |
+| [7016](#error-7016) | `OBJECT_NAME_EMPTY` | 400 | title is an empty string or contains only whitespace. | 1 |
+| [7018](#error-7018) | `API_MALFORMED_URL` | 400 | The DashboardID is out of numeric range (too many digits). | 1 |
 | [7082](#error-7082) | - | 400 | An unexpected error occurred during the trash restore operation. | 2 |
 | [7089](#error-7089) | - | 400 | All the columns of the table cannot be hidden at the same time. | 2 |
 | [7092](#error-7092) | `DDL_LOCK_SINCE_IMPORT_IN_PROGRESS` | 400 | A DDL lock is active on the table. | 12 |
@@ -261,6 +263,7 @@ How to use this catalog:
 | [7282](#error-7282) | - | 400 | A group with the same name already exists in this workspace. Group names must be unique within a workspace. | 2 |
 | [7301](#error-7301) | `SECURITY_NOT_PERMITTED` | 403 | The request is authenticated, but the user does not hold the role or view permission required for this operation on the requested resource. | 161 |
 | [7307](#error-7307) | `OWNER_CANNOT_SHARE_HIMSELF` | 400 | The sharer attempted to share a view to themselves. | 1 |
+| [7309](#error-7309) | `SECURITY_NEEDS_LOGIN` | 401 | The Authorization header is absent. | 2 |
 | [7319](#error-7319) | `OBJID_NOT_BELONGS_TO_DB` | 400 | The view does not belong to the specified workspace. | 48 |
 | [7320](#error-7320) | `CANNOT_SHARETO_SELF` | 400 | Same as above (alternate path). | 1 |
 | [7321](#error-7321) | `VIEW_ALREADY_SHARED` | 400 | The view is already shared with this user. | 1 |
@@ -276,6 +279,7 @@ How to use this catalog:
 | [7338](#error-7338) | `BATCH_IMPORT_INVALID_KEY`, `GRPID_NOT_BELONGS_TO_DB` | 400 | The specified group-id does not belong to this workspace. | 7 |
 | [7340](#error-7340) | `BATCH_IMPORT_VIEWID_MISMATCH` | 400 | The batchKey belongs to a different table. | 1 |
 | [7351](#error-7351) | `SLIDESHOW_NOT_BELONGS_TO_DB` | 400 | The slideshow does not exist, or belongs to a different workspace. | 4 |
+| [7362](#error-7362) | `NO_SUCH_FOLDER_IN_DB` | 404 | The folderId does not exist in the workspace. | 1 |
 | [7367](#error-7367) | - | 400 | The lookup is used by one or more dependent views and the removal has been blocked. | 1 |
 | [7377](#error-7377) | - | 400 | An identical lookup relationship between the same child column and the same reference column is already defined. | 1 |
 | [7378](#error-7378) | - | 400 | No lookup relationship is defined on this column. | 1 |
@@ -307,9 +311,23 @@ How to use this catalog:
 | [7447](#error-7447) | - | 400 | The result of the query would exceed the allowed row or column limit. | 2 |
 | [7467](#error-7467) | - | 400 | Formula columns are not supported on pipeline tables. | 3 |
 | [7478](#error-7478) | `MORE_THAN_MAX_COLUMN` | 400 | The number of columns exceeds the maximum allowed for a table. | 6 |
+| [7479](#error-7479) | `INVALID_LAYOUT_JSON` | 400 | A card is missing one or more of the required positional fields (type, width, height, left, top). | 1 |
+| [7480](#error-7480) | `INVALID_LAYOUT_JSON` | 400 | A card's dimensional or positional value violates boundary rules: any negative value; width or height ≤ 1; left + width > 80. | 1 |
+| [7481](#error-7481) | `INVALID_LAYOUT_JSON` | 400 | A VIEW card references a view that exists but the caller does not have permission to access. | 1 |
+| [7482](#error-7482) | `INVALID_LAYOUT_JSON` | 400 | Two or more cards overlap on the grid (fully or partially). | 1 |
+| [7483](#error-7483) | `INVALID_LAYOUT_JSON` | 400 | A non-VIEW card (HTML, TITLE, IMAGE, EMBED) is missing the content field, or content is null. | 1 |
+| [7485](#error-7485) | `INVALID_LAYOUT_JSON` | 400 | A card's type field contains an unrecognised string (e.g. "INVALID"). | 1 |
+| [7486](#error-7486) | `INVALID_LAYOUT_JSON` | 400 | Any positional field (type, width, height, left, top) is the wrong data type — e.g. type is null or an integer; width/height/left/top is a string or null instead of an integer. | 1 |
+| [7487](#error-7487) | `INVALID_CONFIG` | 400 | displayName or layout is absent, null, or empty. | 1 |
+| [7488](#error-7488) | `INVALID_PARAMS` | 400 | A settings field is set to an empty string (""). | 1 |
+| [7491](#error-7491) | `INVALID_THEME_PARAMS` | 400 | The type-specific sub-object required by themes.type is absent (e.g. solid missing when type="solid"); or the card property is absent entirely. | 1 |
+| [7492](#error-7492) | `INVALID_THEME_PARAMS` | 400 | A required field inside a type-specific sub-object is missing (e.g. gradient.startColor is absent when type="gradient"). | 1 |
+| [7493](#error-7493) | `INVALID_THEME_PARAMS` | 400 | A type-specific sub-object for a *different* theme type is also present (e.g. solid property exists when type="gradient"). | 1 |
 | [7496](#error-7496) | - | 400 | The maximum sub-folder nesting depth has been exceeded. | 1 |
 | [7500](#error-7500) | `UNAUTHORIZED_ORG_CANNOT_MAKEPUBLIC` | 400 | publicPermLevel: "3" requested but the caller does not belong to the workspace admin's business organization. | 1 |
+| [7507](#error-7507) | `MORE_THAN_MAX_LENGTH` | 400 | displayName exceeds the maximum allowed length (200 characters). | 1 |
 | [7509](#error-7509) | - | 400 | The reference column holds duplicate values and cannot serve as the reference side. | 1 |
+| [7510](#error-7510) | `DASH_API_INVALID_JSON_VALUE` | 400 | A theme sub-object (e.g. card, solid) is null. | 1 |
 | [7512](#error-7512) | `INVALID_DATE_FORMAT` | 400 | A date pattern could not be parsed. | 8 |
 | [7515](#error-7515) | `UNKNOWN_LOOKUP_VALUE` | 400 | A value for a lookup column does not exist in the parent table. | 2 |
 | [7531](#error-7531) | `PUBLIC_TO_ORG_NOT_SUPPORTED_IN_FREE` | 400 | publicPermLevel 2 or 3 is not supported on the Free plan. | 1 |
@@ -323,6 +341,9 @@ How to use this catalog:
 | [7550](#error-7550) | - | 400 | The specified role name does not exist as a custom role in the organization. | 2 |
 | [7565](#error-7565) | `UNVERIFIED_EMAIL` | 400 | The calling user's primary email address is not verified. | 11 |
 | [7571](#error-7571) | `UNKNOWN_VIEWID_PASSED` | 400 | A tableCriteriaList[].viewId does not exist in this workspace. | 1 |
+| [7701](#error-7701) | `DROP_X_Y` | 400 | No X-axis or Y-axis column was provided for a chart report type. | 1 |
+| [7703](#error-7703) | `REMOVE_CLR_FIELD` | 400 | A colorAxis column is present alongside multiple Y-axis columns. | 1 |
+| [7727](#error-7727) | `Y_EXCEED_LIMIT` | 400 | More than 15 columns were placed on the Y-axis of a chart. | 1 |
 | [7801](#error-7801) | `MARGIN_VALUE_EXCEEDS` | 400 | A PDF margin is outside 0–1 inches. | 3 |
 | [7803](#error-7803) | `INVALID_DIMENSION` | 400 | width or height is outside the permitted image range. | 2 |
 | [7806](#error-7806) | `XLS_CELL_LIMIT_EXCEEDS` | 400 | The XLS export exceeds the per-sheet cell limit. | 1 |
@@ -348,6 +369,7 @@ How to use this catalog:
 | [8003](#error-8003) | `ALL_SCH_RUNERROR` | 400 | The schedule could not be activated. | 1 |
 | [8004](#error-8004) | `ALL_SCH_PAUSEERROR` | 400 | The schedule could not be deactivated. | 1 |
 | [8005](#error-8005) | `SCH_NOT_IN_WS` | 400 | The schedule does not belong to the specified workspace. | 4 |
+| [8008](#error-8008) | `UNKNOWN_PARAMETER` | 400 | The behaviour key was supplied in a userFilter whose operation is "dateRange" or "relative", where behaviour is not applicable. | 1 |
 | [8009](#error-8009) | `MAIL_MULTIVIEW_MAXCOUNT_EXCEEEDED` | 400 | Too many views in one schedule. | 1 |
 | [8014](#error-8014) | `API_IMAGE_RESPONSE_NOT_POSSIBLE` | 400 | image was requested for a view that is not a chart. | 3 |
 | [8015](#error-8015) | `API_EXPORT_COLUMN_NOT_PRESENT` | 400 | A name in selectedColumns does not match any column in the view. | 3 |
@@ -356,6 +378,7 @@ How to use this catalog:
 | [8021](#error-8021) | - | 400 | Invalid view type specified. | 3 |
 | [8023](#error-8023) | `OEM_OPERATION_NOT_ALLOWED` | 403 | The organization/workspace is not enabled for Embedded Analytics. | 3 |
 | [8024](#error-8024) | - | 400 | A cross-organization copy was attempted without a valid workspaceKey, or the key provided does not match the secret key of the source workspace. | 1 |
+| [8027](#error-8027) | `VIEWS_NOT_FOUND` | 404 | One or more VIEW-type cards reference a viewName that does not exist in the workspace; viewName is absent, null, or an integer; the layout has no VIEW-type card at all; or layout is an empty object {}. | 1 |
 | [8029](#error-8029) | `SHARE_INVALID_EMAIL_ADDRESS` | 400 | One or more emailIds entries is not a valid email address. | 1 |
 | [8030](#error-8030) | `EMAILEXPORT_DISABLED_IN_ORG` | 400 | Email export is disabled for this organization. | 2 |
 | [8031](#error-8031) | `UNTRUSTED_EMAILIDS`, `REMOVESHARE_API_PARAMS` | 400 | A recipient address is outside the organization's trusted domains. | 3 |
@@ -368,8 +391,11 @@ How to use this catalog:
 | [8040](#error-8040) | - | 400 | One or more of the specified email addresses are not currently Workspace Admins of this workspace. | 1 |
 | [8046](#error-8046) | `INVALID_COLUMNS_SELECTED` | 400 | A name in selectedColumns is not present in the source data. | 4 |
 | [8050](#error-8050) | `INVALID_VALUE` | 400 | Invalid value provided. | 3 |
+| [8051](#error-8051) | `VALUE_NOT_PRESENT` | 400 | A required field is missing — e.g., title, reportType, axisColumns, or a mandatory field within an axis-column object (type, columnName, operation) or a filter object (filterType, values, operation, columnName, exclude). | 1 |
 | [8054](#error-8054) | `INVALID_FILTER_CRITERIA` | 400 | criteria could not be parsed. | 4 |
+| [8057](#error-8057) | `NOT_ALLOWED_BASEFIELD` | 400 | The specified column cannot be used as a baseField for a window function in this report. | 1 |
 | [8058](#error-8058) | - | 400 | The organization ID provided in the ZANALYTICS-DEST-ORGID header does not exist. | 3 |
+| [8059](#error-8059) | `UNRELATED_TABLE` | 400 | The tableName in a filter or axis-column entry does not belong to the workspace or is not joined to the base table. | 1 |
 | [8060](#error-8060) | `DOMAIN_NOT_EXIST` | 400 | The specified domainName does not exist. | 17 |
 | [8061](#error-8061) | `DOMAIN_DOES_NOT_BELONGS_TO_USER` | 400 | The specified domainName does not belong to the organization's Account Admin. | 17 |
 | [8062](#error-8062) | `ADD_ROW_REQUEST_STILL_IN_PROGRESS` | 400 | withCustomDomain is true but no custom domain is configured for this workspace. | 3 |
@@ -408,11 +434,18 @@ How to use this catalog:
 | [8137](#error-8137) | `IMPORT_JOB_NOT_FOUND` | 400 | No import job exists with this ID. | 1 |
 | [8138](#error-8138) | `IMPORT_JOB_ACCESS_DENIED` | 403 | The job was created by a different user. | 1 |
 | [8139](#error-8139) | `PASTED_DATA_LIMIT_EXCEEDED`, `DATA` | 400 | The DATA parameter exceeds 10,000,000 characters. | 2 |
+| [8144](#error-8144) | `INVALID_GRAPH_TYPE` | 400 | The chartType value is not a recognised chart type. | 1 |
+| [8145](#error-8145) | `FOLDERID_CANNOT_BE_UPDATED` | 400 | folderId was included in the Update CONFIG. | 1 |
 | [8148](#error-8148) | `DECIMAL_AND_THOUSAND_SEPARATOR_SAME` | 400 | Separator configuration errors. | 6 |
 | [8149](#error-8149) | `DECIMAL_AND_THOUSAND_COLUMN_SEPARATOR_LEGNTH_VALIDATION` | 400 | A columnSeparators entry has fewer than two values. | 6 |
 | [8150](#error-8150) | `VIEW_NOT_SHARED_TO_GROUP` | 400 | The view is not currently shared with the specified group. | 2 |
 | [8152](#error-8152) | `INTERVAL_SHOULD_BE_120_OR_ABOVE` | 400 | autoRefresh is a positive value below 120 seconds. | 1 |
 | [8154](#error-8154) | `COLUMN_NOT_PRESENT_IN_TABLE` | 400 | A column in vudColumns / drillColumns (or in criteria) does not exist in the given table. | 4 |
+| [8162](#error-8162) | `RANGE_SIZE_NOT_SUPPORTED_FOR_THIS_OPERATION` | 400 | rangeSize was supplied as a string instead of a numeric double. | 1 |
+| [8166](#error-8166) | `INVALID OPERATION FOR THE COLUMN` | 400 | The operation is incompatible with the column's data type (e.g. "sum" on a date column, "year" on a numeric column, aggregate operation in a pivot row position). | 1 |
+| [8167](#error-8167) | `INVALID FILTER TYPE FOR THE GIVEN OPERATION` | 400 | The filterType is not valid for the column type + operation combination (e.g. "individualValues" on a date column with "actual" operation, "ranking" on a date column). | 1 |
+| [8168](#error-8168) | `INVALID CRITERIA FORMAT FOR THE COLUMN` | 400 | A filter values entry does not match the expected format for the given filterType (e.g. "not-a-range" for a "range" filter, malformed dateRange string). | 1 |
+| [8170](#error-8170) | `INVALID AXIS TYPE FOR THE REPORT` | 400 | The type in an axisColumns entry is not valid for the chosen reportType (e.g. "row" axis type in a "chart" report). | 1 |
 | [8173](#error-8173) | - | 400 | The number of columns sent in bulk mode exceeds the allowed limit. | 1 |
 | [8175](#error-8175) | `OEM_KEY_NOT_PRESENT` | 404 | No embed URL on this view matches the supplied rsConfig. | 1 |
 | [8176](#error-8176) | `OEM_VIEW_HOLD_NO_KEYS` | 404 | deleteAllUrls was requested but the view has no embed URLs. | 1 |
@@ -423,13 +456,19 @@ How to use this catalog:
 | [8182](#error-8182) | `SYNC_CANNOT_BE_INITIATED_FOR_CONNECTOR_WITH_MULTIPLE_SCHEDULES` | 403 | resetSort and sortOrder cannot be used together. | 2 |
 | [8183](#error-8183) | `SCHEDULE_ID_NOT_ASSOCIATED_WITH_CONNECTOR` | 400 | The syncIntervalId does not belong to this datasource. | 1 |
 | [8188](#error-8188) | `EXPORT_INVALID_PASSWORD` | 400 | password is blank or shorter than 6 characters. | 3 |
+| [8191](#error-8191) | `INCORRECT_DATE_VALUE` | 400 | A date filter value is invalid (e.g. applying a numeric range filter to a date column). | 1 |
 | [8241](#error-8241) | `SYSTEM_TAG_DATA_WARNING_V2_VALIDATION_CONFIRMATION` | 409 | The view carries a restricted DATAWARNING system tag. | 13 |
+| [8250](#error-8250) | `INVALID_UF_COMP_TYPE` | 400 | The compType is not applicable for the column category — e.g., "slider" used for a dimension column, or "singleSelect" used for a measure column, or "slider"/"singleSelect" used for a date column. | 1 |
 | [8252](#error-8252) | - | 400 | Invalid report type. | 2 |
+| [8253](#error-8253) | `REQUIRED PARAM IS MISSING` | 400 | A mandatory userFilter field is absent — typically compType (required for all operations except "dateRange") or filterType (required for measures and date actual/seasonal operations). | 1 |
 | [8504](#error-8504) | `LESS_THAN_MIN_OCCURANCE`, `CONFIG` | 400 | CONFIG was not sent, or a mandatory key is missing. | 13 |
 | [8507](#error-8507) | `MORE_THAN_MAX_LENGTH`, `CONFIG` | 400 | CONFIG exceeds 100,000 characters. | 6 |
 | [8509](#error-8509) | `PATTERN_NOT_MATCHED` | 400 | serviceName or databaseType is not one of the accepted values. | 1 |
 | [8516](#error-8516) | `UNABLE_TO_PARSE_DATA_TYPE` | 400 | A CONFIG value has the wrong JSON type. | 4 |
+| [8517](#error-8517) | `DATATYPE_NOT_MATCHED` | 400 | A boolean settings field is set to an integer (e.g. 1) or an invalid string (e.g. "yes" instead of "true"); or an allowExport sub-key uses an invalid value. | 2 |
+| [8534](#error-8534) | `JSON_PARSE_ERROR` | 400 | A theme sub-object (e.g. solid, card) is provided as an array instead of an object. | 2 |
 | [8535](#error-8535) | `INVALID_OAUTHTOKEN` | 401 | The OAuth access token is missing, expired, revoked, or does not carry the scope required by this operation. | 121 |
+| [8542](#error-8542) | `EXTRA_KEY_FOUND_IN_JSON` | 400 | The caller does not have update permission (non-admin token); or the DashboardID does not exist. | 2 |
 | [8544](#error-8544) | `OUT_OF_RANGE` | 400 | A schedule value is outside its declared range. | 1 |
 | [8547](#error-8547) | `ARRAY_SIZE_OUT_OF_RANGE` | 400 | selectedColumns is empty or holds more than 300 entries. | 4 |
 | [9102](#error-9102) | `LANGUAGE_NOT_SUPPORTED` | 400 | language is not one of the supported language names. | 1 |
@@ -507,6 +546,7 @@ Raised by:
 | [Add Users](../domains/users-and-groups/org-users/add-users.md) | Adding these users would exceed the organization's user seat limit under the current plan. | Upgrade the plan to accommodate more users, or remove unused user accounts before adding new ones. |
 | [Activate Users](../domains/users-and-groups/org-users/activate-users.md) | Activating these users would exceed the organization's user seat limit. | Check the current user count using the Get Resource Details API. Upgrade the plan or remove unused users before reactivating. |
 
+
 ## Error 6026
 
 | Attribute | Value |
@@ -523,6 +563,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Add Users](../domains/users-and-groups/org-users/add-users.md) | The current plan does not support adding extra users (free plan restriction). | Upgrade to a paid plan to invite additional users. |
+
 
 ## Error 6054
 
@@ -544,6 +585,7 @@ Raised by:
 | [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md) | `PUBLISHCNT_VIOLATION` — `accessType: 1` requested but the plan does not allow login-free (private-link style) access. | Use `accessType: 0`, or upgrade the plan. |
 | [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `PUBLISHCNT_VIOLATION` — `accessType: 1` or `regenerateSlideKey: true` requested but the plan does not allow login-free (private-link style) access. | Use `accessType: 0` and omit `regenerateSlideKey`, or upgrade the plan. |
 
+
 ## Error 6055
 
 | Attribute | Value |
@@ -560,6 +602,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md) | `REGENERATE_VIOLATION` — The current plan does not allow regenerating a private-link key. | Upgrade the plan, or omit `regenerateKey`. |
+
 
 ## Error 6056
 
@@ -580,6 +623,7 @@ Raised by:
 | [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md) | `SHAREDUSR_PUBLISHCNT_VIOLATION` — A shared user requested `accessType: 1` on a plan that restricts it. | Ask the workspace owner to create the slideshow, use `accessType: 0`, or upgrade the plan. |
 | [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `SHAREDUSR_PUBLISHCNT_VIOLATION` — A shared user requested a plan-restricted `accessType: 1` or key rotation. | Ask the workspace owner to perform the update, or upgrade the plan. |
 
+
 ## Error 6057
 
 | Attribute | Value |
@@ -596,6 +640,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md) | `SHAREDUSR_REGENERATE_VIOLATION` — A shared user attempted a plan-restricted key regeneration. | Ask the workspace owner to regenerate the key, or upgrade the plan. |
+
 
 ## Error 6063
 
@@ -614,6 +659,7 @@ Raised by:
 |---|---|---|
 | [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md), [Delete Slide Show](../domains/share-and-publish/slideshow-management/delete-slideshow.md), [Get Slide Info](../domains/share-and-publish/slideshow-management/get-slideshow-details.md), [Get Slide List](../domains/share-and-publish/slideshow-management/get-slideshows.md), [Get Slide URL](../domains/share-and-publish/slideshow-management/get-slideshow-url.md), [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `SLIDESHOW_NOT_ALLOWED` — The workspace owner's plan does not include the slideshow feature. | Upgrade the plan to one that supports slideshows. |
 
+
 ## Error 6071
 
 | Attribute | Value |
@@ -631,6 +677,7 @@ Raised by:
 |---|---|---|
 | [Add Users](../domains/users-and-groups/org-users/add-users.md) | One or more of the specified email addresses is already a member of this organisation. | Remove already-existing email addresses from the `emailIds` list and retry. |
 | [Add Users](../domains/users-and-groups/org-users/add-users.md) | One or more of the specified email addresses is already a member of this organization. | Remove the already-existing email addresses from the emailIds list and retry. |
+
 
 ## Error 6089
 
@@ -652,6 +699,7 @@ Raised by:
 | [Add Users](../domains/users-and-groups/org-users/add-users.md) | Attempted to assign the ORGADMIN role through a custom domain (domainName). The Organization Admin role cannot be assigned through a custom portal domain. | Omit domainName when assigning the ORGADMIN role, or use a different role for domain-based additions. |
 | [Change User Role](../domains/users-and-groups/org-users/change-user-role.md) | Attempted to assign the ORGADMIN role through a custom domain (domainName). | Omit domainName when assigning the Organization Admin role. |
 
+
 ## Error 6121
 
 | Attribute | Value |
@@ -668,6 +716,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md) | `EXCEEDING_USR_PLN_PRIVATE_LINKS` — The organization has used all private links allowed by its plan. | Remove an unused private link via [Remove Private Access](../domains/share-and-publish/publish/remove-private-access.md), or upgrade the plan. |
+
 
 ## Error 6122
 
@@ -686,6 +735,7 @@ Raised by:
 |---|---|---|
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md) | `EXCEEDING_USR_PLN_PRIVATE_LINKS_DM` — Same limit, reported to a non-super-admin caller. | Ask the Organization Admin to free up a private link or upgrade the plan. |
 
+
 ## Error 7005
 
 | Attribute | Value |
@@ -702,6 +752,43 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create AutoML Analysis](../domains/dsml/automl/create-auto-ml-analysis.md) | `COMMON_INTERNAL_SERVER_ERROR` — Surfaces when `trainingTableId` does not identify a real table. | Verify the ID via [Get View List](../domains/views-management/view-operations/get-views.md). |
+
+
+## Error 7016
+
+| Attribute | Value |
+|---|---|
+| Error code | `7016` |
+| Summary constant | `OBJECT_NAME_EMPTY` |
+| HTTP status | 400 (typical) |
+| Meaning | title is an empty string or contains only whitespace. |
+| Resolution | Provide a non-empty title. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | OBJECT_NAME_EMPTY — `title` is an empty string or contains only whitespace. | Provide a non-empty `title`. |
+
+## Error 7018
+
+| Attribute | Value |
+|---|---|
+| Error code | `7018` |
+| Summary constant | `API_MALFORMED_URL` |
+| HTTP status | 400 (typical) |
+| Meaning | The DashboardID is out of numeric range (too many digits). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Read Dashboard Metadata](../domains/reports-and-dashboards/dashboards/get-dashboard-metadata.md) | API_MALFORMED_URL — The `DashboardID` is out of numeric range (too many digits). | Correct the offending CONFIG value and retry. |
+
+Server message: `Invalid URL format.`
 
 ## Error 7082
 
@@ -720,6 +807,7 @@ Raised by:
 |---|---|---|
 | [Restore Trash View](../domains/views-management/trash-management/restore-trash-view.md) | An unexpected error occurred during the trash restore operation. | Retry the request. If the error persists, contact support. |
 | [Delete Trash View](../domains/views-management/trash-management/delete-trash-view.md) | An unexpected error occurred during the permanent delete operation. | Retry the request. If it persists, contact support. |
+
 
 ## Error 7089
 
@@ -740,6 +828,7 @@ Raised by:
 | [Hide Columns](../domains/data-modeling-and-schema/columns/hide-columns.md) | Hiding these columns would leave no visible columns in the table. | Ensure at least one column is not in the `columnIds` list. |
 | [Add Column](../domains/data-modeling-and-schema/columns/add-column.md) | All the columns of the table cannot be hidden at the same time. | Ensure that at least one column of the table remains visible. |
 | [Hide Columns](../domains/data-modeling-and-schema/columns/hide-columns.md) | Hiding these columns would leave no visible column in the table. | Ensure that at least one column is left out of the columnIds array. |
+
 
 ## Error 7092
 
@@ -765,6 +854,7 @@ Raised by:
 | [Add Row](../domains/data-operations/row-operations/add-row.md), [Delete Row](../domains/data-operations/row-operations/delete-rows.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `DDL_LOCK_SINCE_IMPORT_IN_PROGRESS` — A batch import is holding a lock on this table. | Retry once the import has finished. |
 | [Add Column](../domains/data-modeling-and-schema/columns/add-column.md) | A DDL lock is active because an import or a schema operation is in progress on the table. | Wait for the current import or schema operation to complete and then retry. |
 | [Delete Column](../domains/data-modeling-and-schema/columns/delete-column.md), [Rename Column](../domains/data-modeling-and-schema/columns/rename-column.md) | A DDL lock is active on the table. | Wait for the in-progress operation to complete and then retry. |
+
 
 ## Error 7103
 
@@ -796,6 +886,7 @@ Raised by:
 | [Get AutoML Analysis In Workspace](../domains/dsml/automl/get-auto-ml-analysis-in-workspace.md), [Get Email Schedules](../domains/schedules-and-alerts/email-schedules/get-email-schedules.md), [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md), [Get Slide List](../domains/share-and-publish/slideshow-management/get-slideshows.md), [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `META_OBJECT_NOT_PRESENT` — Workspace not found. | Verify `<workspace-id>` and that the `ZANALYTICS-ORGID` header matches it. |
 | [Activate Users](../domains/users-and-groups/org-users/activate-users.md), [Add Users](../domains/users-and-groups/org-users/add-users.md), [Change User Role](../domains/users-and-groups/org-users/change-user-role.md), [Deactivate Users](../domains/users-and-groups/org-users/de-activate-users.md), [Get Org Admins](../domains/users-and-groups/org-users/get-org-admins.md), [Get Users](../domains/users-and-groups/org-users/get-users.md), [Remove Users](../domains/users-and-groups/org-users/remove-users.md) | Organization not found. | Verify the ZANALYTICS-ORGID header value. |
 | [Copy Views](../domains/views-management/view-operations/copy-views.md) | The source or the destination workspace was not found. | Verify that the workspace-id in the URL and destWorkspaceId in the CONFIG are valid. |
+
 
 ## Error 7104
 
@@ -835,6 +926,7 @@ Raised by:
 | [Create Similar Views](../domains/views-management/view-operations/create-similar-views.md) | The target table given as view-id, or the reference table given as referenceViewId, was not found. | Verify that both view IDs exist in the workspace. |
 | [Auto Analyse Column](../domains/views-management/auto-analysis/auto-analyse-column.md), [Auto Analyse View](../domains/views-management/auto-analysis/auto-analyse-view.md) | View, or table, not found. | Verify that the view-id exists in the specified workspace. |
 
+
 ## Error 7105
 
 | Attribute | Value |
@@ -852,6 +944,7 @@ Raised by:
 |---|---|---|
 | [Get Table Metadata](../domains/data-modeling-and-schema/table-and-schema/get-table-metadata.md) | The specified view does not exist. | Verify the `<view-id>` using the Get View List API. |
 
+
 ## Error 7106
 
 | Attribute | Value |
@@ -868,6 +961,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Trigger Email Schedule](../domains/schedules-and-alerts/email-schedules/trigger-email-schedule.md) | `META_OBJECT_NOT_PRESENT` — The schedule has no surviving views to send. | Recreate the schedule against existing views. |
+
 
 ## Error 7107
 
@@ -896,6 +990,7 @@ Raised by:
 | [Auto Analyse Column](../domains/views-management/auto-analysis/auto-analyse-column.md) | Column not found in the specified table. | Verify `<column-id>` belongs to the table identified by `<view-id>`. |
 | [Hide Columns](../domains/data-modeling-and-schema/columns/hide-columns.md), [Show Columns](../domains/data-modeling-and-schema/columns/show-columns.md) | One or more of the column IDs do not exist in the table. | Verify every ID using the Get Table Metadata API. |
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md), [Remove Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/remove-lookup.md) | The specified child column does not exist in the child table. | Verify the column-id using the Get Table Metadata API on the child view. |
+
 
 ## Error 7111
 
@@ -926,6 +1021,7 @@ Raised by:
 | [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | A dashboard with the same name already exists in the workspace. | Use a different `displayName` value. |
 | [Rename Workspace](../domains/workspace-management/workspace-operations/rename-workspace.md) | The workspace name is already used by another workspace in the organization. | Choose a workspace name that is not already in use within the organization. |
 
+
 ## Error 7112
 
 | Attribute | Value |
@@ -949,6 +1045,7 @@ Raised by:
 | [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The new formula expression could not be parsed because of a syntax error. | Review the expression for correct syntax and quoting. |
 | [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md) | The new expression could not be parsed because of a syntax error. | Review the expression for correct syntax. |
 
+
 ## Error 7113
 
 | Attribute | Value |
@@ -968,6 +1065,7 @@ Raised by:
 | [Add Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/add-aggregate-formula.md) | The expression references an unknown/unsupported function. | Verify the aggregate function name (e.g., `sum`, `mean`, `max`, `min`, `count`, `count_distinct`, `count_if`). |
 | [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md) | The expression references an unknown/unsupported function. | Verify the aggregate function name. |
 | [Add Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/add-aggregate-formula.md), [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md), [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md), [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The expression refers to an unknown or unsupported function. | Verify the function name against the Zoho Analytics formula function reference. |
+
 
 ## Error 7115
 
@@ -991,6 +1089,7 @@ Raised by:
 | [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md), [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The expression refers to a column that does not exist in the view. | Verify that every column name used in the expression exists and is spelled exactly as shown by the Get Table Metadata API. |
 | [Add Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/add-aggregate-formula.md), [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md) | The expression refers to a column that does not exist. | Verify every table and column name used in the expression. |
 
+
 ## Error 7116
 
 | Attribute | Value |
@@ -1012,6 +1111,7 @@ Raised by:
 | [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md) | The expression references a column that does not exist, or the formula is otherwise invalid. | Verify all table/column names referenced. |
 | [Add Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/add-aggregate-formula.md), [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md), [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md), [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The formula is invalid. | Verify the expression and every column name that it refers to. |
 
+
 ## Error 7125
 
 | Attribute | Value |
@@ -1032,6 +1132,7 @@ Raised by:
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | The specified data type is not compatible with the configuration of the column. | Verify the DATATYPE value and the associated format settings. |
 | [Add Column](../domains/data-modeling-and-schema/columns/add-column.md) | The data type is not compatible with the configuration of the column. | Verify the dataType value. |
 
+
 ## Error 7126
 
 | Attribute | Value |
@@ -1049,6 +1150,7 @@ Raised by:
 |---|---|---|
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | A column name is empty or missing. | Provide a non-empty `COLUMNNAME` for every column in the `COLUMNS` array. |
 
+
 ## Error 7127
 
 | Attribute | Value |
@@ -1065,6 +1167,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | A column name exceeds the maximum allowed length. | Keep `COLUMNNAME` values within 1000 characters. |
+
 
 ## Error 7128
 
@@ -1084,6 +1187,7 @@ Raised by:
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | Duplicate column names found in the `COLUMNS` array. | Ensure all `COLUMNNAME` values are unique within the same table definition. |
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | Duplicate column names were found in the COLUMNS array. | Ensure that every COLUMNNAME value is unique within the table definition. |
 
+
 ## Error 7137
 
 | Attribute | Value |
@@ -1101,6 +1205,7 @@ Raised by:
 |---|---|---|
 | [Add Row](../domains/data-operations/row-operations/add-row.md) | `NOT_A_TABLE` — The target view is not a table. | Target a table; reports, dashboards, and query tables cannot accept rows. |
 | [Delete Row](../domains/data-operations/row-operations/delete-rows.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `NOT_A_TABLE` — The target view is not a table. | Target a table. |
+
 
 ## Error 7138
 
@@ -1120,6 +1225,7 @@ Raised by:
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md), [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `META_OBJECT_NOT_PRESENT` — A `tableName` in `vudColumns` / `drillColumns` is not a table involved in this view. | Use only tables that the view actually reads from. |
 | [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md) | `META_OBJECT_NOT_PRESENT` — A `tableName` in a `vudColumns`/`drillColumns` array is not a table involved in this view. | Use only tables that the view actually reads from. |
 
+
 ## Error 7140
 
 | Attribute | Value |
@@ -1137,6 +1243,7 @@ Raised by:
 |---|---|---|
 | [Create Folder](../domains/workspace-management/workspace-folders/create-folder.md), [Rename Folder](../domains/workspace-management/workspace-folders/rename-folder.md) | A folder with the same name already exists in the workspace. | Use a unique folder name within the workspace. |
 
+
 ## Error 7143
 
 | Attribute | Value |
@@ -1153,6 +1260,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | A `DEFAULT` value was provided for an `AUTO_NUMBER` column. | Remove the `DEFAULT` field from `AUTO_NUMBER` column definitions. |
+
 
 ## Error 7144
 
@@ -1180,6 +1288,7 @@ Raised by:
 | [Change Folder Hierarchy](../domains/workspace-management/workspace-folders/change-folder-hierarchy.md) | The specified folder or the specified parent folder does not exist. | Verify the folder IDs using the Get Folder List API. |
 | [Change Folder Position](../domains/workspace-management/workspace-folders/change-folder-position.md) | The specified folder or the specified reference folder does not exist. | Verify the folder IDs using the Get Folder List API. |
 
+
 ## Error 7146
 
 | Attribute | Value |
@@ -1197,6 +1306,7 @@ Raised by:
 |---|---|---|
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | The `DATATYPE` value is not a recognised data type. | Use one of the supported values from the Supported Data Types table. |
 | [Add Column](../domains/data-modeling-and-schema/columns/add-column.md) | The `dataType` value is not recognised. | Use one of the values from the Supported Data Types table. |
+
 
 ## Error 7157
 
@@ -1216,6 +1326,7 @@ Raised by:
 | [Add Column](../domains/data-modeling-and-schema/columns/add-column.md) | A column with the same name already exists in the table. | Use a unique `columnName` within the table. |
 | [Rename Column](../domains/data-modeling-and-schema/columns/rename-column.md) | Column name already exists. | Use a unique `columnName` within the table. |
 | [Rename Column](../domains/data-modeling-and-schema/columns/rename-column.md) | The column name already exists. | Use a columnName that is unique within the table. |
+
 
 ## Error 7160
 
@@ -1240,6 +1351,7 @@ Raised by:
 | [Add Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/add-aggregate-formula.md) | Aggregate formulas are not allowed for this combination of user and view. | Ensure that the user is a Workspace Admin or has Create Formula permission on the view. |
 | [Delete Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/delete-aggregate-formula.md), [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md) | Formula operations are not allowed for this combination of user and view. | Ensure that the user is a Workspace Admin or has Create Formula permission on the view. |
 
+
 ## Error 7164
 
 | Attribute | Value |
@@ -1261,6 +1373,7 @@ Raised by:
 | [Add Row](../domains/data-operations/row-operations/add-row.md) | `SYSTEM_TABLE_DATA_MOD` — System table data cannot be modified. | System tables are managed by Zoho Analytics. Target a user-created table instead. |
 | [Rename Column](../domains/data-modeling-and-schema/columns/rename-column.md) | The table is a snapshot table and its columns cannot be renamed. | Snapshot tables are read-only with respect to their schema. Create a new table when schema changes are needed. |
 
+
 ## Error 7165
 
 | Attribute | Value |
@@ -1277,6 +1390,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Add Row](../domains/data-operations/row-operations/add-row.md), [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Create Import Job for an Existing Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-existing-table.md), [Delete Row](../domains/data-operations/row-operations/delete-rows.md), [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `SNAPSHOT_TABLE_DATAMOD` — Snapshot table data cannot be modified. | Target a non-snapshot table. |
+
 
 ## Error 7166
 
@@ -1296,6 +1410,7 @@ Raised by:
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | The child column is itself a lookup-derived column (lookup-on-lookup is not allowed). | Use a regular (base) column of the child table, not a column pulled in from a parent via an existing lookup. |
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | The child column is itself a lookup-derived column, and a lookup on a lookup is not allowed. | Use a regular base column of the child table, not a column pulled in from a parent table through an existing lookup. |
 
+
 ## Error 7173
 
 | Attribute | Value |
@@ -1313,6 +1428,7 @@ Raised by:
 |---|---|---|
 | [Delete Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/delete-aggregate-formula.md) | The aggregate formula is currently used by one or more dependent views/dashboards/formulas; deletion blocked. | Use Get Aggregate Formula Dependents to identify dependents, then either remove them manually first or set `deleteDependentViews: true` to cascade delete. |
 | [Delete Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/delete-aggregate-formula.md) | The aggregate formula is used by one or more dependent views, dashboards or formulas and the deletion has been blocked. | Call the Get Aggregate Formula Dependents API to identify them, then either remove them first or set deleteDependentViews to true. |
+
 
 ## Error 7180
 
@@ -1333,6 +1449,7 @@ Raised by:
 | [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The updated formula creates a circular dependency. | Remove the circular reference from the expression. |
 | [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md) | The formula creates a circular dependency. | Remove from the expression the reference to the formula that, directly or indirectly, refers back to this one. |
 
+
 ## Error 7181
 
 | Attribute | Value |
@@ -1351,6 +1468,7 @@ Raised by:
 | [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md) | The formula creates a circular dependency (it references a formula that, directly or indirectly, references this one). | Remove the circular reference from the expression. |
 | [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The updated formula creates a circular dependency. | Remove the circular reference from the expression. |
 | [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md) | The formula creates a circular dependency. | Remove the circular reference from the expression. |
+
 
 ## Error 7183
 
@@ -1371,6 +1489,7 @@ Raised by:
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | The child column and the reference column have incompatible data types. | Ensure both columns share a compatible data type (e.g., both `PLAIN`, both `NUMBER`). For GEO columns, the geo role level must also match. |
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | The data type of the lookup column is incompatible with the data type of the referenced column. | Ensure that both columns use compatible data types. |
 
+
 ## Error 7184
 
 | Attribute | Value |
@@ -1387,6 +1506,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | Adding this lookup would create a circular relationship chain across tables. | Review existing relationships and choose a reference table that does not already reference the child table (directly or transitively). |
+
 
 ## Error 7196
 
@@ -1405,6 +1525,7 @@ Raised by:
 |---|---|---|
 | [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md) | `SLIDENAME_ALREADY_EXISTS` — Another slideshow in this workspace already uses `slideName`. | Choose a different name, or update the existing slideshow via [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md). |
 | [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `SLIDENAME_ALREADY_EXISTS` — Another slideshow in this workspace already uses the requested `slideName`. | Choose a different name. |
+
 
 ## Error 7203
 
@@ -1426,6 +1547,7 @@ Raised by:
 | [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | `IMPORT_FILE_EMPTY` — No file was uploaded for this batch, or it is empty. | Attach a non-empty `FILE` part to every batch. |
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md) | `IMPORT_FILE_EMPTY` — No file was uploaded for this batch, or it is empty. | Attach a non-empty `FILE` part. |
 
+
 ## Error 7208
 
 | Attribute | Value |
@@ -1444,6 +1566,7 @@ Raised by:
 | [Import Data into a New Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-new-table.md) | `IMPORT_FILE_NUMBER_OF_FIELDS_EXCEEDS_SIZE` — A row contains more fields than the header defines. | Correct the source data, or set the right `delimiter`. |
 | [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md) | `IMPORT_FILE_NUMBER_OF_FIELDS_EXCEEDS_SIZE` — A row contains more fields than expected. | Correct the source data or the `delimiter`. |
 
+
 ## Error 7232
 
 | Attribute | Value |
@@ -1461,6 +1584,7 @@ Raised by:
 |---|---|---|
 | [Import Data into a New Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-new-table.md) | `IMPORT_ABORTED` — A value could not be parsed and `onError` is `ABORT`. `errorMessage` carries the per-line detail. | Fix the data, or resend with `onError` set to `SKIPROW` or `SETCOLUMNEMPTY`. |
 | [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md) | `IMPORT_ABORTED` — A value could not be parsed and `onError` is `ABORT`. | Fix the data, or resend with `SKIPROW` / `SETCOLUMNEMPTY`. |
+
 
 ## Error 7248
 
@@ -1482,6 +1606,7 @@ Raised by:
 | [Create Import Job for a New Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-new-table.md) | `INVALID_FILE_CONTENT` — The file could not be parsed as the declared `fileType`. | Check that `fileType` matches the actual content. |
 | [Create Import Job for an Existing Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-existing-table.md) | `INVALID_FILE_CONTENT` — The file could not be parsed as the declared `fileType`. | Check that `fileType` matches the content. |
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | `INVALID_FILE_CONTENT` — The batch could not be parsed as CSV. | Batch import accepts CSV only. |
+
 
 ## Error 7277
 
@@ -1505,6 +1630,7 @@ Raised by:
 | [Delete Column](../domains/data-modeling-and-schema/columns/delete-column.md) | The column has dependent views and the deletion has been blocked. | Call the Get Column Dependents API to identify them, then either delete them first or set deleteDependentViews to true to delete them along with the column. |
 | [Delete Custom Formula](../domains/data-modeling-and-schema/formula-columns/delete-formula-column.md) | The formula column has dependent views and the deletion has been blocked. | Call the Get Column Dependents API to identify the dependents, then either delete them first or set deleteDependentViews to true. |
 
+
 ## Error 7280
 
 | Attribute | Value |
@@ -1521,6 +1647,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | A lookup relationship already exists on this child column. | Remove the existing lookup first (using Remove Lookup), then add the new one. |
+
 
 ## Error 7282
 
@@ -1540,6 +1667,7 @@ Raised by:
 | [Create Group](../domains/users-and-groups/workspace-groups/create-group.md) | A group with the same name already exists in this workspace. Group names must be unique per workspace. | Choose a different name for the group. |
 | [Rename Group](../domains/users-and-groups/workspace-groups/rename-group.md) | The new group name is already used by another group in this workspace. | Choose a name not already in use. |
 | [Create Group](../domains/users-and-groups/workspace-groups/create-group.md) | A group with the same name already exists in this workspace. Group names must be unique within a workspace. | Choose a different name for the group. |
+
 
 ## Error 7301
 
@@ -1687,6 +1815,7 @@ Raised by:
 | [Delete Trash View](../domains/views-management/trash-management/delete-trash-view.md) | The user does not have permission to delete this view from the trash. | Ensure the user is a Workspace Admin, Account Admin, Organization Admin, or the original owner of the trashed view. |
 | [Auto Analyse Column](../domains/views-management/auto-analysis/auto-analyse-column.md), [Auto Analyse View](../domains/views-management/auto-analysis/auto-analyse-view.md) | The user does not have Create Report permission on the workspace. | Ensure the user is a Workspace Admin, Account Admin, Organization Admin, or has been granted Create Report permission on this workspace. |
 
+
 ## Error 7307
 
 | Attribute | Value |
@@ -1703,6 +1832,27 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `OWNER_CANNOT_SHARE_HIMSELF` — The sharer attempted to share a view to themselves. | Remove the sharer's own email from `emailIds`. |
+
+
+## Error 7309
+
+| Attribute | Value |
+|---|---|
+| Error code | `7309` |
+| Summary constant | `SECURITY_NEEDS_LOGIN` |
+| HTTP status | 401 (typical) |
+| Meaning | The Authorization header is absent. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | SECURITY_NEEDS_LOGIN — The `Authorization` header is absent. | Correct the offending CONFIG value and retry. |
+| [Read Dashboard Metadata](../domains/reports-and-dashboards/dashboards/get-dashboard-metadata.md) | SECURITY_NEEDS_LOGIN — The `Authorization` header is absent. | Correct the offending CONFIG value and retry. |
+
+Server message: `You need to (re)login to do this operation.`
 
 ## Error 7319
 
@@ -1746,6 +1896,7 @@ Raised by:
 | [Remove Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/remove-lookup.md) | The child table does not belong to the specified workspace. | Confirm that the view-id is a table within the workspace identified by workspace-id. |
 | [Copy Views](../domains/views-management/view-operations/copy-views.md) | One or more view IDs do not belong to the source workspace given in the URL. | Ensure that every view ID in viewIds comes from the workspace given in the workspace-id path parameter. |
 
+
 ## Error 7320
 
 | Attribute | Value |
@@ -1762,6 +1913,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `CANNOT_SHARETO_SELF` — Same as above (alternate path). | Same as above. |
+
 
 ## Error 7321
 
@@ -1780,6 +1932,7 @@ Raised by:
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `VIEW_ALREADY_SHARED` — The view is already shared with this user. | Use Update Shared Details to modify the existing share instead. |
 
+
 ## Error 7322
 
 | Attribute | Value |
@@ -1796,6 +1949,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `VIEW_ALREADY_SHARED` (group form) — The view is already shared with this group. | Use Update Shared Details to modify the existing share instead. |
+
 
 ## Error 7323
 
@@ -1814,6 +1968,7 @@ Raised by:
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `CANNOT_SHARED_TO_OBJOWNER` — Attempted to share the view with its own owner. | Remove the owner's email/group from the share request. |
 
+
 ## Error 7327
 
 | Attribute | Value |
@@ -1830,6 +1985,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `FILTER_CRITERIA_INVALID` — `criteria` parsed but could not be converted into a query. | Simplify the expression and check operator and value types. |
+
 
 ## Error 7330
 
@@ -1849,6 +2005,7 @@ Raised by:
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `UNKNOWN_COLUMN_IN_FILTERCRITERIA` — A column named in `criteria` does not exist in the view. | Check the name against [Get Columns](../domains/data-modeling-and-schema/columns/overview.md). |
 | [Delete Row](../domains/data-operations/row-operations/delete-rows.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `UNKNOWN_COLUMN_IN_FILTERCRITERIA` — A column referenced in `criteria` does not exist in the table. | Verify the column names in `criteria` via [Get Columns](../domains/data-modeling-and-schema/columns/overview.md). |
 
+
 ## Error 7331
 
 | Attribute | Value |
@@ -1865,6 +2022,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `FILTERCRITERIA_PARSE_ERROR` — `criteria` is syntactically malformed. | Check quoting: double quotes around column names, single quotes around string literals. |
+
 
 ## Error 7332
 
@@ -1884,6 +2042,7 @@ Raised by:
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `UNKNOWN_TABLE_IN_FILTERCRITERIA` — A table qualifier in `criteria` is not part of the view. | Qualify columns only with tables the view actually uses. |
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `UNKNOWN_TABLE_IN_FILTERCRITERIA` — A table qualifier in `criteria` is not part of the view. | Qualify columns only with tables the view uses. |
 
+
 ## Error 7333
 
 | Attribute | Value |
@@ -1901,6 +2060,7 @@ Raised by:
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `INVALID_GROUP_FUNC_USE_IN_FILTERCRITERIA` — An aggregate function was used in `criteria`. | Remove `sum`, `avg`, `count`, and similar functions; filter on raw column values instead. |
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `INVALID_GROUP_FUNC_USE_IN_FILTERCRITERIA` — An aggregate function was used in `criteria`. | Filter on raw column values instead. |
+
 
 ## Error 7336
 
@@ -1920,6 +2080,7 @@ Raised by:
 | [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | `BATCH_IMPORT_LIMIT_EXCEEDED` — More than 100 batches were sent for one job. | Use larger batches so the job fits within the limit. |
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md) | `BATCH_IMPORT_LIMIT_EXCEEDED` — More than 100 batches were sent for one job. | Use larger batches. |
 
+
 ## Error 7337
 
 | Attribute | Value |
@@ -1936,6 +2097,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | `BATCH_IMPORT_LAST_BATCH_ALREADY_RECEIVED` — A batch was sent after `isLastBatch: true`. | Start a new job for additional data. |
+
 
 ## Error 7338
 
@@ -1959,6 +2121,7 @@ Raised by:
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md) | `BATCH_IMPORT_INVALID_KEY` — The `batchKey` is not recognised or is no longer active. | Use the key returned by the first batch. |
 | [Add Group Members](../domains/users-and-groups/workspace-groups/add-group-members.md), [Delete Group](../domains/users-and-groups/workspace-groups/delete-group.md), [Get Group Details](../domains/users-and-groups/workspace-groups/get-group-details.md), [Remove Group Members](../domains/users-and-groups/workspace-groups/remove-group-members.md), [Rename Group](../domains/users-and-groups/workspace-groups/rename-group.md) | The specified group-id does not belong to this workspace. | Retrieve the correct group identifier using the Get Group List API. |
 
+
 ## Error 7340
 
 | Attribute | Value |
@@ -1975,6 +2138,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md) | `BATCH_IMPORT_VIEWID_MISMATCH` — The `batchKey` belongs to a different table. | Send every batch of a job to the same `<view-id>`. |
+
 
 ## Error 7351
 
@@ -1994,6 +2158,24 @@ Raised by:
 | [Get Slide Info](../domains/share-and-publish/slideshow-management/get-slideshow-details.md), [Get Slide URL](../domains/share-and-publish/slideshow-management/get-slideshow-url.md), [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `SLIDESHOW_NOT_BELONGS_TO_DB` — The slideshow does not exist, or belongs to a different workspace. | Verify `<slide-id>` against [Get Slide List](../domains/share-and-publish/slideshow-management/get-slideshows.md) for this workspace. |
 | [Delete Slide Show](../domains/share-and-publish/slideshow-management/delete-slideshow.md) | `SLIDESHOW_NOT_BELONGS_TO_DB` — The slideshow does not exist, was already deleted, or belongs to a different workspace. | Verify `<slide-id>` against [Get Slide List](../domains/share-and-publish/slideshow-management/get-slideshows.md) for this workspace. |
 
+
+## Error 7362
+
+| Attribute | Value |
+|---|---|
+| Error code | `7362` |
+| Summary constant | `NO_SUCH_FOLDER_IN_DB` |
+| HTTP status | 404 (typical) |
+| Meaning | The folderId does not exist in the workspace. |
+| Resolution | Provide a valid folder ID, or omit folderId to place the report at the workspace root. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | NO_SUCH_FOLDER_IN_DB — The `folderId` does not exist in the workspace. | Provide a valid folder ID, or omit `folderId` to place the report at the workspace root. |
+
 ## Error 7367
 
 | Attribute | Value |
@@ -2011,6 +2193,7 @@ Raised by:
 |---|---|---|
 | [Remove Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/remove-lookup.md) | The lookup is used by one or more dependent views; removal blocked. | Call Get Column Dependents to identify dependent views. Either delete them manually first, or set `deleteDependentViews: true` to cascade-delete them automatically. |
 | [Remove Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/remove-lookup.md) | The lookup is used by one or more dependent views and the removal has been blocked. | Call the Get Column Dependents API to identify the dependent views, then either delete them first or set deleteDependentViews to true to remove them along with the relationship. |
+
 
 ## Error 7377
 
@@ -2030,6 +2213,7 @@ Raised by:
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | An identical lookup relationship (same child column → same reference column) is already defined. | No action needed — the relationship already exists. |
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | An identical lookup relationship between the same child column and the same reference column is already defined. | No action is needed because the relationship already exists. |
 
+
 ## Error 7378
 
 | Attribute | Value |
@@ -2046,6 +2230,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Remove Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/remove-lookup.md) | No lookup relationship is defined on this column. | Verify the correct `<column-id>` and `<view-id>`. The lookup may have already been removed. |
+
 
 ## Error 7379
 
@@ -2067,6 +2252,7 @@ Raised by:
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | A lookup column cannot refer to a column within the same table. | Set LOOKUPCOLUMN.TABLENAME to a different existing table, not the table being created. |
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | The reference table is the same as the child table, and a self-referential lookup is not allowed. | Provide a referenceViewId that is different from the view-id in the request URL. |
 
+
 ## Error 7390
 
 | Attribute | Value |
@@ -2083,6 +2269,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Add Workspace Admins](../domains/users-and-groups/workspace-users/add-workspace-admins.md) | One or more of the specified users holds the org-level Viewer role and cannot be promoted to Workspace Admin. | Viewers cannot be Workspace Admins. Change their org-level role to `"USER"` first via the Change User Role API. |
+
 
 ## Error 7395
 
@@ -2101,6 +2288,7 @@ Raised by:
 |---|---|---|
 | [Create Table](../domains/data-modeling-and-schema/table-and-schema/create-table.md) | The column specified in `LOOKUPCOLUMN.COLUMNNAME` does not exist in the referenced table. | Verify the column name using Get Table Metadata on the referenced table. |
 
+
 ## Error 7396
 
 | Attribute | Value |
@@ -2117,6 +2305,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Get Slide Info](../domains/share-and-publish/slideshow-management/get-slideshow-details.md), [Get Slide URL](../domains/share-and-publish/slideshow-management/get-slideshow-url.md) | `SLIDE_NOT_PRESENT_IN_DB` — The slideshow record exists but no slide details could be read for it. | Re-check the slideshow via [Get Slide List](../domains/share-and-publish/slideshow-management/get-slideshows.md); recreate it if it is in an inconsistent state. |
+
 
 ## Error 7397
 
@@ -2138,6 +2327,7 @@ Raised by:
 | [Hide Columns](../domains/data-modeling-and-schema/columns/hide-columns.md), [Show Columns](../domains/data-modeling-and-schema/columns/show-columns.md) | The view is not a table. | This API only works on tables. |
 | [Auto Analyse Column](../domains/views-management/auto-analysis/auto-analyse-column.md), [Auto Analyse View](../domains/views-management/auto-analysis/auto-analyse-view.md) | The view is not a Table, Query Table, or Pipeline Table. | Auto analysis only works on base table types. Pass a valid table view ID. |
 
+
 ## Error 7399
 
 | Attribute | Value |
@@ -2156,6 +2346,7 @@ Raised by:
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | The query references a spatial (GEO) file-based table, which is not supported for query tables. | Remove the spatial table reference from the SQL query. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | The query refers to a spatial file-based table, which is not supported for query tables. | Remove the reference to the spatial table from the SQL query. |
 
+
 ## Error 7400
 
 | Attribute | Value |
@@ -2173,6 +2364,7 @@ Raised by:
 |---|---|---|
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | Query tables are not supported/allowed for this workspace. | Contact your administrator; this is a workspace-level restriction. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | Query tables are not allowed for this workspace. | Contact your administrator, because this is a workspace-level restriction. |
+
 
 ## Error 7401
 
@@ -2194,6 +2386,7 @@ Raised by:
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | The SQL statement is not a valid or allowed construct. | Review the syntax; only `SELECT` statements over the workspace's own tables are accepted. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | The SQL statement is not a valid or allowed SQL construct. | Review the SQL for unsupported syntax. Only SELECT queries are permitted, not DDL or DML statements. |
 
+
 ## Error 7402
 
 | Attribute | Value |
@@ -2211,6 +2404,7 @@ Raised by:
 |---|---|---|
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | The SQL statement is invalid. | Verify the SQL syntax and referenced object names. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | The SQL statement is invalid. | Verify SQL syntax and referenced object names. |
+
 
 ## Error 7403
 
@@ -2230,6 +2424,7 @@ Raised by:
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | Parsing of the SQL query failed. | Check for typos, mismatched parentheses, or unsupported SQL grammar. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | Parsing of the SQL query failed. | Check for typos or unsupported SQL grammar. |
 
+
 ## Error 7404
 
 | Attribute | Value |
@@ -2247,6 +2442,7 @@ Raised by:
 |---|---|---|
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | Conversion of the SQL query to the internal execution engine failed. | Simplify the query or check for unsupported functions/constructs. |
 
+
 ## Error 7405
 
 | Attribute | Value |
@@ -2263,6 +2459,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Add Row](../domains/data-operations/row-operations/add-row.md), [Delete Row](../domains/data-operations/row-operations/delete-rows.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `DML_NOT_ALLOWED` — Row modification is not allowed for this table. | Use a table that permits DML. |
+
 
 ## Error 7407
 
@@ -2283,6 +2480,7 @@ Raised by:
 | [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | An invalid column was referenced in the `SELECT` clause. | Verify all column names exist in the source table(s). |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | An invalid column was referred to in the SELECT clause. | Verify that every column named in the SELECT clause exists in the source tables. |
 
+
 ## Error 7408
 
 | Attribute | Value |
@@ -2300,6 +2498,7 @@ Raised by:
 |---|---|---|
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | An invalid column was referenced elsewhere in the query (e.g., `WHERE`, `GROUP BY`). | Verify all column names used in the query. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | An invalid column was referred to elsewhere in the query, such as in the WHERE or GROUP BY clause. | Verify every column name used in the query. |
+
 
 ## Error 7409
 
@@ -2320,6 +2519,7 @@ Raised by:
 | [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | An invalid/unknown table was referenced in the query. | Verify the table/view name matches an existing view in the workspace. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | An unknown table was referred to in the query. | Verify that the table or view name matches the display name of an existing view in the workspace. The match is case-sensitive. |
 
+
 ## Error 7413
 
 | Attribute | Value |
@@ -2339,6 +2539,7 @@ Raised by:
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | The number of arguments passed to a SQL function does not match its expected signature. | Check the function's expected argument count. |
 | [Rename View](../domains/views-management/view-operations/rename-view.md) | `viewName` is empty. | Provide a non-empty, valid view name. |
 
+
 ## Error 7414
 
 | Attribute | Value |
@@ -2356,6 +2557,7 @@ Raised by:
 |---|---|---|
 | [Create Folder](../domains/workspace-management/workspace-folders/create-folder.md), [Rename Folder](../domains/workspace-management/workspace-folders/rename-folder.md) | Folder name cannot be empty. | Provide a non-empty value for `folderName`. |
 | [Create Folder](../domains/workspace-management/workspace-folders/create-folder.md), [Rename Folder](../domains/workspace-management/workspace-folders/rename-folder.md) | The folder name cannot be empty. | Provide a non-empty value for folderName. |
+
 
 ## Error 7415
 
@@ -2375,6 +2577,7 @@ Raised by:
 | [Remove Default Workspace](../domains/workspace-management/workspace-preferences/remove-default-workspace.md) | The specified workspace is not the calling user's current default workspace. This API does not succeed silently for non-default workspaces. | Use Get All Workspace List to identify the workspace with `isDefault: true`, then call this API with that workspace ID. |
 | [Remove Default Workspace](../domains/workspace-management/workspace-preferences/remove-default-workspace.md) | The specified workspace is not the current default workspace of the requesting user. This API does not succeed silently for a workspace that is not the default. | Use the Get All Workspace List API to identify the workspace that holds isDefault as true, and invoke this API with that workspace ID. |
 
+
 ## Error 7421
 
 | Attribute | Value |
@@ -2391,6 +2594,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | A general SQL parse error occurred. | Review the query for syntax errors near the reported location. |
+
 
 ## Error 7422
 
@@ -2410,6 +2614,7 @@ Raised by:
 | [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | The query table is referenced as a source by a child view, preventing this type of structural change. | Review dependent views before making incompatible schema changes. |
 | [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | The query table is used as a source by a child view, which prevents this kind of structural change. | Review the dependent views before making incompatible schema changes. |
 
+
 ## Error 7427
 
 | Attribute | Value |
@@ -2428,6 +2633,7 @@ Raised by:
 | [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The specified `<formula-id>` is not a valid formula column on this view. | Verify the `<formula-id>` using Get Custom Formulas. |
 | [Delete Custom Formula](../domains/data-modeling-and-schema/formula-columns/delete-formula-column.md) | The specified column is not a custom formula column. | Verify `<formula-id>` refers to a formula column, not a regular column, using Get Custom Formulas. |
 | [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The specified formula ID is not a valid formula column on this view. | Verify the formula-id using the Get Custom Formulas API. |
+
 
 ## Error 7428
 
@@ -2452,6 +2658,7 @@ Raised by:
 | [Get Aggregate Formula Dependents](../domains/data-modeling-and-schema/aggregate-formulas/get-aggregate-formula-dependents.md) | The specified formula ID is not a valid aggregate formula, or it does not belong to a view of this workspace. | Verify the formula-id using the Get Unified Metrics in Workspace API. |
 | [Get Aggregate Formula Value](../domains/data-modeling-and-schema/aggregate-formulas/get-aggregate-formula-value.md) | The specified formula ID is not a valid aggregate formula. | Verify the formula-id using the Get Unified Metrics in Workspace API. |
 
+
 ## Error 7429
 
 | Attribute | Value |
@@ -2470,6 +2677,7 @@ Raised by:
 | [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | A design edit (schema change) is already in progress for this query table. | Wait for the in-progress operation to complete, then retry. |
 | [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | A design edit is already in progress for this query table. | Wait for the in-progress operation to complete and then retry. |
 
+
 ## Error 7433
 
 | Attribute | Value |
@@ -2487,6 +2695,7 @@ Raised by:
 |---|---|---|
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | Duplicate column names detected in the `SELECT` clause (after aliasing). | Use unique aliases (`AS`) for columns with the same name from different tables. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md) | Duplicate column names were detected in the SELECT clause after aliasing. | Use unique AS aliases for columns that share a name across different tables. |
+
 
 ## Error 7439
 
@@ -2507,6 +2716,7 @@ Raised by:
 | [Delete Column](../domains/data-modeling-and-schema/columns/delete-column.md), [Rename Column](../domains/data-modeling-and-schema/columns/rename-column.md) | The view is not a table. | Provide the view ID of a table. |
 | [Delete Column](../domains/data-modeling-and-schema/columns/delete-column.md), [Rename Column](../domains/data-modeling-and-schema/columns/rename-column.md) | The specified view is not a table. | Provide the view ID of a table. |
 
+
 ## Error 7447
 
 | Attribute | Value |
@@ -2526,6 +2736,7 @@ Raised by:
 | [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | The query result would exceed the allowed row/column limit. | Add filters or reduce selected columns. |
 | [Create Query Table](../domains/data-modeling-and-schema/query-tables/create-query-table.md), [Edit Query Table](../domains/data-modeling-and-schema/query-tables/edit-query-table.md) | The result of the query would exceed the allowed row or column limit. | Add a WHERE clause or reduce the number of selected columns to bring the result within the limits. |
 
+
 ## Error 7467
 
 | Attribute | Value |
@@ -2544,6 +2755,7 @@ Raised by:
 | [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md) | Formula columns are not supported on Pipeline Tables. | Formula columns can only be added to regular tables and standard views. |
 | [Delete Custom Formula](../domains/data-modeling-and-schema/formula-columns/delete-formula-column.md), [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | Formula columns are not supported on Pipeline Tables. | This API only applies to standard tables/views. |
 | [Add Custom Formula](../domains/data-modeling-and-schema/formula-columns/add-formula-column.md), [Delete Custom Formula](../domains/data-modeling-and-schema/formula-columns/delete-formula-column.md), [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | Formula columns are not supported on pipeline tables. | Formula columns can be added only to regular tables and standard views. |
+
 
 ## Error 7478
 
@@ -2566,6 +2778,236 @@ Raised by:
 | [Create Import Job for a New Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-new-table.md) | `MORE_THAN_MAX_COLUMN` — The source has more columns than a table can hold. | Reduce the columns, or use `selectedColumns`. |
 | [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | `MORE_THAN_MAX_COLUMN` — The source has more columns than a table can hold. | Reduce the columns, or use `selectedColumns` on the first batch. |
 
+
+## Error 7479
+
+| Attribute | Value |
+|---|---|
+| Error code | `7479` |
+| Summary constant | `INVALID_LAYOUT_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | A card is missing one or more of the required positional fields (type, width, height, left, top). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_LAYOUT_JSON — A card is missing one or more of the required positional fields (`type`, `width`, `height`, `left`, `top`). | Correct the offending CONFIG value and retry. |
+
+Server message: `Missing required fields (x, y, height, width, type) for the view "<viewName>".`
+
+## Error 7480
+
+| Attribute | Value |
+|---|---|
+| Error code | `7480` |
+| Summary constant | `INVALID_LAYOUT_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | A card's dimensional or positional value violates boundary rules: any negative value; width or height ≤ 1; left + width > 80. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_LAYOUT_JSON — A card's dimensional or positional value violates boundary rules: any negative value; `width` or `height` ≤ 1; `left + width > 80`. | Correct the offending CONFIG value and retry. |
+
+Server message: `Invalid boundary values passed for the view "<type/viewName>".`
+
+## Error 7481
+
+| Attribute | Value |
+|---|---|
+| Error code | `7481` |
+| Summary constant | `INVALID_LAYOUT_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | A VIEW card references a view that exists but the caller does not have permission to access. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_LAYOUT_JSON — A `VIEW` card references a view that exists but the caller does not have permission to access. | Correct the offending CONFIG value and retry. |
+
+Server message: `No permission to include the view "<viewName>" in the dashboard.`
+
+## Error 7482
+
+| Attribute | Value |
+|---|---|
+| Error code | `7482` |
+| Summary constant | `INVALID_LAYOUT_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | Two or more cards overlap on the grid (fully or partially). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_LAYOUT_JSON — Two or more cards overlap on the grid (fully or partially). | Correct the offending CONFIG value and retry. |
+
+Server message: `Views are overlapping '<card A>' and '<card B>'.`
+
+## Error 7483
+
+| Attribute | Value |
+|---|---|
+| Error code | `7483` |
+| Summary constant | `INVALID_LAYOUT_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | A non-VIEW card (HTML, TITLE, IMAGE, EMBED) is missing the content field, or content is null. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_LAYOUT_JSON — A non-`VIEW` card (`HTML`, `TITLE`, `IMAGE`, `EMBED`) is missing the `content` field, or `content` is `null`. | Correct the offending CONFIG value and retry. |
+
+Server message: `Non-View cards should contain content attribute.`
+
+## Error 7485
+
+| Attribute | Value |
+|---|---|
+| Error code | `7485` |
+| Summary constant | `INVALID_LAYOUT_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | A card's type field contains an unrecognised string (e.g. "INVALID"). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_LAYOUT_JSON — A card's `type` field contains an unrecognised string (e.g. `"INVALID"`). | Correct the offending CONFIG value and retry. |
+
+Server message: `Invalid view type value is passed "<type>".`
+
+## Error 7486
+
+| Attribute | Value |
+|---|---|
+| Error code | `7486` |
+| Summary constant | `INVALID_LAYOUT_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | Any positional field (type, width, height, left, top) is the wrong data type — e.g. type is null or an integer; width/height/left/top is a string or null instead of an integer. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_LAYOUT_JSON — Any positional field (`type`, `width`, `height`, `left`, `top`) is the wrong data type — e.g. `type` is `null` or an integer; `width`/`height`/`left`/`top` is a string or `null` instead of an integer. | Correct the offending CONFIG value and retry. |
+
+Server message: `The fields (x, y, height, width) must be an Integer and Type must be String for the view "<type>".`
+
+## Error 7487
+
+| Attribute | Value |
+|---|---|
+| Error code | `7487` |
+| Summary constant | `INVALID_CONFIG` |
+| HTTP status | 400 (typical) |
+| Meaning | displayName or layout is absent, null, or empty. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_CONFIG — `displayName` or `layout` is absent, `null`, or empty. | Correct the offending CONFIG value and retry. |
+
+Server message: `The displayName and layout attribute cannot be empty.`
+
+## Error 7488
+
+| Attribute | Value |
+|---|---|
+| Error code | `7488` |
+| Summary constant | `INVALID_PARAMS` |
+| HTTP status | 400 (typical) |
+| Meaning | A settings field is set to an empty string (""). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_PARAMS — A theme sub-object key is explicitly set to `null` (e.g. `"border": null`). | Correct the offending CONFIG value and retry. |
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_PARAMS — A settings field is set to an empty string (`""`). | Correct the offending CONFIG value and retry. |
+
+Server message: `The invalid key '<key>' and value 'null'.`
+
+## Error 7491
+
+| Attribute | Value |
+|---|---|
+| Error code | `7491` |
+| Summary constant | `INVALID_THEME_PARAMS` |
+| HTTP status | 400 (typical) |
+| Meaning | The type-specific sub-object required by themes.type is absent (e.g. solid missing when type="solid"); or the card property is absent entirely. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_THEME_PARAMS — The type-specific sub-object required by `themes.type` is absent (e.g. `solid` missing when `type="solid"`); or the `card` property is absent entirely. | Correct the offending CONFIG value and retry. |
+
+Server message: `'<property>' property must be present in the themes json.`
+
+## Error 7492
+
+| Attribute | Value |
+|---|---|
+| Error code | `7492` |
+| Summary constant | `INVALID_THEME_PARAMS` |
+| HTTP status | 400 (typical) |
+| Meaning | A required field inside a type-specific sub-object is missing (e.g. gradient.startColor is absent when type="gradient"). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_THEME_PARAMS — A required field inside a type-specific sub-object is missing (e.g. `gradient.startColor` is absent when `type="gradient"`). | Correct the offending CONFIG value and retry. |
+
+Server message: `'<field>' property must be present for '<type>' in the themes json.`
+
+## Error 7493
+
+| Attribute | Value |
+|---|---|
+| Error code | `7493` |
+| Summary constant | `INVALID_THEME_PARAMS` |
+| HTTP status | 400 (typical) |
+| Meaning | A type-specific sub-object for a *different* theme type is also present (e.g. solid property exists when type="gradient"). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | INVALID_THEME_PARAMS — A type-specific sub-object for a *different* theme type is also present (e.g. `solid` property exists when `type="gradient"`). | Correct the offending CONFIG value and retry. |
+
+Server message: `'<property>' property must not be present in the themes json.`
+
 ## Error 7496
 
 | Attribute | Value |
@@ -2584,6 +3026,7 @@ Raised by:
 | [Create Folder](../domains/workspace-management/workspace-folders/create-folder.md) | Maximum subfolder nesting depth exceeded. | Sub-folders cannot themselves have children. Only one level of nesting is supported. |
 | [Create Folder](../domains/workspace-management/workspace-folders/create-folder.md) | The maximum sub-folder nesting depth has been exceeded. | Only one level of nesting is supported. A sub-folder cannot hold children of its own, so the parentFolderId should refer to a root level folder. |
 
+
 ## Error 7500
 
 | Attribute | Value |
@@ -2600,6 +3043,26 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `UNAUTHORIZED_ORG_CANNOT_MAKEPUBLIC` — `publicPermLevel: "3"` requested but the caller does not belong to the workspace admin's business organization. | Use `publicPermLevel` `1` or `2`, or call as a user of the same business organization. |
+
+
+## Error 7507
+
+| Attribute | Value |
+|---|---|
+| Error code | `7507` |
+| Summary constant | `MORE_THAN_MAX_LENGTH` |
+| HTTP status | 400 (typical) |
+| Meaning | displayName exceeds the maximum allowed length (200 characters). |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | MORE_THAN_MAX_LENGTH — `displayName` exceeds the maximum allowed length (200 characters). | Correct the offending CONFIG value and retry. |
+
+Server message: `Value for '<field>' exceeds maximum allowed length.`
 
 ## Error 7509
 
@@ -2618,6 +3081,27 @@ Raised by:
 |---|---|---|
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | The reference column contains duplicate values; it must be unique to serve as the reference side. | Choose a column in the reference table that has unique values, or de-duplicate the reference column's data first. |
 | [Add Lookup](../domains/data-modeling-and-schema/lookups-and-relationships/add-lookup.md) | The reference column holds duplicate values and cannot serve as the reference side. | Choose a column in the reference table that holds unique values, or de-duplicate the data of the reference column first. |
+
+
+## Error 7510
+
+| Attribute | Value |
+|---|---|
+| Error code | `7510` |
+| Summary constant | `DASH_API_INVALID_JSON_VALUE` |
+| HTTP status | 400 (typical) |
+| Meaning | A theme sub-object (e.g. card, solid) is null. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | DASH_API_INVALID_JSON_VALUE — `layout` is provided as an array or a string instead of a JSON object; or `layout` is `null`. | Correct the offending CONFIG value and retry. |
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | DASH_API_INVALID_JSON_VALUE — A theme sub-object (e.g. `card`, `solid`) is `null`. | Correct the offending CONFIG value and retry. |
+
+Server message: `Invalid value given for 'layout'`
 
 ## Error 7512
 
@@ -2640,6 +3124,7 @@ Raised by:
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | `INVALID_DATE_FORMAT` — A date pattern could not be parsed. | Supply a valid pattern on the first batch. |
 | [Update Row](../domains/data-operations/row-operations/update-rows.md) | `INVALID_DATE_FORMAT` — A pattern in `dateFormat` / `columnDateFormat` could not be parsed. | Supply a valid date pattern. |
 
+
 ## Error 7515
 
 | Attribute | Value |
@@ -2658,6 +3143,7 @@ Raised by:
 | [Add Row](../domains/data-operations/row-operations/add-row.md) | `UNKNOWN_LOOKUP_VALUE` — A value for a lookup column does not exist in the parent table. | Add the value to the parent table first, or send an existing one. |
 | [Update Row](../domains/data-operations/row-operations/update-rows.md) | `UNKNOWN_LOOKUP_VALUE` — A value for a lookup column does not exist in the parent table. | Send an existing lookup value. |
 
+
 ## Error 7531
 
 | Attribute | Value |
@@ -2674,6 +3160,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `PUBLIC_TO_ORG_NOT_SUPPORTED_IN_FREE` — `publicPermLevel` `2` or `3` is not supported on the Free plan. | Upgrade the plan, or use `publicPermLevel: "1"`. |
+
 
 ## Error 7533
 
@@ -2693,6 +3180,7 @@ Raised by:
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `CANNOT_SHARE_OBJECT_TO_GROUP` — The view's type does not support group sharing. | Share to individual `emailIds` instead. |
 | [Remove Shared Views](../domains/share-and-publish/sharing/remove-share.md) | `CANNOT_SHARE_OBJECT_TO_GROUP` — The view's type does not support group-based sharing/unsharing. | Only applicable to user-based (`emailIds`) removal for this view type. |
 
+
 ## Error 7535
 
 | Attribute | Value |
@@ -2709,6 +3197,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `CANNOT_SHARE_TO_MEMBERS_NOT_PART_OF_ORG` — One or more `emailIds` do not belong to the organization. | Verify the recipients are valid organization/portal users. |
+
 
 ## Error 7541
 
@@ -2727,6 +3216,7 @@ Raised by:
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `FILTER_CRITERIA_NOT_SUPPORTED_FOR_MULTI_VIEW_SHARE` — `criteria` supplied with more than one `viewIds` entry. | Share one view at a time when using row-level `criteria`. |
 
+
 ## Error 7542
 
 | Attribute | Value |
@@ -2743,6 +3233,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Update Shared Details](../domains/share-and-publish/sharing/update-shared-details-for-view.md) | `FILTER_CRITERIA_NOT_PERMITTED_FOR_SHARED_USER` — `criteria` update is not permitted for this share type. | Remove or adjust the `criteria` field. |
+
 
 ## Error 7543
 
@@ -2762,6 +3253,7 @@ Raised by:
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `ONLY_BASETABLE_COL_IN_TABULAR_FILTERCRITERIA` — `criteria` on a tabular view referenced a column outside its base table. | Filter using only the base table's own columns. |
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `VUD_OR_DRILL_COLUMNS_EDIT_NOT_SUPPORTED_FOR_MULTI_VIEW_SHARE` — `vudColumns`/`drillColumns` supplied with more than one view. | Share one view at a time when restricting VUD/drill columns. |
 
+
 ## Error 7545
 
 | Attribute | Value |
@@ -2780,6 +3272,7 @@ Raised by:
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `SHARE_AND_WRITE_PERMISSIONS_NOT_ALLOWED_FOR_RO_USERS` — A Read-Only/embedded user was granted `share` together with a write permission. | Do not combine `share: true` with write permissions for Read-Only users. |
 | [Update Shared Details](../domains/share-and-publish/sharing/update-shared-details-for-view.md) | `SHARE_AND_WRITE_PERMISSIONS_NOT_ALLOWED_FOR_RO_USERS` — A Read-Only user was granted `share` together with a write permission. | Do not combine `share: true` with write permissions for Read-Only users. |
 
+
 ## Error 7549
 
 | Attribute | Value |
@@ -2796,6 +3289,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `CANNOT_SHARE_TO_CUSTOMROLE_USER` — Attempted to share directly to a user who only has a custom-role-based org-level permission. | Share via the appropriate group/role mechanism instead. |
+
 
 ## Error 7550
 
@@ -2816,6 +3310,7 @@ Raised by:
 | [Change Workspace Users Role](../domains/users-and-groups/workspace-users/change-workspace-users-role.md) | The specified `role` name does not exist as a custom role in the org. | Use `"WORKSPACEADMIN"`, `"USER"`, or an exact custom role name. |
 | [Add Workspace Users](../domains/users-and-groups/workspace-users/add-workspace-users.md), [Change Workspace Users Role](../domains/users-and-groups/workspace-users/change-workspace-users-role.md) | The specified role name does not exist as a custom role in the organization. | Use WORKSPACEADMIN, USER, or the exact name of a custom role defined in the organization. |
 
+
 ## Error 7565
 
 | Attribute | Value |
@@ -2832,6 +3327,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Create Private URL](../domains/share-and-publish/publish/create-private-url.md), [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md), [Delete Slide Show](../domains/share-and-publish/slideshow-management/delete-slideshow.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md), [Make View Public](../domains/share-and-publish/publish/make-views-public.md), [Remove Private Access](../domains/share-and-publish/publish/remove-private-access.md), [Remove Public Permission](../domains/share-and-publish/publish/remove-public-permission.md), [Update Publish Configurations](../domains/share-and-publish/publish/update-publish-configurations.md), [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `UNVERIFIED_EMAIL` — The calling user's primary email address is not verified. | Verify the account's primary email address and retry. |
+
 
 ## Error 7571
 
@@ -2850,6 +3346,58 @@ Raised by:
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `UNKNOWN_VIEWID_PASSED` — A `tableCriteriaList[].viewId` does not exist in this workspace. | Verify the IDs with [Get View List](../domains/views-management/view-operations/get-views.md). |
 
+
+## Error 7701
+
+| Attribute | Value |
+|---|---|
+| Error code | `7701` |
+| Summary constant | `DROP_X_Y` |
+| HTTP status | 400 (typical) |
+| Meaning | No X-axis or Y-axis column was provided for a chart report type. |
+| Resolution | Add at least one xAxis and one yAxis entry to axisColumns. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | DROP_X_Y — No X-axis or Y-axis column was provided for a `chart` report type. | Add at least one `xAxis` and one `yAxis` entry to `axisColumns`. |
+
+## Error 7703
+
+| Attribute | Value |
+|---|---|
+| Error code | `7703` |
+| Summary constant | `REMOVE_CLR_FIELD` |
+| HTTP status | 400 (typical) |
+| Meaning | A colorAxis column is present alongside multiple Y-axis columns. |
+| Resolution | Remove the colorAxis entry or reduce the Y-axis columns to one. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | REMOVE_CLR_FIELD — A `colorAxis` column is present alongside multiple Y-axis columns. | Remove the `colorAxis` entry or reduce the Y-axis columns to one. |
+
+## Error 7727
+
+| Attribute | Value |
+|---|---|
+| Error code | `7727` |
+| Summary constant | `Y_EXCEED_LIMIT` |
+| HTTP status | 400 (typical) |
+| Meaning | More than 15 columns were placed on the Y-axis of a chart. |
+| Resolution | Reduce the number of Y-axis (yAxis type) entries in axisColumns to 15 or fewer. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Update Visual](../domains/reports-and-dashboards/reports/update-report.md) | Y_EXCEED_LIMIT — More than 15 columns were placed on the Y-axis of a chart. | Reduce the number of Y-axis (`yAxis` type) entries in `axisColumns` to 15 or fewer. |
+
 ## Error 7801
 
 | Attribute | Value |
@@ -2866,6 +3414,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `MARGIN_VALUE_EXCEEDS` — A PDF margin is outside `0`–`1` inches. | Send a value between `0` and `1`. |
+
 
 ## Error 7803
 
@@ -2884,6 +3433,7 @@ Raised by:
 |---|---|---|
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `INVALID_DIMENSION` — `width` or `height` is outside the permitted image range. | Use `width` 250–2000 and `height` 200–2000. |
 
+
 ## Error 7806
 
 | Attribute | Value |
@@ -2900,6 +3450,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `XLS_CELL_LIMIT_EXCEEDS` — The XLS export exceeds the per-sheet cell limit. | Narrow the export with `criteria` or `selectedColumns`, or export as CSV. |
+
 
 ## Error 7807
 
@@ -2918,6 +3469,7 @@ Raised by:
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `XLS_COL_LIMIT_EXCEEDS` — More than 256 columns were requested for an XLS export. | Reduce the column count with `selectedColumns`, or export as CSV. |
 
+
 ## Error 7808
 
 | Attribute | Value |
@@ -2935,6 +3487,7 @@ Raised by:
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `XLS_CELL_CHAR_LIMIT_EXCEEDS` — A single cell exceeds 32,767 characters. | Exclude the offending column, or export as CSV. |
 
+
 ## Error 7809
 
 | Attribute | Value |
@@ -2951,6 +3504,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `XLS_NO_DATA` — The XLS export produced no data. | Widen or remove `criteria`. |
+
 
 ## Error 7812
 
@@ -2971,6 +3525,7 @@ Raised by:
 | [Delete Email Schedule](../domains/schedules-and-alerts/email-schedules/delete-email-schedule.md) | `SCHEDULE_DELETED` — No schedule exists with the given `<schedule-id>`. | Nothing to delete; re-check via [Get Email Schedules](../domains/schedules-and-alerts/email-schedules/get-email-schedules.md). |
 | [Change Email Schedule Status](../domains/schedules-and-alerts/email-schedules/change-email-schedule-status.md), [Trigger Email Schedule](../domains/schedules-and-alerts/email-schedules/trigger-email-schedule.md) | `SCHEDULE_DELETED` — No schedule exists with the given `<schedule-id>`. | Re-resolve the current ID via [Get Email Schedules](../domains/schedules-and-alerts/email-schedules/get-email-schedules.md). |
 
+
 ## Error 7824
 
 | Attribute | Value |
@@ -2987,6 +3542,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `EXPORT_REQ_BLOCKED` — Export has been blocked for this workspace. | Contact Zoho Analytics support using the address in the error message. |
+
 
 ## Error 7827
 
@@ -3007,6 +3563,7 @@ Raised by:
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `EXP_PDF_RECORD_LIMIT` — The PDF exceeds 1,000,000 cells. | Narrow the statement or use `selectedColumns`. |
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `EXP_PDF_RECORD_LIMIT` — The PDF exceeds 1,000,000 cells. | Narrow the export with `criteria` or `selectedColumns`. |
 
+
 ## Error 7830
 
 | Attribute | Value |
@@ -3023,6 +3580,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `EXP_ALL_RECORD_LIMIT` — The exported payload exceeds 100 MB. | Split the export with `criteria`, or use the asynchronous export. |
+
 
 ## Error 7832
 
@@ -3041,6 +3599,7 @@ Raised by:
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `INVALID_EXPORT_TYPE` — `exportType` is not one of the supported formats. | Use `CSV`, `XLS`, `PDF`, `HTML`, or `IMG`. |
 
+
 ## Error 7835
 
 | Attribute | Value |
@@ -3057,6 +3616,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `NO_TABLES_INVOLVED_IN_SQL_EXPORT` — The statement references no table. | Query at least one table of the workspace. |
+
 
 ## Error 7836
 
@@ -3075,6 +3635,7 @@ Raised by:
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `GIVEN_TABLE_NOT_INVOLVED_IN_SQL_EXPORT` — A `tableCriteriaList[].viewId` is not used by the statement. | List only tables the query actually references. |
 
+
 ## Error 7837
 
 | Attribute | Value |
@@ -3091,6 +3652,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `INVOLVED_TABLE_DOES_NOT_HAVE_PERMISSION` — A table used by the query has no matching `tableCriteriaList` entry where one is required. | Supply a criteria entry for every participating table. |
+
 
 ## Error 7929
 
@@ -3112,6 +3674,7 @@ Raised by:
 | [Restore Trash View](../domains/views-management/trash-management/restore-trash-view.md) | The view has already been restored from the trash. | The view is active again. No action is needed. |
 | [Delete Trash View](../domains/views-management/trash-management/delete-trash-view.md) | The view has already been restored from the trash and is no longer in the trash bin. | The view is active again and cannot be deleted from the trash. |
 
+
 ## Error 7941
 
 | Attribute | Value |
@@ -3129,6 +3692,7 @@ Raised by:
 |---|---|---|
 | [Restore Trash View](../domains/views-management/trash-management/restore-trash-view.md) | The view has parent dependencies that are also in trash and must be restored together. | Retry with `"withDependents": true` in the CONFIG. See **Appendix D** for details. |
 | [Restore Trash View](../domains/views-management/trash-management/restore-trash-view.md) | The view has parent dependencies that are also in the trash and must be restored together. | Retry the request with withDependents set to true in the CONFIG. |
+
 
 ## Error 7942
 
@@ -3148,6 +3712,7 @@ Raised by:
 | [Delete Trash View](../domains/views-management/trash-management/delete-trash-view.md) | The view has child dependent views in trash that must be deleted together. | Retry with `"withDependents": true` in the CONFIG. See **Appendix D** for details. |
 | [Delete Trash View](../domains/views-management/trash-management/delete-trash-view.md) | The view has child dependent views in the trash that must be deleted together. | Retry the request with withDependents set to true in the CONFIG. |
 
+
 ## Error 7943
 
 | Attribute | Value |
@@ -3164,6 +3729,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Restore Trash View](../domains/views-management/trash-management/restore-trash-view.md) | The requesting user does not have permission to restore this specific trashed view. | Only the view's original owner or an admin can restore it. |
+
 
 ## Error 7951
 
@@ -3185,6 +3751,7 @@ Raised by:
 | [Create Workspace](../domains/workspace-management/workspace-operations/create-workspace.md) | The organization has reached its workspace creation limit based on the current subscription plan. | Upgrade the subscription plan or delete the unused workspaces before creating a new workspace. |
 | [Copy Workspace](../domains/workspace-management/workspace-operations/copy-workspace.md) | The destination organization has reached its workspace limit. | Upgrade the subscription plan of the destination organization or remove the unused workspaces. |
 
+
 ## Error 8000
 
 | Attribute | Value |
@@ -3202,6 +3769,7 @@ Raised by:
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `DUPLICATE_SCHEDULE` — A schedule with this `scheduleName` already exists in the workspace. | Choose a different name. |
 | [Update Email Schedule](../domains/schedules-and-alerts/email-schedules/update-email-schedule.md) | `DUPLICATE_SCHEDULE` — Another schedule in the workspace already uses the requested `scheduleName`. | Choose a different name. |
+
 
 ## Error 8001
 
@@ -3223,6 +3791,7 @@ Raised by:
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `MAILCOUNT_PER_SCHED_EXCEED` — Too many recipients for a single schedule. | Reduce the recipient list, or split it across schedules. |
 | [Update Email Schedule](../domains/schedules-and-alerts/email-schedules/update-email-schedule.md) | `MAILCOUNT_PER_SCHED_EXCEED` — Too many recipients after the update. | Reduce the recipient list. |
 
+
 ## Error 8002
 
 | Attribute | Value |
@@ -3242,6 +3811,7 @@ Raised by:
 | [Delete Email Schedule](../domains/schedules-and-alerts/email-schedules/delete-email-schedule.md) | `SCHMAIL_ACTION_NOTSUPPORTED` — The schedule is not in this workspace, or a custom-role user attempted to delete a schedule they do not own. | Verify the ID belongs to this workspace; otherwise have the creator or an admin delete it. |
 | [Change Email Schedule Status](../domains/schedules-and-alerts/email-schedules/change-email-schedule-status.md), [Trigger Email Schedule](../domains/schedules-and-alerts/email-schedules/trigger-email-schedule.md) | `SCHMAIL_ACTION_NOTSUPPORTED` — The schedule is not in this workspace, or the caller may not act on it. | Verify the ID belongs to this workspace. |
 
+
 ## Error 8003
 
 | Attribute | Value |
@@ -3258,6 +3828,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Change Email Schedule Status](../domains/schedules-and-alerts/email-schedules/change-email-schedule-status.md) | `ALL_SCH_RUNERROR` — The schedule could not be activated. | Check that the schedule's views still exist and that the organization is within its schedule quota. |
+
 
 ## Error 8004
 
@@ -3276,6 +3847,7 @@ Raised by:
 |---|---|---|
 | [Change Email Schedule Status](../domains/schedules-and-alerts/email-schedules/change-email-schedule-status.md) | `ALL_SCH_PAUSEERROR` — The schedule could not be deactivated. | Retry; if it persists, verify the schedule still exists. |
 
+
 ## Error 8005
 
 | Attribute | Value |
@@ -3293,6 +3865,24 @@ Raised by:
 |---|---|---|
 | [Change Email Schedule Status](../domains/schedules-and-alerts/email-schedules/change-email-schedule-status.md), [Delete Email Schedule](../domains/schedules-and-alerts/email-schedules/delete-email-schedule.md), [Trigger Email Schedule](../domains/schedules-and-alerts/email-schedules/trigger-email-schedule.md), [Update Email Schedule](../domains/schedules-and-alerts/email-schedules/update-email-schedule.md) | `SCH_NOT_IN_WS` — The schedule does not belong to the specified workspace. | Ensure `<workspace-id>` and `<schedule-id>` are consistent. |
 
+
+## Error 8008
+
+| Attribute | Value |
+|---|---|
+| Error code | `8008` |
+| Summary constant | `UNKNOWN_PARAMETER` |
+| HTTP status | 400 (typical) |
+| Meaning | The behaviour key was supplied in a userFilter whose operation is "dateRange" or "relative", where behaviour is not applicable. |
+| Resolution | Remove behaviour from userFilters entries that use "dateRange" or "relative" operations. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | UNKNOWN_PARAMETER — The `behaviour` key was supplied in a `userFilter` whose `operation` is `"dateRange"` or `"relative"`, where `behaviour` is not applicable. | Remove `behaviour` from `userFilters` entries that use `"dateRange"` or `"relative"` operations. |
+
 ## Error 8009
 
 | Attribute | Value |
@@ -3309,6 +3899,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `MAIL_MULTIVIEW_MAXCOUNT_EXCEEEDED` — Too many views in one schedule. | Reduce `viewIds`, or split across schedules. |
+
 
 ## Error 8014
 
@@ -3329,6 +3920,7 @@ Raised by:
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `API_IMAGE_RESPONSE_NOT_POSSIBLE` — `image` was requested. | A query result cannot be rendered as an image; choose another format. |
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `API_IMAGE_RESPONSE_NOT_POSSIBLE` — `image` was requested for a view that is not a chart. | Export charts as images; use `pdf` or `html` otherwise. |
 
+
 ## Error 8015
 
 | Attribute | Value |
@@ -3347,6 +3939,7 @@ Raised by:
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `API_EXPORT_COLUMN_NOT_PRESENT` — A name in `selectedColumns` does not match any column in the view. | Check the display names with [Get Columns](../domains/data-modeling-and-schema/columns/overview.md). |
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `API_EXPORT_COLUMN_NOT_PRESENT` — A name in `selectedColumns` is not in the result set. | Match the names to the columns the statement projects. |
 
+
 ## Error 8016
 
 | Attribute | Value |
@@ -3364,6 +3957,7 @@ Raised by:
 |---|---|---|
 | [Add Row](../domains/data-operations/row-operations/add-row.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `API_NO_COLUMN_PRESENT` — None of the supplied column names matched a column in the table. | Check the names via [Get Columns](../domains/data-modeling-and-schema/columns/overview.md). |
 
+
 ## Error 8017
 
 | Attribute | Value |
@@ -3380,6 +3974,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md), [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `INVALID_IMAGE_FORMAT` — `imageFormat` is not `png`, `jpg`, or `jpeg`. | Send one of the three supported values. |
+
 
 ## Error 8021
 
@@ -3399,6 +3994,7 @@ Raised by:
 | [Create Analysis View](../domains/reports-and-dashboards/reports/create-report.md), [Update Analysis View](../domains/reports-and-dashboards/reports/update-report.md) | Invalid view type specified. | Set `reportType` to one of `chart`, `pivot`, or `summary`. |
 | [Get Report Metadata](../domains/reports-and-dashboards/reports/get-report-metadata.md) | Invalid view type for the requested operation. | Ensure the target view is an analysis view (chart, pivot, or summary). |
 
+
 ## Error 8023
 
 | Attribute | Value |
@@ -3415,6 +4011,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Delete Embed URL](../domains/share-and-publish/embed-url/delete-embed-url.md), [Fetch All Embed URLs](../domains/share-and-publish/embed-url/get-embed-urls.md), [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md) | `OEM_OPERATION_NOT_ALLOWED` — The organization/workspace is not enabled for Embedded Analytics. | Embedded Analytics must be enabled for the account; contact Zoho Analytics support/sales. |
+
 
 ## Error 8024
 
@@ -3434,6 +4031,26 @@ Raised by:
 | [Copy Workspace](../domains/workspace-management/workspace-operations/copy-workspace.md) | Cross-org copy attempted without a valid `workspaceKey`, or the provided key does not match the source workspace's secret key. | Obtain the correct `workspaceKey` from the source workspace owner using Get Workspace Secret Key, then retry. For same-org copies, omit `workspaceKey`. |
 | [Copy Workspace](../domains/workspace-management/workspace-operations/copy-workspace.md) | A cross-organization copy was attempted without a valid workspaceKey, or the key provided does not match the secret key of the source workspace. | Obtain the correct workspaceKey of the source workspace using the Get Workspace Secret Key API and retry. Omit workspaceKey for copies within the same organization. |
 
+
+## Error 8027
+
+| Attribute | Value |
+|---|---|
+| Error code | `8027` |
+| Summary constant | `VIEWS_NOT_FOUND` |
+| HTTP status | 404 (typical) |
+| Meaning | One or more VIEW-type cards reference a viewName that does not exist in the workspace; viewName is absent, null, or an integer; the layout has no VIEW-type card at all; or layout is an empty object {}. |
+| Resolution | Correct the offending CONFIG value and retry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | VIEWS_NOT_FOUND — One or more `VIEW`-type cards reference a `viewName` that does not exist in the workspace; `viewName` is absent, `null`, or an integer; the layout has no `VIEW`-type card at all; or `layout` is an empty object `{}`. | Correct the offending CONFIG value and retry. |
+
+Server message: `Following views are not found: [<viewName list>]`
+
 ## Error 8029
 
 | Attribute | Value |
@@ -3451,6 +4068,7 @@ Raised by:
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `SHARE_INVALID_EMAIL_ADDRESS` — One or more `emailIds` entries is not a valid email address. | Correct the malformed email address(es). |
 
+
 ## Error 8030
 
 | Attribute | Value |
@@ -3467,6 +4085,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md), [Trigger Email Schedule](../domains/schedules-and-alerts/email-schedules/trigger-email-schedule.md) | `EMAILEXPORT_DISABLED_IN_ORG` — Email export is disabled for this organization. | Ask the Organization Admin to enable export in Security Controls. |
+
 
 ## Error 8031
 
@@ -3486,6 +4105,7 @@ Raised by:
 | [Remove Shared Views](../domains/share-and-publish/sharing/remove-share.md) | `REMOVESHARE_API_PARAMS` — Neither `viewIds` nor `removeAllViews: true` was supplied. | Supply either a `viewIds` array or set `removeAllViews: true`. |
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `UNTRUSTED_EMAILIDS` — A recipient address is outside the organization's trusted domains. | Use trusted-domain addresses, or ask the Organization Admin to add the domain. |
 | [Update Email Schedule](../domains/schedules-and-alerts/email-schedules/update-email-schedule.md) | `UNTRUSTED_EMAILIDS` — A recipient address is outside the organization's trusted domains. | Use trusted-domain addresses. |
+
 
 ## Error 8032
 
@@ -3508,6 +4128,7 @@ Raised by:
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `EMAILINGVIEW_DISABLED` — Emailing this view is disabled. | Check the view's and workspace's export settings. |
 | [Trigger Email Schedule](../domains/schedules-and-alerts/email-schedules/trigger-email-schedule.md) | `EMAILINGVIEW_DISABLED` — Emailing is disabled for a view in this schedule. | Check the view's and workspace's export settings. |
 
+
 ## Error 8033
 
 | Attribute | Value |
@@ -3526,6 +4147,7 @@ Raised by:
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `MAILSCH_SELECT_ATLEASTONE_EMAILID` — No recipient could be resolved from `emailIds`, `groupIds`, and `cc`. | Supply at least one address or a non-empty group. |
 | [Update Email Schedule](../domains/schedules-and-alerts/email-schedules/update-email-schedule.md) | `MAILSCH_SELECT_ATLEASTONE_EMAILID` — The update would leave the schedule with no recipients. | Keep at least one address or non-empty group. |
 
+
 ## Error 8034
 
 | Attribute | Value |
@@ -3542,6 +4164,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `ONLY_ONE_DASHBOARD_IS_ALLOWED_PER_SCH` — More than one view scheduled where the first is a dashboard. | Schedule the dashboard on its own. |
+
 
 ## Error 8035
 
@@ -3560,6 +4183,7 @@ Raised by:
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `EXPORT_FORMATS_ALLOWED_FOR_DASHBOARD` — Dashboard scheduled with a format other than `PDF`/`HTML`. | Use `PDF` or `HTML`. |
 
+
 ## Error 8036
 
 | Attribute | Value |
@@ -3577,6 +4201,7 @@ Raised by:
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `EXPORT_FORMATS_ALLOWED_FOR_CHART` — `IMG` requested for a view that is not a chart. | Use `IMG` only for chart views. |
 
+
 ## Error 8037
 
 | Attribute | Value |
@@ -3593,6 +4218,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `ONLY_ONE_VIEW_IS_ALLOWED_FOR_XLS` — `XLS` requested with more than one view. | Send exactly one view, or choose another format. |
+
 
 ## Error 8040
 
@@ -3612,6 +4238,7 @@ Raised by:
 | [Remove Workspace Admins](../domains/users-and-groups/workspace-users/remove-workspace-admins.md) | One or more specified email addresses are not currently Workspace Admins in this workspace. | Verify all email addresses are current Workspace Admins using Get Workspace Admins before calling this API. |
 | [Remove Workspace Admins](../domains/users-and-groups/workspace-users/remove-workspace-admins.md) | One or more of the specified email addresses are not currently Workspace Admins of this workspace. | Verify that every email address is a current Workspace Admin using the Get Workspace Admins API before invoking this API. |
 
+
 ## Error 8046
 
 | Attribute | Value |
@@ -3629,6 +4256,7 @@ Raised by:
 |---|---|---|
 | [Import Data into a New Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-new-table.md), [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md) | `INVALID_COLUMNS_SELECTED` — A name in `selectedColumns` is not present in the source data. | Match the names to the source's header row. |
 | [Create Import Job for a New Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-new-table.md), [Create Import Job for an Existing Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-existing-table.md) | `INVALID_COLUMNS_SELECTED` — A name in `selectedColumns` is not present in the source. | Match the names to the source's header row. |
+
 
 ## Error 8050
 
@@ -3648,6 +4276,24 @@ Raised by:
 | [Create Analysis View](../domains/reports-and-dashboards/reports/create-report.md), [Update Analysis View](../domains/reports-and-dashboards/reports/update-report.md) | Invalid value provided. | Check that all CONFIG field values are within the allowed ranges and types. |
 | [Create AutoML Analysis Deployment](../domains/dsml/automl/create-auto-ml-analysis-deployment.md) | `INVALID_VALUE` — `timezone` is not a recognised timezone name. | Use a standard timezone identifier such as `Asia/Kolkata`. |
 
+
+## Error 8051
+
+| Attribute | Value |
+|---|---|
+| Error code | `8051` |
+| Summary constant | `VALUE_NOT_PRESENT` |
+| HTTP status | 400 (typical) |
+| Meaning | A required field is missing — e.g., title, reportType, axisColumns, or a mandatory field within an axis-column object (type, columnName, operation) or a filter object (filterType, values, operation, columnName, exclude). |
+| Resolution | Add the missing field to the CONFIG JSON. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | VALUE_NOT_PRESENT — A required field is missing — e.g., `title`, `reportType`, `axisColumns`, or a mandatory field within an axis-column object (`type`, `columnName`, `operation`) or a filter object (`filterType`, `values`, `operation`, `columnName`, `exclude`). | Add the missing field to the CONFIG JSON. |
+
 ## Error 8054
 
 | Attribute | Value |
@@ -3665,6 +4311,24 @@ Raised by:
 |---|---|---|
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md), [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md), [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `INVALID_FILTER_CRITERIA` — `criteria` could not be parsed. | Correct the criteria syntax (e.g. `"Table"."Column"='Value'`). |
 | [Update Publish Configurations](../domains/share-and-publish/publish/update-publish-configurations.md) | `INVALID_FILTER_CRITERIA` — `URLCriteria` could not be parsed. | Correct the criteria syntax (e.g. `"Table"."Column"='Value'`). |
+
+
+## Error 8057
+
+| Attribute | Value |
+|---|---|
+| Error code | `8057` |
+| Summary constant | `NOT_ALLOWED_BASEFIELD` |
+| HTTP status | 400 (typical) |
+| Meaning | The specified column cannot be used as a baseField for a window function in this report. |
+| Resolution | Choose a valid reference column for the window function. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | NOT_ALLOWED_BASEFIELD — The specified column cannot be used as a `baseField` for a window function in this report. | Choose a valid reference column for the window function. |
 
 ## Error 8058
 
@@ -3687,6 +4351,24 @@ Raised by:
 | [Copy Custom Formulas](../domains/data-modeling-and-schema/formula-columns/copy-formulas.md) | The organisation ID sent in ZANALYTICS-DEST-ORGID does not exist. | Verify the destination organisation ID. |
 | [Copy Views](../domains/views-management/view-operations/copy-views.md) | The organization ID sent in ZANALYTICS-DEST-ORGID does not exist. | Provide a valid, existing organization ID in the ZANALYTICS-DEST-ORGID header. |
 
+
+## Error 8059
+
+| Attribute | Value |
+|---|---|
+| Error code | `8059` |
+| Summary constant | `UNRELATED_TABLE` |
+| HTTP status | 400 (typical) |
+| Meaning | The tableName in a filter or axis-column entry does not belong to the workspace or is not joined to the base table. |
+| Resolution | Use a table that is part of the workspace's join graph. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | UNRELATED_TABLE — The `tableName` in a filter or axis-column entry does not belong to the workspace or is not joined to the base table. | Use a table that is part of the workspace's join graph. |
+
 ## Error 8060
 
 | Attribute | Value |
@@ -3706,6 +4388,7 @@ Raised by:
 | [Activate Users](../domains/users-and-groups/org-users/activate-users.md), [Add Users](../domains/users-and-groups/org-users/add-users.md), [Add Workspace Admins](../domains/users-and-groups/workspace-users/add-workspace-admins.md), [Add Workspace Users](../domains/users-and-groups/workspace-users/add-workspace-users.md), [Change User Role](../domains/users-and-groups/org-users/change-user-role.md), [Change Workspace Users Role](../domains/users-and-groups/workspace-users/change-workspace-users-role.md), [Change Workspace Users Status](../domains/users-and-groups/workspace-users/change-workspace-users-status.md), [Create Group](../domains/users-and-groups/workspace-groups/create-group.md), [Deactivate Users](../domains/users-and-groups/org-users/de-activate-users.md), [Get View URL](../domains/views-management/view-operations/get-view-url.md), [Remove Users](../domains/users-and-groups/org-users/remove-users.md), [Remove Workspace Admins](../domains/users-and-groups/workspace-users/remove-workspace-admins.md), [Remove Workspace Users](../domains/users-and-groups/workspace-users/delete-workspace-users.md) | The specified `domainName` does not exist. | Provide a valid client portal domain name. |
 | [Activate Users](../domains/users-and-groups/org-users/activate-users.md), [Add Users](../domains/users-and-groups/org-users/add-users.md), [Add Workspace Admins](../domains/users-and-groups/workspace-users/add-workspace-admins.md), [Add Workspace Users](../domains/users-and-groups/workspace-users/add-workspace-users.md), [Change User Role](../domains/users-and-groups/org-users/change-user-role.md), [Change Workspace Users Role](../domains/users-and-groups/workspace-users/change-workspace-users-role.md), [Change Workspace Users Status](../domains/users-and-groups/workspace-users/change-workspace-users-status.md), [Create Group](../domains/users-and-groups/workspace-groups/create-group.md), [Deactivate Users](../domains/users-and-groups/org-users/de-activate-users.md), [Get View URL](../domains/views-management/view-operations/get-view-url.md), [Remove Users](../domains/users-and-groups/org-users/remove-users.md), [Remove Workspace Admins](../domains/users-and-groups/workspace-users/remove-workspace-admins.md), [Remove Workspace Users](../domains/users-and-groups/workspace-users/delete-workspace-users.md) | The specified `domainName` does not exist. | Provide a valid custom domain name configured for the workspace. |
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md), [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md), [Get Private URL](../domains/share-and-publish/publish/get-private-url.md), [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `DOMAIN_NOT_EXIST` — The `domainName` supplied does not exist. | Use a domain returned by the [Domain and White Label APIs](../domains/workspace-management/domain-and-white-label/overview.md). |
+
 
 ## Error 8061
 
@@ -3731,6 +4414,7 @@ Raised by:
 | [Activate Users](../domains/users-and-groups/org-users/activate-users.md), [Add Users](../domains/users-and-groups/org-users/add-users.md), [Change User Role](../domains/users-and-groups/org-users/change-user-role.md), [Deactivate Users](../domains/users-and-groups/org-users/de-activate-users.md), [Remove Users](../domains/users-and-groups/org-users/remove-users.md) | The specified domainName does not belong to the calling user or to the organization's Account Admin. | Use a domain name that is administered by the Account Admin of this organization. |
 | [Add Workspace Admins](../domains/users-and-groups/workspace-users/add-workspace-admins.md), [Add Workspace Users](../domains/users-and-groups/workspace-users/add-workspace-users.md), [Change Workspace Users Role](../domains/users-and-groups/workspace-users/change-workspace-users-role.md), [Change Workspace Users Status](../domains/users-and-groups/workspace-users/change-workspace-users-status.md), [Create Group](../domains/users-and-groups/workspace-groups/create-group.md), [Remove Workspace Admins](../domains/users-and-groups/workspace-users/remove-workspace-admins.md), [Remove Workspace Users](../domains/users-and-groups/workspace-users/delete-workspace-users.md) | The specified domainName does not belong to the organization's Account Admin. | Use a domain name that is administered by the Account Admin of this organization. |
 
+
 ## Error 8062
 
 | Attribute | Value |
@@ -3749,6 +4433,7 @@ Raised by:
 | [Delete Row](../domains/data-operations/row-operations/delete-rows.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `ADD_ROW_REQUEST_STILL_IN_PROGRESS` — Another row-write request for this table is still being processed. | Retry after the in-flight request completes. |
 | [Get View URL](../domains/views-management/view-operations/get-view-url.md) | `withCustomDomain=true` but no custom domain is configured for this workspace. | Configure a custom domain for the workspace first, or use the standard URL by omitting `withCustomDomain`. |
 | [Get View URL](../domains/views-management/view-operations/get-view-url.md) | withCustomDomain is true but no custom domain is configured for this workspace. | Configure a custom domain for the workspace first, or omit withCustomDomain to use the standard domain. |
+
 
 ## Error 8072
 
@@ -3769,6 +4454,7 @@ Raised by:
 | [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md), [Get Dashboard Metadata](../domains/reports-and-dashboards/dashboards/get-dashboard-metadata.md), [Update Dashboard](../domains/reports-and-dashboards/dashboards/update-dashboard.md) | The target object is not a valid dashboard. | Verify the `<dashboard-id>` refers to a dashboard (not a report or other view type). |
 | [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md), [Get Dashboard Metadata](../domains/reports-and-dashboards/dashboards/get-dashboard-metadata.md), [Update Dashboard](../domains/reports-and-dashboards/dashboards/update-dashboard.md) | The target object is not a valid dashboard. | Verify the `<dashboard-id>` refers to a dashboard. |
 
+
 ## Error 8074
 
 | Attribute | Value |
@@ -3788,6 +4474,7 @@ Raised by:
 | [Update Shared Details](../domains/share-and-publish/sharing/update-shared-details-for-view.md) | `READ_PERM_SHOULD_BE_TRUE_FOR_SHARING` — `permissions.read` was explicitly set to `false`. | Keep `permissions.read` as `true`. |
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md), [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `READ_PERM_SHOULD_BE_TRUE_FOR_SHARING` — `permissions.read` was sent as `false`. | Omit `read` or set it to `true`. |
 
+
 ## Error 8075
 
 | Attribute | Value |
@@ -3804,6 +4491,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Analysis View](../domains/reports-and-dashboards/reports/create-report.md), [Update Analysis View](../domains/reports-and-dashboards/reports/update-report.md) | Invalid chart type parameter. | Provide a valid `chartType` value (e.g., `Bar`, `Line`, `Pie`). |
+
 
 ## Error 8077
 
@@ -3822,6 +4510,7 @@ Raised by:
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `EMPTY_JSON_CONFIGURATION` — `CONFIG` was not sent, or was sent empty. | Send a CONFIG object containing at least `sqlQuery`. |
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `EMPTY_JSON_CONFIGURATION` — `CONFIG` was not sent, or was sent empty. | Send a CONFIG object with at least `serviceName`, `hostName`, and `userName`. |
+
 
 ## Error 8078
 
@@ -3843,6 +4532,7 @@ Raised by:
 | [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md) | `EMPTY_JSON_ATTRIBUTE_FOUND` — `slideName` is blank, or `viewIds` is an empty array. | Supply a non-empty name and at least one view ID. |
 | [Create AutoML Analysis](../domains/dsml/automl/create-auto-ml-analysis.md) | `EMPTY_JSON_ATTRIBUTE_FOUND` — A mandatory attribute was sent empty. | Supply a value. |
 | [AutoML What If Analysis](../domains/dsml/automl/auto-ml-what-if-analysis.md) | `EMPTY_JSON_ATTRIBUTE_FOUND` — `features` was sent as an empty object. | Supply every training feature and its value. |
+
 
 ## Error 8079
 
@@ -3878,6 +4568,7 @@ Raised by:
 | [Edit Custom Formula](../domains/data-modeling-and-schema/formula-columns/edit-formula-column.md) | The mandatory expression attribute is missing from the configuration. | Send expression in every Edit Custom Formula request. |
 | [Edit Aggregate Formula](../domains/data-modeling-and-schema/aggregate-formulas/edit-aggregate-formula.md) | Neither formulaName nor expression was sent. | Send at least one of these two attributes. |
 
+
 ## Error 8080
 
 | Attribute | Value |
@@ -3905,6 +4596,7 @@ Raised by:
 | [Get Slide URL](../domains/share-and-publish/slideshow-management/get-slideshow-url.md) | `INVALID_JSON_CONFIGURATION` — CONFIG is not valid JSON, was not URL-encoded correctly, or contains an unsupported key. | Stringify and URL-encode the CONFIG object, and send only the documented keys. |
 | [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md), [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `INVALID_JSON_CONFIGURATION` — CONFIG is not valid JSON, contains an unsupported key, or violates a constraint (e.g. punctuation in `slideName`, more than 100 entries in `viewIds`). | Send only the documented keys with the documented types and value constraints. |
 
+
 ## Error 8083
 
 | Attribute | Value |
@@ -3915,6 +4607,7 @@ Raised by:
 | Meaning | The ZANALYTICS-ORGID header is missing from a request that requires it. |
 | Resolution | Send the organization ID in the ZANALYTICS-ORGID header. Obtain it from Get Org List. |
 | Retryable | No, fix the request first |
+
 
 ## Error 8085
 
@@ -3933,6 +4626,7 @@ Raised by:
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `SHAREDTO_EXTERNAL_DOMAIN_NOT_ALLOWED` — Sharing to an email outside the allowed domain(s) is disabled by org policy. | Share only to users within the permitted domain(s), or contact the Org Admin to adjust the policy. |
 
+
 ## Error 8086
 
 | Attribute | Value |
@@ -3949,6 +4643,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Share Views](../domains/share-and-publish/sharing/share-views.md) | `SHAREDTO_EXTERNAL_DOMAIN_NOT_ALLOWED` — Sharing to an email outside the allowed domain(s) is disabled by org policy. | Share only to users within the permitted domain(s), or contact the Org Admin to adjust the policy. |
+
 
 ## Error 8088
 
@@ -3972,6 +4667,7 @@ Raised by:
 | [Create Slide Show](../domains/share-and-publish/slideshow-management/create-slideshow.md) | `SECURITY_CONTROLS_FEATURE_DISABLED` — `accessType: 1` requested but login-free links are disabled for this organization/workspace by security controls. | Use `accessType: 0`, or ask the Organization Admin to re-enable private links in Security Controls. |
 | [Update Slide Show](../domains/share-and-publish/slideshow-management/update-slideshow.md) | `SECURITY_CONTROLS_FEATURE_DISABLED` — `accessType: 1` or key rotation requested but login-free links are disabled for this organization/workspace by security controls. | Ask the Organization Admin to re-enable private links in Security Controls. |
 
+
 ## Error 8100
 
 | Attribute | Value |
@@ -3988,6 +4684,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Update Analysis View](../domains/reports-and-dashboards/reports/update-report.md) | Operation not supported for this analysis view widget. | Ensure the update operation is valid for the current view type. |
+
 
 ## Error 8102
 
@@ -4007,6 +4704,7 @@ Raised by:
 | [Get Dashboard Metadata](../domains/reports-and-dashboards/dashboards/get-dashboard-metadata.md), [Update Dashboard](../domains/reports-and-dashboards/dashboards/update-dashboard.md) | Dashboard view type not supported for this operation. | The requested dashboard may be a tabbed dashboard, which is not supported via this API. |
 | [Get Dashboard Metadata](../domains/reports-and-dashboards/dashboards/get-dashboard-metadata.md), [Update Dashboard](../domains/reports-and-dashboards/dashboards/update-dashboard.md) | Dashboard view type not supported for this operation. | Tabbed dashboards cannot be updated via this API. |
 
+
 ## Error 8105
 
 | Attribute | Value |
@@ -4023,6 +4721,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Remove Shared Views](../domains/share-and-publish/sharing/remove-share.md) | `REMOVESHARE_ALL_VIEWS_PRESENT` — Both `viewIds` and `removeAllViews: true` were supplied together. | Supply only one of the two — `viewIds` for a targeted removal, or `removeAllViews: true` alone for a bulk removal. |
+
 
 ## Error 8114
 
@@ -4043,6 +4742,7 @@ Raised by:
 | [Activate Users](../domains/users-and-groups/org-users/activate-users.md), [Change User Role](../domains/users-and-groups/org-users/change-user-role.md), [Deactivate Users](../domains/users-and-groups/org-users/de-activate-users.md) | One or more specified email addresses are not members of this organisation. | Verify all email IDs using Get Users before calling this API. |
 | [Activate Users](../domains/users-and-groups/org-users/activate-users.md), [Change User Role](../domains/users-and-groups/org-users/change-user-role.md), [Deactivate Users](../domains/users-and-groups/org-users/de-activate-users.md), [Remove Users](../domains/users-and-groups/org-users/remove-users.md) | One or more of the specified email addresses are not members of this organization. | Verify all email addresses using the Get Users API before calling this API. |
 
+
 ## Error 8115
 
 | Attribute | Value |
@@ -4060,6 +4760,7 @@ Raised by:
 |---|---|---|
 | [Get Private URL](../domains/share-and-publish/publish/get-private-url.md) | `VIEW_NOT_PUBLISHED_AS_PRIVATE` — The view has no private link. | Call [Create Private URL](../domains/share-and-publish/publish/create-private-url.md) first. |
 | [Remove Private Access](../domains/share-and-publish/publish/remove-private-access.md) | `VIEW_NOT_PUBLISHED_AS_PRIVATE` — The view has no private link. | Nothing to remove; the link is already absent. |
+
 
 ## Error 8116
 
@@ -4079,6 +4780,7 @@ Raised by:
 | [Auto Analyse View](../domains/views-management/auto-analysis/auto-analyse-view.md) | Auto analysis has already been completed for this table and `analyseAgain` was not set to `true`. | Pass `CONFIG={"analyseAgain":true}` to re-run the analysis and replace previously generated views. |
 | [Auto Analyse Column](../domains/views-management/auto-analysis/auto-analyse-column.md) | The selected column type is not supported for auto analysis (e.g., Auto-Number, Multi-Line, URL, Geometry, or a system/hidden column). | Choose an eligible column. Refer to the Column Eligibility section for the full list of unsupported column characteristics. |
 | [Auto Analyse Column](../domains/views-management/auto-analysis/auto-analyse-column.md) | The selected column type is not supported for auto analysis, such as an Auto-Number, Multi-Line Text, URL or Geometry column, or a hidden or system column. | Choose an eligible column. The unsupported column characteristics are listed in the notes for this API. |
+
 
 ## Error 8119
 
@@ -4127,6 +4829,7 @@ Raised by:
 | [Get Dashboard Metadata](../domains/reports-and-dashboards/dashboards/get-dashboard-metadata.md) | Invalid value supplied for the include attribute. | Use one or more of all, themes, layout and settings. |
 | [Update Dashboard](../domains/reports-and-dashboards/dashboards/update-dashboard.md) | One or more CONFIG field values are invalid, such as an out-of-range number or an invalid color. | Review the CONFIG JSON and correct the invalid values. |
 
+
 ## Error 8120
 
 | Attribute | Value |
@@ -4145,6 +4848,7 @@ Raised by:
 | [Get Export Job Details](../domains/data-operations/async-data-export/get-export-job-details.md) | `EXPORT_JOB_NOT_FOUND` — No export job exists for the given ID (HTTP 404). | Verify the `jobId` returned by the create call, and that the job has not passed its 72-hour retention. |
 | [Download Exported Data](../domains/data-operations/async-data-export/download-exported-data.md) | `EXPORT_JOB_NOT_FOUND` — No export job exists for the given ID, or it has passed its 72-hour retention (HTTP 404). | Verify the `jobId`; if it has expired, create a new job. |
 
+
 ## Error 8121
 
 | Attribute | Value |
@@ -4161,6 +4865,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Download Exported Data](../domains/data-operations/async-data-export/download-exported-data.md) | `EXPORT_JOB_NOT_INITIATED` — The job is queued but has not started (`jobCode` `1001`). | Poll [Get Export Job Details](../domains/data-operations/async-data-export/get-export-job-details.md) until `jobCode` is `1004`. |
+
 
 ## Error 8122
 
@@ -4179,6 +4884,7 @@ Raised by:
 |---|---|---|
 | [Download Exported Data](../domains/data-operations/async-data-export/download-exported-data.md) | `EXPORT_JOB_NOT_COMPLETED` — The job is still running (`jobCode` `1002`). | Poll [Get Export Job Details](../domains/data-operations/async-data-export/get-export-job-details.md) until `jobCode` is `1004`. |
 
+
 ## Error 8123
 
 | Attribute | Value |
@@ -4195,6 +4901,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Download Exported Data](../domains/data-operations/async-data-export/download-exported-data.md) | `EXPORT_JOB_ERROR_OCCURRED` — The job failed (`jobCode` `1003`). | Nothing to download. Create a new job; if the failure repeats, contact support. |
+
 
 ## Error 8124
 
@@ -4213,6 +4920,7 @@ Raised by:
 |---|---|---|
 | [Get Export Job Details](../domains/data-operations/async-data-export/get-export-job-details.md) | `EXPORT_JOB_ACCESS_DENIED` — The caller did not create this job (HTTP 403). | Poll with the same user that created the job. |
 | [Download Exported Data](../domains/data-operations/async-data-export/download-exported-data.md) | `EXPORT_JOB_ACCESS_DENIED` — The caller did not create this job (HTTP 403). | Download with the same user that created the job. |
+
 
 ## Error 8125
 
@@ -4234,6 +4942,7 @@ Raised by:
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | Callback URL is malformed, unreachable, or private. | See [The `callbackUrl` Attribute](../domains/data-operations/async-data-import/overview.md#the-callbackurl-attribute). |
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `CALLBACKURL_NOT_VALID` — `callbackUrl` is malformed. | Send a well-formed absolute `http`/`https` URL. |
 
+
 ## Error 8126
 
 | Attribute | Value |
@@ -4253,6 +4962,7 @@ Raised by:
 | [Create Import Job for an Existing Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-existing-table.md) | `CALLBACKURL_NOT_VALID` / `CALLBACKURL_CONNECTION_ERROR` / `CALLBACKURL_RESTRICTED` — The callback URL is malformed, unreachable, or points at a private address. | See [The `callbackUrl` Attribute](../domains/data-operations/async-data-import/overview.md#the-callbackurl-attribute). |
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | Callback URL is malformed, unreachable, or private. | See [The `callbackUrl` Attribute](../domains/data-operations/async-data-import/overview.md#the-callbackurl-attribute). |
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `CALLBACKURL_CONNECTION_ERROR` — `callbackUrl` could not be reached during validation. | Make the endpoint publicly reachable before creating the job. |
+
 
 ## Error 8127
 
@@ -4274,6 +4984,7 @@ Raised by:
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | Callback URL is malformed, unreachable, or private. | See [The `callbackUrl` Attribute](../domains/data-operations/async-data-import/overview.md#the-callbackurl-attribute). |
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `CALLBACKURL_RESTRICTED` — `callbackUrl` resolves to a private or internal address. | Use a publicly routable host. |
 
+
 ## Error 8128
 
 | Attribute | Value |
@@ -4290,6 +5001,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `INTERNAL_ERROR_ON_INITIATING_EXPORT` — The job could not be queued. | Retry; if it persists, contact support. |
+
 
 ## Error 8130
 
@@ -4308,6 +5020,7 @@ Raised by:
 |---|---|---|
 | [Update Row](../domains/data-operations/row-operations/update-rows.md) | `INVALID_UPDATE_CRITERIA_CONFIGURATION` — Both `criteria` and `updateAllRows` were sent, or neither was. | Send exactly one of the two. |
 
+
 ## Error 8131
 
 | Attribute | Value |
@@ -4324,6 +5037,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Delete Row](../domains/data-operations/row-operations/delete-rows.md) | `INVALID_DELETE_CRITERIA_CONFIGURATION` — Both `criteria` and `deleteAllRows` were sent, or neither was. | Send exactly one of the two. |
+
 
 ## Error 8132
 
@@ -4342,6 +5056,7 @@ Raised by:
 |---|---|---|
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `ASYNC_EXPORT_LIMIT_EXCEEDED` — 5 export jobs are already queued or running for the organization. | Wait for an in-flight job to finish, then retry. |
 
+
 ## Error 8133
 
 | Attribute | Value |
@@ -4358,6 +5073,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `SYNC_EXPORT_NOT_ALLOWED` — The view is a dashboard, a query table, a live-connect view, or a table above the row limit. | Use the asynchronous export API for this view. |
+
 
 ## Error 8134
 
@@ -4379,6 +5095,7 @@ Raised by:
 | [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md) | `ASYNC_IMPORT_LIMIT_EXCEEDED` — The maximum number of simultaneous import jobs is in progress. | Wait for a running job to finish, or close an abandoned batch job. |
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md) | `ASYNC_IMPORT_LIMIT_EXCEEDED` — The maximum number of simultaneous import jobs is in progress. | Wait for a running job to finish. |
 
+
 ## Error 8137
 
 | Attribute | Value |
@@ -4395,6 +5112,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Get Import Job Details](../domains/data-operations/async-data-import/get-import-job-details.md) | `IMPORT_JOB_NOT_FOUND` — No import job exists with this ID. | Verify the `jobId`. Note that a job whose summary has expired is also reported as `jobCode` `1005`. |
+
 
 ## Error 8138
 
@@ -4413,6 +5131,7 @@ Raised by:
 |---|---|---|
 | [Get Import Job Details](../domains/data-operations/async-data-import/get-import-job-details.md) | `IMPORT_JOB_ACCESS_DENIED` — The job was created by a different user. | Poll under the same account that created the job. |
 
+
 ## Error 8139
 
 | Attribute | Value |
@@ -4429,6 +5148,41 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Import Data into a New Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-new-table.md), [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md) | `PASTED_DATA_LIMIT_EXCEEDED` — The `DATA` parameter exceeds 10,000,000 characters. | Send the payload as a `FILE` upload instead. |
+
+
+## Error 8144
+
+| Attribute | Value |
+|---|---|
+| Error code | `8144` |
+| Summary constant | `INVALID_GRAPH_TYPE` |
+| HTTP status | 400 (typical) |
+| Meaning | The chartType value is not a recognised chart type. |
+| Resolution | Use one of the allowed values listed in [Chart Types](report-and-dashboard-enums.md#chart-types). |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | INVALID_GRAPH_TYPE — The `chartType` value is not a recognised chart type. | Use one of the allowed values listed in [Chart Types](report-and-dashboard-enums.md#chart-types). |
+
+## Error 8145
+
+| Attribute | Value |
+|---|---|
+| Error code | `8145` |
+| Summary constant | `FOLDERID_CANNOT_BE_UPDATED` |
+| HTTP status | 400 (typical) |
+| Meaning | folderId was included in the Update CONFIG. |
+| Resolution | Remove folderId from the Update request. Folder assignment cannot be changed via this endpoint. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Update Visual](../domains/reports-and-dashboards/reports/update-report.md) | FOLDERID_CANNOT_BE_UPDATED — `folderId` was included in the Update CONFIG. | Remove `folderId` from the Update request. Folder assignment cannot be changed via this endpoint. |
 
 ## Error 8148
 
@@ -4449,6 +5203,7 @@ Raised by:
 | [Create Import Job for a New Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-new-table.md), [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md) | `DECIMAL_AND_THOUSAND_SEPARATOR_SAME` — The thousand and decimal separators are the same character. | Choose different separators. |
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md), [Create Import Job for an Existing Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-existing-table.md) | Separator configuration errors. | See [Number Separator Values](../domains/data-operations/async-data-import/overview.md#number-separator-values). |
 
+
 ## Error 8149
 
 | Attribute | Value |
@@ -4468,6 +5223,7 @@ Raised by:
 | [Create Import Job for a New Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-new-table.md), [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md) | `DECIMAL_AND_THOUSAND_COLUMN_SEPARATOR_LEGNTH_VALIDATION` — A `columnSeparators` entry has fewer than two values. | Send `[thousandSeparator, decimalSeparator]` per column. |
 | [Batch Import Data into Existing Table](../domains/data-operations/async-data-import/batch-import-existing-table.md), [Batch Import Data into New Table](../domains/data-operations/async-data-import/batch-import-new-table.md), [Create Import Job for an Existing Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-existing-table.md) | Separator configuration errors. | See [Number Separator Values](../domains/data-operations/async-data-import/overview.md#number-separator-values). |
 
+
 ## Error 8150
 
 | Attribute | Value |
@@ -4486,6 +5242,7 @@ Raised by:
 | [Update Shared Details](../domains/share-and-publish/sharing/update-shared-details-for-view.md) | `VIEW_NOT_SHARED_TO_GROUP` — The view is not currently shared with the specified group. | Share the view to this group first via Share Views. |
 | [Remove Shared Views](../domains/share-and-publish/sharing/remove-share.md) | `VIEW_NOT_SHARED_TO_GROUP` — The specified view is not currently shared with this group. | Verify the share exists via Get Shared Details before removing. |
 
+
 ## Error 8152
 
 | Attribute | Value |
@@ -4502,6 +5259,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Update Publish Configurations](../domains/share-and-publish/publish/update-publish-configurations.md) | `INTERVAL_SHOULD_BE_120_OR_ABOVE` — `autoRefresh` is a positive value below 120 seconds. | Use `-1` to disable auto-refresh, or a value of at least `120`. |
+
 
 ## Error 8154
 
@@ -4522,6 +5280,92 @@ Raised by:
 | [Update Publish Configurations](../domains/share-and-publish/publish/update-publish-configurations.md) | `COLUMN_NOT_PRESENT_IN_TABLE` — A column referenced in `URLCriteria` does not exist. | Verify column names via [Get Columns](../domains/data-modeling-and-schema/columns/overview.md). |
 | [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md) | `COLUMN_NOT_PRESENT_IN_TABLE` — A column in a `vudColumns`/`drillColumns` array (or in `criteria`) does not exist in the given table. | Verify column names via [Get Columns](../domains/data-modeling-and-schema/columns/overview.md). |
 
+
+## Error 8162
+
+| Attribute | Value |
+|---|---|
+| Error code | `8162` |
+| Summary constant | `RANGE_SIZE_NOT_SUPPORTED_FOR_THIS_OPERATION` |
+| HTTP status | 400 (typical) |
+| Meaning | rangeSize was supplied as a string instead of a numeric double. |
+| Resolution | Provide rangeSize as a JSON number (e.g. 5.0), not a quoted string. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | RANGE_SIZE_NOT_SUPPORTED_FOR_THIS_OPERATION — `rangeSize` was supplied as a string instead of a numeric double. | Provide `rangeSize` as a JSON number (e.g. `5.0`), not a quoted string. |
+
+## Error 8166
+
+| Attribute | Value |
+|---|---|
+| Error code | `8166` |
+| Summary constant | `INVALID OPERATION FOR THE COLUMN` |
+| HTTP status | 400 (typical) |
+| Meaning | The operation is incompatible with the column's data type (e.g. "sum" on a date column, "year" on a numeric column, aggregate operation in a pivot row position). |
+| Resolution | Match operations to column types using [Operations](report-and-dashboard-enums.md#operations). |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | INVALID OPERATION FOR THE COLUMN — The `operation` is incompatible with the column's data type (e.g. `"sum"` on a date column, `"year"` on a numeric column, aggregate operation in a pivot `row` position). | Match operations to column types using [Operations](report-and-dashboard-enums.md#operations). |
+
+## Error 8167
+
+| Attribute | Value |
+|---|---|
+| Error code | `8167` |
+| Summary constant | `INVALID FILTER TYPE FOR THE GIVEN OPERATION` |
+| HTTP status | 400 (typical) |
+| Meaning | The filterType is not valid for the column type + operation combination (e.g. "individualValues" on a date column with "actual" operation, "ranking" on a date column). |
+| Resolution | Match filterType to operation and column type using [Report and dashboard enumerations](report-and-dashboard-enums.md). |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | INVALID FILTER TYPE FOR THE GIVEN OPERATION — The `filterType` is not valid for the column type + `operation` combination (e.g. `"individualValues"` on a date column with `"actual"` operation, `"ranking"` on a date column). | Match `filterType` to operation and column type using [Report and dashboard enumerations](report-and-dashboard-enums.md). |
+
+## Error 8168
+
+| Attribute | Value |
+|---|---|
+| Error code | `8168` |
+| Summary constant | `INVALID CRITERIA FORMAT FOR THE COLUMN` |
+| HTTP status | 400 (typical) |
+| Meaning | A filter values entry does not match the expected format for the given filterType (e.g. "not-a-range" for a "range" filter, malformed dateRange string). |
+| Resolution | Provide values in the format specified in [Report and dashboard enumerations](report-and-dashboard-enums.md). |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | INVALID CRITERIA FORMAT FOR THE COLUMN — A filter `values` entry does not match the expected format for the given `filterType` (e.g. `"not-a-range"` for a `"range"` filter, malformed `dateRange` string). | Provide values in the format specified in [Report and dashboard enumerations](report-and-dashboard-enums.md). |
+
+## Error 8170
+
+| Attribute | Value |
+|---|---|
+| Error code | `8170` |
+| Summary constant | `INVALID AXIS TYPE FOR THE REPORT` |
+| HTTP status | 400 (typical) |
+| Meaning | The type in an axisColumns entry is not valid for the chosen reportType (e.g. "row" axis type in a "chart" report). |
+| Resolution | See [Axis Types](report-and-dashboard-enums.md#axis-types) for valid axis types per report type. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | INVALID AXIS TYPE FOR THE REPORT — The `type` in an `axisColumns` entry is not valid for the chosen `reportType` (e.g. `"row"` axis type in a `"chart"` report). | See [Axis Types](report-and-dashboard-enums.md#axis-types) for valid axis types per report type. |
+
 ## Error 8173
 
 | Attribute | Value |
@@ -4540,6 +5384,7 @@ Raised by:
 | [Add Column](../domains/data-modeling-and-schema/columns/add-column.md) | The number of columns in bulk mode exceeds the allowed limit. | Reduce the number of columns per request or split into multiple calls. |
 | [Add Column](../domains/data-modeling-and-schema/columns/add-column.md) | The number of columns sent in bulk mode exceeds the allowed limit. | Reduce the number of columns per request or split the request into several calls. |
 
+
 ## Error 8175
 
 | Attribute | Value |
@@ -4556,6 +5401,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Delete Embed URL](../domains/share-and-publish/embed-url/delete-embed-url.md) | `OEM_KEY_NOT_PRESENT` — No embed URL on this view matches the supplied `rsConfig`. | Re-read the current keys via [Fetch All Embed URLs](../domains/share-and-publish/embed-url/get-embed-urls.md). |
+
 
 ## Error 8176
 
@@ -4574,6 +5420,7 @@ Raised by:
 |---|---|---|
 | [Delete Embed URL](../domains/share-and-publish/embed-url/delete-embed-url.md) | `OEM_VIEW_HOLD_NO_KEYS` — `deleteAllUrls` was requested but the view has no embed URLs. | Confirm the view has outstanding URLs via [Fetch All Embed URLs](../domains/share-and-publish/embed-url/get-embed-urls.md) with `includeExpiredUrls: true`. |
 
+
 ## Error 8177
 
 | Attribute | Value |
@@ -4591,6 +5438,7 @@ Raised by:
 |---|---|---|
 | [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md) | `MAX_ALLOWED_VALUE_EXCEEDED` — `validityPeriod` exceeds the maximum of 86400 seconds (1 day). | Send a value of 86400 seconds or less. |
 
+
 ## Error 8178
 
 | Attribute | Value |
@@ -4607,6 +5455,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Delete Embed URL](../domains/share-and-publish/embed-url/delete-embed-url.md) | `INVALID_DELETE_EMBED_URL_CONFIGURATION` — Both `rsConfig` and `deleteAllUrls: true` were sent, or neither was. | Send exactly one of the two. |
+
 
 ## Error 8179
 
@@ -4626,6 +5475,7 @@ Raised by:
 | [Reorder Columns](../domains/data-modeling-and-schema/columns/reorder-columns.md) | One or more required (non-system) columns are missing from the `columns` array. | Include every non-system column ID of the table in `columns`, not just the ones being moved. |
 | [Reorder Columns](../domains/data-modeling-and-schema/columns/reorder-columns.md) | One or more non-system columns are missing from the columns array. | Include every non-system column ID of the table in the array, not only the ones being moved. |
 
+
 ## Error 8180
 
 | Attribute | Value |
@@ -4642,6 +5492,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Reorder Columns](../domains/data-modeling-and-schema/columns/reorder-columns.md), [Sort Data by Columns](../domains/data-modeling-and-schema/columns/sort-data-by-columns.md) | One or more column IDs in the `columns` array do not belong to this view. | Verify all column IDs using Get Table Metadata. |
+
 
 ## Error 8182
 
@@ -4662,6 +5513,7 @@ Raised by:
 | [Sync Data](../domains/data-operations/data-sync-and-connectivity/sync-datasource.md) | `SYNC_CANNOT_BE_INITIATED_FOR_CONNECTOR_WITH_MULTIPLE_SCHEDULES` — The datasource has more than one sync interval and none was named. | Send `syncIntervalId`; read the options from [Get Datasources](../domains/data-operations/data-sync-and-connectivity/get-datasources.md). |
 | [Sort Data by Columns](../domains/data-modeling-and-schema/columns/sort-data-by-columns.md) | resetSort and sortOrder cannot be used together. | Send either resetSort set to true on its own, or columns together with sortOrder without resetSort. |
 
+
 ## Error 8183
 
 | Attribute | Value |
@@ -4678,6 +5530,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Sync Data](../domains/data-operations/data-sync-and-connectivity/sync-datasource.md) | `SCHEDULE_ID_NOT_ASSOCIATED_WITH_CONNECTOR` — The `syncIntervalId` does not belong to this datasource. | Use a `syncIntervalId` listed under this datasource's `syncIntervals`. |
+
 
 ## Error 8188
 
@@ -4696,6 +5549,24 @@ Raised by:
 |---|---|---|
 | [Export Data from a View](../domains/data-operations/sync-data-export/export-data-view.md) | `EXPORT_INVALID_PASSWORD` — `password` is empty, blank, or shorter than 6 characters. | Send a password of 6–256 characters. |
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md), [Create Export Job using View ID (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-view-id.md) | `EXPORT_INVALID_PASSWORD` — `password` is blank or shorter than 6 characters. | Send 6–256 characters. |
+
+
+## Error 8191
+
+| Attribute | Value |
+|---|---|
+| Error code | `8191` |
+| Summary constant | `INCORRECT_DATE_VALUE` |
+| HTTP status | 400 (typical) |
+| Meaning | A date filter value is invalid (e.g. applying a numeric range filter to a date column). |
+| Resolution | Provide date values in the correct format for the given filterType. See [Report and dashboard enumerations](report-and-dashboard-enums.md). |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | INCORRECT_DATE_VALUE — A date filter value is invalid (e.g. applying a numeric range filter to a date column). | Provide date values in the correct format for the given `filterType`. See [Report and dashboard enumerations](report-and-dashboard-enums.md). |
 
 ## Error 8241
 
@@ -4721,6 +5592,24 @@ Raised by:
 | [Create Email Schedule](../domains/schedules-and-alerts/email-schedules/create-email-schedule.md) | `SYSTEM_TAG_DATA_WARNING_V2_VALIDATION_CONFIRMATION` — A view carries a restricted DATA_WARNING system tag. | Review the warning, then resend with `"validateSystemTags": false`. |
 | [Update Email Schedule](../domains/schedules-and-alerts/email-schedules/update-email-schedule.md) | `SYSTEM_TAG_DATA_WARNING_V2_VALIDATION_CONFIRMATION` — A delivered view carries a restricted DATA_WARNING system tag. | Review the warning, then resend with `"validateSystemTags": false`. |
 
+
+## Error 8250
+
+| Attribute | Value |
+|---|---|
+| Error code | `8250` |
+| Summary constant | `INVALID_UF_COMP_TYPE` |
+| HTTP status | 400 (typical) |
+| Meaning | The compType is not applicable for the column category — e.g., "slider" used for a dimension column, or "singleSelect" used for a measure column, or "slider"/"singleSelect" used for a date column. |
+| Resolution | Use "singleSelect"/"multiSelect" for dimensions and dates; "slider"/"multiSelect" for measures. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | INVALID_UF_COMP_TYPE — The `compType` is not applicable for the column category — e.g., `"slider"` used for a dimension column, or `"singleSelect"` used for a measure column, or `"slider"`/`"singleSelect"` used for a date column. | Use `"singleSelect"`/`"multiSelect"` for dimensions and dates; `"slider"`/`"multiSelect"` for measures. |
+
 ## Error 8252
 
 | Attribute | Value |
@@ -4737,6 +5626,24 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create Analysis View](../domains/reports-and-dashboards/reports/create-report.md), [Update Analysis View](../domains/reports-and-dashboards/reports/update-report.md) | Invalid report type. | Ensure `reportType` is `chart`, `pivot`, or `summary`. |
+
+
+## Error 8253
+
+| Attribute | Value |
+|---|---|
+| Error code | `8253` |
+| Summary constant | `REQUIRED PARAM IS MISSING` |
+| HTTP status | 400 (typical) |
+| Meaning | A mandatory userFilter field is absent — typically compType (required for all operations except "dateRange") or filterType (required for measures and date actual/seasonal operations). |
+| Resolution | Add the missing parameter to the userFilters entry. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | REQUIRED PARAM IS MISSING — A mandatory `userFilter` field is absent — typically `compType` (required for all operations except `"dateRange"`) or `filterType` (required for measures and date actual/seasonal operations). | Add the missing parameter to the `userFilters` entry. |
 
 ## Error 8504
 
@@ -4763,6 +5670,7 @@ Raised by:
 | [Create AutoML Analysis Deployment](../domains/dsml/automl/create-auto-ml-analysis-deployment.md) | `LESS_THAN_MIN_OCCURANCE` — CONFIG is absent or a mandatory key is missing at the template level. | Send a complete CONFIG object. |
 | [AutoML What If Analysis](../domains/dsml/automl/auto-ml-what-if-analysis.md) | `LESS_THAN_MIN_OCCURANCE` — CONFIG is absent. | Send a CONFIG object containing `features`. |
 
+
 ## Error 8507
 
 | Attribute | Value |
@@ -4783,6 +5691,7 @@ Raised by:
 | [Refetch Data](../domains/data-operations/data-sync-and-connectivity/refetch-datasource.md), [Sync Data](../domains/data-operations/data-sync-and-connectivity/sync-datasource.md) | `MORE_THAN_MAX_LENGTH` — `CONFIG` exceeds 3,000 characters, or a credential exceeds 1,000. | Shorten the value. |
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `MORE_THAN_MAX_LENGTH` — An attribute exceeds its length limit. | See [Limitations](../domains/data-operations/data-sync-and-connectivity/overview.md#limitations). |
 
+
 ## Error 8509
 
 | Attribute | Value |
@@ -4799,6 +5708,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `PATTERN_NOT_MATCHED` — `serviceName` or `databaseType` is not one of the accepted values. | Send a value from [`serviceName` values](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md#servicename-values). |
+
 
 ## Error 8516
 
@@ -4818,6 +5728,47 @@ Raised by:
 | [Import Data into a New Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-new-table.md) | `UNABLE_TO_PARSE_DATA_TYPE` — A CONFIG value has the wrong JSON type. | Check that booleans are booleans and integers are integers. |
 | [Create Import Job for a New Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-new-table.md), [Import Data into an Existing Table (Synchronous)](../domains/data-operations/sync-data-import/import-data-existing-table.md) | `UNABLE_TO_PARSE_DATA_TYPE` — A CONFIG value has the wrong JSON type. | Check booleans and integers are sent as such. |
 | [Create Import Job for an Existing Table (Asynchronous)](../domains/data-operations/async-data-import/create-import-job-existing-table.md) | `UNABLE_TO_PARSE_DATA_TYPE` — A CONFIG value has the wrong JSON type. | Check booleans and integers. |
+
+
+## Error 8517
+
+| Attribute | Value |
+|---|---|
+| Error code | `8517` |
+| Summary constant | `DATATYPE_NOT_MATCHED` |
+| HTTP status | 400 (typical) |
+| Meaning | A boolean settings field is set to an integer (e.g. 1) or an invalid string (e.g. "yes" instead of "true"); or an allowExport sub-key uses an invalid value. |
+| Resolution | Ensure boolean fields use JSON true/false, not strings or integers. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | DATATYPE_NOT_MATCHED — A boolean settings field is set to an integer (e.g. `1`) or an invalid string (e.g. `"yes"` instead of `"true"`); or an `allowExport` sub-key uses an invalid value. | Correct the offending CONFIG value and retry. |
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | DATATYPE_NOT_MATCHED — A field was supplied with the wrong JSON data type — e.g. `exclude = "yes"` (string instead of boolean), `isAxisMerge = "maybe"` (string instead of boolean), `compType = 123` (integer instead of string), `exclude = 1` (integer instead of boolean). | Ensure boolean fields use JSON `true`/`false`, not strings or integers. |
+
+Server message: `Invalid value passed in parameter`
+
+## Error 8534
+
+| Attribute | Value |
+|---|---|
+| Error code | `8534` |
+| Summary constant | `JSON_PARSE_ERROR` |
+| HTTP status | 400 (typical) |
+| Meaning | A theme sub-object (e.g. solid, card) is provided as an array instead of an object. |
+| Resolution | Validate JSON structure; ensure arrays are [] and objects are {}. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Create Dashboard](../domains/reports-and-dashboards/dashboards/create-dashboard.md) | JSON_PARSE_ERROR — A theme sub-object (e.g. `solid`, `card`) is provided as an array instead of an object. | Correct the offending CONFIG value and retry. |
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | JSON_PARSE_ERROR — CONFIG JSON is malformed, or a field was given the wrong structural type — e.g. `axisColumns` as a JSON object `{}` instead of array, `filters` as `{}`, `values` as a plain string instead of an array, `windowFunction` as a string or array instead of an object, `defaultFilterValues` as a string instead of an array. | Validate JSON structure; ensure arrays are `[]` and objects are `{}`. |
+
+Server message: `Invalid JSON Format.`
 
 ## Error 8535
 
@@ -4873,6 +5824,27 @@ Raised by:
 | [Delete AutoML Analysis](../domains/dsml/automl/delete-auto-ml-analysis.md), [Delete AutoML Analysis Model](../domains/dsml/automl/delete-auto-ml-analysis-model.md), [Delete AutoML Analysis Model Deployment](../domains/dsml/automl/delete-auto-ml-analysis-model-deployment.md), [Delete Email Schedule](../domains/schedules-and-alerts/email-schedules/delete-email-schedule.md) | `INVALID_OAUTHTOKEN` — Invalid or expired OAuth token. | Provide a valid token with scope `ZohoAnalytics.modeling.delete`. |
 | [Add Default Workspace](../domains/workspace-management/workspace-preferences/add-default-workspace.md), [Add Favourite Workspace](../domains/workspace-management/workspace-preferences/add-favorite-workspace.md), [Copy Workspace](../domains/workspace-management/workspace-operations/copy-workspace.md), [Create Workspace](../domains/workspace-management/workspace-operations/create-workspace.md), [Delete Workspace](../domains/workspace-management/workspace-operations/delete-workspace.md), [Disable Workspace for Domain Access](../domains/workspace-management/domain-and-white-label/disable-domain-workspace.md), [Enable Workspace for Domain Access](../domains/workspace-management/domain-and-white-label/enable-domain-workspace.md), [Export as Template](../domains/workspace-management/workspace-operations/export-as-template.md), [Get All Workspace List](../domains/workspace-management/workspace-operations/get-all-workspaces.md), [Get Meta Details From Name](../domains/organization-management/org-info-and-settings/get-meta-details.md), [Get Org List](../domains/organization-management/org-info-and-settings/get-organizations.md), [Get Owned Workspace List](../domains/workspace-management/workspace-operations/get-owned-workspaces.md), [Get Resource Details](../domains/organization-management/org-info-and-settings/get-resource-details.md), [Get Shared Workspace List](../domains/workspace-management/workspace-operations/get-shared-workspaces.md), [Get Subscription Details](../domains/organization-management/org-info-and-settings/get-subscription-details.md), [Get Workspace Info](../domains/workspace-management/workspace-operations/get-workspace-details.md), [Get Workspace Secret Key](../domains/workspace-management/workspace-operations/get-workspace-secret-key.md), [Remove Default Workspace](../domains/workspace-management/workspace-preferences/remove-default-workspace.md), [Remove Favourite Workspace](../domains/workspace-management/workspace-preferences/remove-favorite-workspace.md), [Rename Workspace](../domains/workspace-management/workspace-operations/rename-workspace.md) | The OAuth token is invalid or has expired. | Provide a valid OAuth token generated with the ZohoAnalytics.metadata.read scope. |
 
+
+## Error 8542
+
+| Attribute | Value |
+|---|---|
+| Error code | `8542` |
+| Summary constant | `EXTRA_KEY_FOUND_IN_JSON` |
+| HTTP status | 400 (typical) |
+| Meaning | The caller does not have update permission (non-admin token); or the DashboardID does not exist. |
+| Resolution | Remove unknown keys; correct windowFunction configuration. |
+| Retryable | No, fix the request first |
+
+Raised by:
+
+| Operation(s) | Reason | Solution |
+|---|---|---|
+| [Update Dashboard](../domains/reports-and-dashboards/dashboards/update-dashboard.md) | EXTRA_KEY_FOUND_IN_JSON — The caller does not have update permission (non-admin token); or the `DashboardID` does not exist. | Correct the offending CONFIG value and retry. |
+| [Create Visual](../domains/reports-and-dashboards/reports/create-report.md) | EXTRA_KEY_FOUND_IN_JSON — An unknown key was found in the CONFIG JSON, or `windowFunction` configuration is invalid (e.g. unrecognised `type`, missing `baseField`, `movingCalculation` missing `type`). | Remove unknown keys; correct `windowFunction` configuration. |
+
+Server message: `Unknown JSON attribute(s) found in the parameter CONFIG.`
+
 ## Error 8544
 
 | Attribute | Value |
@@ -4889,6 +5861,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Create AutoML Analysis Deployment](../domains/dsml/automl/create-auto-ml-analysis-deployment.md) | `OUT_OF_RANGE` — A schedule value is outside its declared range. | Correct the value. |
+
 
 ## Error 8547
 
@@ -4909,6 +5882,7 @@ Raised by:
 | [Create Export Job using SQL Query (Asynchronous)](../domains/data-operations/async-data-export/create-export-job-sql-query.md) | `ARRAY_SIZE_OUT_OF_RANGE` — `tableCriteriaList` exceeds 25 entries, or `selectedColumns` is empty or exceeds 300. | Stay within the documented sizes. |
 | [Create AutoML Analysis](../domains/dsml/automl/create-auto-ml-analysis.md) | `ARRAY_SIZE_OUT_OF_RANGE` — `features` is empty or exceeds the allowed array size. | Send between 3 and 20 feature names. |
 
+
 ## Error 9102
 
 | Attribute | Value |
@@ -4925,6 +5899,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md) | `LANGUAGE_NOT_SUPPORTED` — `language` is not one of the supported language names. | Use a value from [`language` Values](../domains/share-and-publish/embed-url/get-embed-url.md#language-values). |
+
 
 ## Error 12049
 
@@ -4944,6 +5919,7 @@ Raised by:
 | [Enable Workspace for Domain Access](../domains/workspace-management/domain-and-white-label/enable-domain-workspace.md) | The workspace is already enabled for White Label domain access. Calling Enable on an already-enabled workspace is not idempotent. | Check the current domain access state before calling. Use Disable first if you need to re-enable (e.g., after domain reconfiguration). |
 | [Enable Workspace for Domain Access](../domains/workspace-management/domain-and-white-label/enable-domain-workspace.md) | The workspace is already enabled for White Label domain access. Enabling an already enabled workspace is not idempotent. | Verify the current domain access state before invoking this API. Use the Disable Workspace for Domain Access API first when the workspace has to be enabled again, such as after a domain reconfiguration. |
 
+
 ## Error 12050
 
 | Attribute | Value |
@@ -4962,6 +5938,7 @@ Raised by:
 | [Disable Workspace for Domain Access](../domains/workspace-management/domain-and-white-label/disable-domain-workspace.md) | The workspace is not currently enabled for White Label domain access. Calling Disable on an already-disabled workspace is not idempotent. | Verify the current state before calling. Only call Disable on workspaces previously enabled via Enable Workspace for Domain Access. |
 | [Disable Workspace for Domain Access](../domains/workspace-management/domain-and-white-label/disable-domain-workspace.md) | The workspace is not currently enabled for White Label domain access. Disabling an already disabled workspace is not idempotent. | Verify the current domain access state before invoking this API. Invoke this API only on a workspace that was enabled using the Enable Workspace for Domain Access API. |
 
+
 ## Error 12052
 
 | Attribute | Value |
@@ -4979,6 +5956,7 @@ Raised by:
 |---|---|---|
 | [Create Private URL](../domains/share-and-publish/publish/create-private-url.md), [Get Embed URL](../domains/share-and-publish/embed-url/get-embed-url.md), [Get Private URL](../domains/share-and-publish/publish/get-private-url.md), [Make View Public](../domains/share-and-publish/publish/make-views-public.md) | `WORKSPACE_NOT_ENABLED_FOR_DOMAIN_ACCESS` — The workspace is not enabled for access through the requested portal domain. | Enable the workspace for that Client Portal domain first. |
 
+
 ## Error 14037
 
 | Attribute | Value |
@@ -4995,6 +5973,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Auto Analyse Column](../domains/views-management/auto-analysis/auto-analyse-column.md) | The column is disabled in its Query Table definition and cannot be used for analysis. | Enable the column in the Query Table configuration or choose a different column. |
+
 
 ## Error 15007
 
@@ -5016,6 +5995,7 @@ Raised by:
 | [Copy Custom Formulas](../domains/data-modeling-and-schema/formula-columns/copy-formulas.md) | The copy is not allowed because the organisation of the destination workspace does not match that of the caller and no valid workspace key was supplied. | Send the correct workspaceKey for the destination workspace, or perform the copy within the same organisation. |
 | [Copy Views](../domains/views-management/view-operations/copy-views.md) | Cross-organization copy is not authorized. Raised when the resolved destination organization differs from the organization of the source workspace and workspaceKey is missing or incorrect. | Provide the correct workspaceKey of the source workspace for a cross-organization copy. |
 
+
 ## Error 18055
 
 | Attribute | Value |
@@ -5032,6 +6012,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `DBTYPE_SERVICENAME_NOTMACHED` — The `databaseType` is not available for the given `serviceName`. | Pick an engine the service actually offers. |
+
 
 ## Error 18056
 
@@ -5050,6 +6031,7 @@ Raised by:
 |---|---|---|
 | [Refetch Data](../domains/data-operations/data-sync-and-connectivity/refetch-datasource.md) | `NO_SOURCE_AVAILABLE_FOR_TABLE` — The table has no datasource behind it. | Refetch only tables fed by a datasource; use the import APIs otherwise. |
 
+
 ## Error 18057
 
 | Attribute | Value |
@@ -5066,6 +6048,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `INVALID_CLOUD_SERVICENAME` — `serviceName` is not a recognised service. | Send a value from [`serviceName` values](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md#servicename-values). |
+
 
 ## Error 18061
 
@@ -5085,6 +6068,7 @@ Raised by:
 | [Sync Data](../domains/data-operations/data-sync-and-connectivity/sync-datasource.md) | `CONNECTION_ID_NOT_ASSOSIATED_FOR_WORKSPACE` — The datasource ID does not exist in this workspace, or the source type cannot be synced this way (HTTP 404). | Verify `<datasource-id>` with [Get Datasources](../domains/data-operations/data-sync-and-connectivity/get-datasources.md). |
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `CONNECTION_ID_NOT_ASSOSIATED_FOR_WORKSPACE` — The datasource ID does not exist in this workspace, or is not a database connection (HTTP 404). | Verify `<datasource-id>` with [Get Datasources](../domains/data-operations/data-sync-and-connectivity/get-datasources.md). |
 
+
 ## Error 18063
 
 | Attribute | Value |
@@ -5101,6 +6085,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `DBTYPE_CANNOT_BE_UPDATED_FOR_LIVECONNECT_DB` — `databaseType` differs from the stored one on a Live Connect database. | Resend the existing `databaseType`. |
+
 
 ## Error 18064
 
@@ -5119,6 +6104,7 @@ Raised by:
 |---|---|---|
 | [Update Datasource Connection](../domains/data-operations/data-sync-and-connectivity/update-datasource-connection.md) | `SERVICE_NAME_CANNOT_BE_UPDATED_FOR_LIVECONNECT_DB` — `serviceName` differs from the stored one on a Live Connect database. | Resend the existing `serviceName`. |
 
+
 ## Error 18072
 
 | Attribute | Value |
@@ -5136,6 +6122,7 @@ Raised by:
 |---|---|---|
 | [Refetch Data](../domains/data-operations/data-sync-and-connectivity/refetch-datasource.md) | `TABLE_SYNC_INPROGRESS` — A sync for this table is already running. | Wait for it to finish, then retry. |
 
+
 ## Error 18073
 
 | Attribute | Value |
@@ -5152,6 +6139,7 @@ Raised by:
 | Operation(s) | Reason | Solution |
 |---|---|---|
 | [Sync Data](../domains/data-operations/data-sync-and-connectivity/sync-datasource.md) | `DATASOURCE_SYNC_INPROGRESS` — A sync for this datasource is already running. | Wait for the running sync to finish. |
+
 
 ## Error 70320
 
@@ -5171,6 +6159,7 @@ Raised by:
 | [Get Variable Details](../domains/data-modeling-and-schema/workspace-variables/get-variable-details.md) | `USERVARIABLE_VARIABLE_NOT_FOUND` — `<variable-id>` does not exist in this workspace. | Verify `<variable-id>` using Get Variables. |
 | [Get Variable Details](../domains/data-modeling-and-schema/workspace-variables/get-variable-details.md) | The specified variable does not exist in this workspace. | Verify the variable-id using the Get Variables API. |
 
+
 ## Error 70321
 
 | Attribute | Value |
@@ -5189,6 +6178,7 @@ Raised by:
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | `USERVARIABLE_VARIABLE_IN_USE` — The variable is currently referenced elsewhere and cannot be deleted. | Remove all references to this variable (in formulas, filters, SQL queries) before deleting. |
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | The variable is currently referred to elsewhere and cannot be deleted. | Remove every reference to this variable, in formulas, filters and SQL queries, before deleting it. |
 
+
 ## Error 70322
 
 | Attribute | Value |
@@ -5206,6 +6196,7 @@ Raised by:
 |---|---|---|
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | `USERVARIABLE_VARIABLE_IN_USE` (multi-variable form) — One or more of the requested variables are in use. | Same as above; applies when multiple variables are targeted in a single internal delete operation. |
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | One or more of the targeted variables are in use. | Remove every reference to the variables before deleting them. |
+
 
 ## Error 70323
 
@@ -5227,6 +6218,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | A variable with this name already exists in the workspace. | Choose a different variableName, or edit the existing variable instead. |
 | [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The new variable name collides with another existing variable. | Choose a name that is not already used by another variable of the workspace. |
 
+
 ## Error 70324
 
 | Attribute | Value |
@@ -5244,6 +6236,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | `BLANK_VARIABLE_NAME` — `variableName` is empty. | Provide a non-empty variable name. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The variable name is empty. | Send a non-empty variableName. |
+
 
 ## Error 70325
 
@@ -5264,6 +6257,7 @@ Raised by:
 | [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | `INVALID_VAR_NAME` — The name uses a reserved pattern. | Choose a name that doesn't collide with system-variable syntax. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The name uses a reserved pattern, such as a system. prefix, a ${ prefix or a } suffix. | Choose a name that does not collide with the syntax of system variables. |
 
+
 ## Error 70326
 
 | Attribute | Value |
@@ -5282,6 +6276,7 @@ Raised by:
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | `CANT_DELETE_VARIABLE` — The variable cannot be deleted by this user (ownership restriction). | Ensure the user is an Account Admin, Organization Admin, or Workspace Admin. |
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | The variable cannot be deleted by this user because of an ownership restriction. | Ensure that the user is an Account Admin, an Organization Admin or a Workspace Admin. |
 
+
 ## Error 70329
 
 | Attribute | Value |
@@ -5299,6 +6294,7 @@ Raised by:
 |---|---|---|
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | `CANT_DELETE_VARIABLE` (`UNAUTHORIZED_VAR_ACTION`) — `<variable-id>` does not exist in this workspace. | Verify `<variable-id>` using Get Variables. |
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The specified variable does not exist in this workspace. | Verify the variable-id using the Get Variables API. |
+
 
 ## Error 70335
 
@@ -5319,6 +6315,7 @@ Raised by:
 | [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | `VARIABLE_RANGE_NOT_ALLOWED_ON_DT` — Range type combined with Text data type. | Use a numeric `variableDataType` when `variableType` is Range. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The Range type was combined with the Text data type. | Use a numeric variableDataType of 4, 5, 6, 7 or 8 when variableType is Range. |
 
+
 ## Error 70336
 
 | Attribute | Value |
@@ -5336,6 +6333,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_DATA_NOT_PRESENT` — No usable value entries could be derived from the request. | Ensure `defaultData` (and any `userSpecificData` entries) contain the required fields for the chosen `variableType`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | No usable value entry could be derived from the request. | Ensure that defaultData, and any userSpecificData entry, carries the attributes required by the chosen variableType. |
+
 
 ## Error 70337
 
@@ -5355,6 +6353,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_DEFAULT_VALUE_NOT_PRESENT_IN_LIST` — The `defaultValue` is not one of the `values` supplied for a List-type entry. | Ensure `defaultValue` matches one of the entries in `values`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The default value is not one of the values supplied for a List entry. | Ensure that defaultValue matches one of the entries of values. |
 
+
 ## Error 70338
 
 | Attribute | Value |
@@ -5372,6 +6371,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_INSUFFICIENT_DATA` / `VARIABLE_RANGE_EXCESS_DATA` — Range entry is missing a required field or has extra unexpected data. | Ensure exactly `minValue`, `maxValue`, and `stepSize` are provided for Range entries. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | A Range entry is missing a required attribute. | Send exactly minValue, maxValue and stepSize for a Range entry. |
+
 
 ## Error 70339
 
@@ -5391,6 +6391,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_INSUFFICIENT_DATA` / `VARIABLE_RANGE_EXCESS_DATA` — Range entry is missing a required field or has extra unexpected data. | Ensure exactly `minValue`, `maxValue`, and `stepSize` are provided for Range entries. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | A Range entry carries unexpected extra data. | Send exactly minValue, maxValue and stepSize for a Range entry. |
 
+
 ## Error 70340
 
 | Attribute | Value |
@@ -5408,6 +6409,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_DEFAULT_VALUE_OUT_OF_RANGE` / `VARIABLE_RANGE_DEF_BW_MINMAX_RANGE` — The `defaultValue` falls outside `[minValue, maxValue]`. | Ensure `defaultValue` lies within the specified range. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The default value falls outside the range. | Ensure that defaultValue lies between minValue and maxValue. |
+
 
 ## Error 70341
 
@@ -5427,6 +6429,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_DUPLICATE_MAIL_ID_OR_GROUP` — The same email address appears in more than one `userSpecificData` entry. | Ensure each email address is listed in only one override entry. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The same email address appears in more than one userSpecificData entry. | Ensure that each email address is listed in only one override entry. |
 
+
 ## Error 70342
 
 | Attribute | Value |
@@ -5444,6 +6447,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_ALL_VALUES_NO_VARIABLE_DATA` — `userSpecificData`/`defaultData` were supplied for an All Values-type variable. | Omit `defaultData` and `userSpecificData` entirely when `variableType` is `3`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | Value data was supplied for an All Values variable. | Omit defaultData and userSpecificData entirely when variableType is 3. |
+
 
 ## Error 70343
 
@@ -5463,6 +6467,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_NO_VARIABLE_DATA_PRESENT` — `defaultData` is missing for a List or Range-type variable. | Supply `defaultData` with the fields required for the chosen `variableType`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | defaultData is missing for a List or a Range variable. | Send defaultData carrying the attributes required by the chosen variableType. |
 
+
 ## Error 70348
 
 | Attribute | Value |
@@ -5480,6 +6485,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_EMAIL_NOT_PRESENT` — A `userSpecificData` entry has an empty `emailIds` array. | Ensure every `userSpecificData` entry lists at least one email address. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | A userSpecificData entry has an empty emailIds array. | Ensure that every override entry lists at least one email address. |
+
 
 ## Error 70350
 
@@ -5499,6 +6505,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_INVALID_VARTYPE` — `variableType` is not one of `0`, `1`, or `3`. | Use only List (`0`), Range (`1`), or All Values (`3`). |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | variableType is not one of the accepted values. | Use only List, Range or All Values, that is 0, 1 or 3. |
 
+
 ## Error 70351
 
 | Attribute | Value |
@@ -5516,6 +6523,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_INVALID_DATATYPE` — `variableDataType` is not one of the six supported values. | Use only `1`, `4`, `5`, `6`, `7`, or `8`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | variableDataType is not one of the six supported values. | Use only 1, 4, 5, 6, 7 or 8. |
+
 
 ## Error 70352
 
@@ -5535,6 +6543,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_MIN_LESS_THAN_MAX` — `minValue` is not less than `maxValue`. | Ensure `minValue` < `maxValue`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | minValue is not less than maxValue. | Ensure that minValue is smaller than maxValue. |
 
+
 ## Error 70353
 
 | Attribute | Value |
@@ -5552,6 +6561,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_INCR_LESSTHAN_RANGESIZE` — `stepSize` is larger than the range span. | Reduce `stepSize` so it fits within `maxValue - minValue`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | stepSize is larger than the span of the range. | Reduce stepSize so that it fits within the difference between maxValue and minValue. |
+
 
 ## Error 70354
 
@@ -5571,6 +6581,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_INCR_ZERO_ERR` — `stepSize` is zero. | Provide a non-zero `stepSize`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | stepSize is zero. | Send a non-zero stepSize. |
 
+
 ## Error 70355
 
 | Attribute | Value |
@@ -5588,6 +6599,7 @@ Raised by:
 |---|---|---|
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_INCR_DIV_EQUALLY_ERR` — `stepSize` does not evenly divide the range span. | Choose a `stepSize` that evenly divides `maxValue - minValue`. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | stepSize does not divide the span of the range evenly. | Choose a stepSize that divides the difference between maxValue and minValue evenly. |
+
 
 ## Error 70356
 
@@ -5607,6 +6619,7 @@ Raised by:
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md) | `VARIABLE_RANGE_DEFAULT_VALUE_OUT_OF_RANGE` / `VARIABLE_RANGE_DEF_BW_MINMAX_RANGE` — The `defaultValue` falls outside `[minValue, maxValue]`. | Ensure `defaultValue` lies within the specified range. |
 | [Create Variable](../domains/data-modeling-and-schema/workspace-variables/create-variable.md), [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The default value falls outside the range. | Ensure that defaultValue lies between minValue and maxValue. |
 
+
 ## Error 70357
 
 | Attribute | Value |
@@ -5624,6 +6637,7 @@ Raised by:
 |---|---|---|
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | `USERVARIABLE_VARIABLE_CANNOT_BE_DELETED` — Deletion blocked due to unresolved references. | Identify and remove dependent formulas/reports, then retry. |
 | [Delete Variable](../domains/data-modeling-and-schema/workspace-variables/delete-variable.md) | The deletion is blocked because of unresolved references. | Identify the dependent formulas and reports, remove them, then retry. |
+
 
 ## Error 70358
 
@@ -5643,6 +6657,7 @@ Raised by:
 | [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | `VARIABLE_CANNOT_BE_UPDATED` — The requested type/data type change conflicts with existing formula/report references to this variable. | Remove or update the dependent formulas/reports first, or keep the existing `variableType`/`variableDataType`. |
 | [Edit Variable](../domains/data-modeling-and-schema/workspace-variables/update-variable.md) | The requested change of type or data type conflicts with an existing formula or report that refers to this variable. | Remove or update the dependent formulas and reports first, or keep the current variableType and variableDataType. |
 
+
 ## Error 101021
 
 | Attribute | Value |
@@ -5660,6 +6675,7 @@ Raised by:
 |---|---|---|
 | [Add Row](../domains/data-operations/row-operations/add-row.md), [Update Row](../domains/data-operations/row-operations/update-rows.md) | `NOT_A_STREAM_TABLE` — Row operations are not supported on a stream table. | Target a non-stream table. |
 
+
 ## Error 19000048
 
 | Attribute | Value |
@@ -5670,6 +6686,7 @@ Raised by:
 | Meaning | Server message: "You have exceeded the maximum number of manual syncs allowed for this connection." |
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
+
 
 ## Error 21000003
 
@@ -5682,6 +6699,7 @@ Raised by:
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
 
+
 ## Error 21000009
 
 | Attribute | Value |
@@ -5692,6 +6710,7 @@ Raised by:
 | Meaning | Server message: "The given analysis does not belong to this workspace." |
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
+
 
 ## Error 21000010
 
@@ -5704,6 +6723,7 @@ Raised by:
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
 
+
 ## Error 21000012
 
 | Attribute | Value |
@@ -5714,6 +6734,7 @@ Raised by:
 | Meaning | Server message: "The given deployment does not belong to this analysis." |
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
+
 
 ## Error 21000014
 
@@ -5726,6 +6747,7 @@ Raised by:
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
 
+
 ## Error 21000016
 
 | Attribute | Value |
@@ -5736,6 +6758,7 @@ Raised by:
 | Meaning | Server message: "supportVectorRegression is not a valid algorithm. Please choose a supported algorithm." |
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
+
 
 ## Error 21000043
 
@@ -5748,6 +6771,7 @@ Raised by:
 | Resolution | See the operation-specific solutions below. |
 | Retryable | Yes, after a short delay |
 
+
 ## Error 21000050
 
 | Attribute | Value |
@@ -5758,6 +6782,7 @@ Raised by:
 | Meaning | Server message: "One or more features used in training the model is missing in the input.Please ensure that all features used in training are included." |
 | Resolution | See the operation-specific solutions below. |
 | Retryable | No, fix the request first |
+
 
 ## Error 21000051
 

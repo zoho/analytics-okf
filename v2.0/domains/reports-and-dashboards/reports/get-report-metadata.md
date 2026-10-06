@@ -499,6 +499,8 @@ Every failure returns HTTP 4xx/5xx with the JSON error envelope; `data.errorCode
 
 # Related
 
+- [Report and dashboard enumerations](../../../foundations/report-and-dashboard-enums.md) - chart types, axis types, operations, card types and the layout grid rules.
+
 - [Reports (Analysis Views) overview](overview.md) - concepts, limits and behaviours shared by this API group.
 - [Reports & Dashboards](../overview.md) - the parent API domain.
 - [Request conventions](../../../foundations/request-conventions.md), [Response envelope](../../../foundations/response-envelope.md), [Error code catalog](../../../foundations/error-codes.md).

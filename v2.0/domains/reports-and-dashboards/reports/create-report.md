@@ -104,11 +104,11 @@ The authenticated user must be an Account Admin or an Organization Admin, or a W
 |-----------|-----------|-----------|---------|------------------------------|-------------|
 | `baseTableName` | string | **Yes** | — | Max 100 characters | Display name of the base table on which the analysis view is created. |
 | `reportType` | string | **Yes** | — | `chart`, `pivot`, `summary` | The type of analysis view to create. |
-| `title` | string | No | `""` | Max 100 characters | Display name for the new view. If omitted, the view ID is used as the title. |
+| `title` | string | **Yes** | — | 1-100 characters; must be unique in the workspace | Display name for the new view. |
 | `description` | string | No | `""` | Max 250 characters | Optional description for the view. |
 | `folderId` | long | No | Root folder | Valid folder ID; pass `-1` for root | Folder in which to place the new view. |
-| `chartType` | string | No | `""` | Max 50 characters (alphanumeric, spaces) | Chart sub-type (e.g., `bar`, `line`, `pie`, `bubble`, `stacked bar`, `heat map`). Required for `chart` views. |
-| `axisColumns` | JSONArray | No | `[]` | Max serialized size: 1 MB. See **Axis Column Object** below. | Defines the axis/dimension/measure configuration for the view. |
+| `chartType` | string | No | `""` | One of the 47 values in [Chart Types](../../../foundations/report-and-dashboard-enums.md#chart-types). Max 50 characters. | Chart sub-type (e.g., `bar`, `line`, `pie`, `bubble`, `stacked bar`, `heat map`). Required for `chart` views. |
+| `axisColumns` | JSONArray | **Yes** | — | Max serialized size: 1 MB. See **Axis Column Object** below. | Defines the axis/dimension/measure configuration for the view. |
 | `isAxisMerge` | boolean | No | `false` | `true` or `false` | When `true`, merges multiple y-axes onto a single scale. Requires `mergeAxisInfo`. |
 | `mergeAxisInfo` | JSONArray | No | `[]` | Max serialized size: 10 MB. Each item: `axisIndex` (int array of 1-based positions) + `labelName` (string). | Groupings for merged axes when `isAxisMerge` is `true`. |
 | `filters` | JSONArray | No | `[]` | Max serialized size: 1 MB. See **Filter Object** below. | Data filters applied to the view at render time. |
@@ -909,6 +909,8 @@ Every failure returns HTTP 4xx/5xx with the JSON error envelope; `data.errorCode
 | [8535](../../../foundations/error-codes.md#error-8535) | 401 | Invalid OAuth token. | Provide a valid, non-expired OAuth token in the `Authorization` header. |
 
 # Related
+
+- [Report and dashboard enumerations](../../../foundations/report-and-dashboard-enums.md) - chart types, axis types, operations, card types and the layout grid rules.
 
 - [Reports (Analysis Views) overview](overview.md) - concepts, limits and behaviours shared by this API group.
 - [Reports & Dashboards](../overview.md) - the parent API domain.

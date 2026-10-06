@@ -101,12 +101,14 @@ The `CONFIG` parameter is a JSON object sent as a form field. `displayName` and 
 
 | Field | Type | Mandatory | Description | Default |
 |-------|------|-----------|-------------|---------|
-| `displayName` | String | **Yes** | Display name of the new dashboard. Must be unique within the workspace. Max 100 characters. | — |
+| `displayName` | String | **Yes** | Display name of the new dashboard. Must be unique within the workspace. 1-200 characters. | — |
 | `description` | String | No | Optional text description for the dashboard. Max 250 characters. | `""` |
 | `layout` | JSON Object | **Yes** | Layout card map. Keys are sequential card index strings (`"1"`, `"2"`, …). Each value is a layout card object (see sub-table below). | — |
 | `layoutType` | Integer | No | Grid column preset applied at creation time: `1` = single column, `2` = two columns, `3` = three columns, `4` = four columns. Only meaningful when combined with a `layout` that uses the grid. | `0` (free form) |
 | `themes` | JSON Object | No | Visual theme configuration (see Themes Object below). | Default theme |
 | `settings` | JSON Object | No | Dashboard behaviour settings (see Settings Object below). | System defaults |
+
+> **Grid rules.** The canvas is 80 units wide: `left + width` must not exceed `80`, cards must not overlap, a dashboard holds at most 100 cards, and `width`/`height`/`left`/`top` must be plain integers. The full card-type and grid reference is in [Report and dashboard enumerations](../../../foundations/report-and-dashboard-enums.md#dashboard-layout-grid).
 
 ### Layout Card Object
 
@@ -296,6 +298,8 @@ Every failure returns HTTP 4xx/5xx with the JSON error envelope; `data.errorCode
 | [8535](../../../foundations/error-codes.md#error-8535) | 401 | Invalid OAuth token. | Provide a valid, non-expired OAuth token with the `ZohoAnalytics.modeling.create` scope. |
 
 # Related
+
+- [Report and dashboard enumerations](../../../foundations/report-and-dashboard-enums.md) - chart types, axis types, operations, card types and the layout grid rules.
 
 - [Dashboards overview](overview.md) - concepts, limits and behaviours shared by this API group.
 - [Reports & Dashboards](../overview.md) - the parent API domain.

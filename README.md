@@ -7,7 +7,7 @@ and permissions as an [Open Knowledge Format](https://github.com/GoogleCloudPlat
 bundle: a directory of markdown files with YAML frontmatter.
 
 Each API version is a self-contained bundle in its own top-level directory. **The current version is
-[v2.0](v2.0/index.md)**, bundle version 1.1.0 - 168 endpoints, 10 domains, 33 groups, 278 error codes,
+[v2.0](v2.0/index.md)**, bundle version 1.3.0 - 168 endpoints, 10 domains, 33 groups, 317 error codes,
 31 OAuth scopes, 8 workflow playbooks, 166 SDK example documents in 9 languages.
 
 This is documentation, not a client library. For the SDKs themselves see the

@@ -1,14 +1,14 @@
 ---
 type: Reference
 title: Error codes - quick reference
-description: "Compact one-line-per-code table of all 278 Zoho Analytics REST API v2 error codes (code, summary constant, HTTP status, meaning); use the full catalog for per-operation reasons and solutions."
+description: "Compact one-line-per-code table of all 317 Zoho Analytics REST API v2 error codes (code, summary constant, HTTP status, meaning); use the full catalog for per-operation reasons and solutions."
 tags:
   - zoho-analytics
   - rest-api-v2
   - errors
   - error-codes
   - quick-reference
-error_code_count: 278
+error_code_count: 317
 full_catalog: "/foundations/error-codes.md"
 sources:
   - id: error-catalog
@@ -41,6 +41,8 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [6121](error-codes.md#error-6121) | `EXCEEDING_USR_PLN_PRIVATE_LINKS` | 400 (typical) | The organization has used all private links allowed by its plan. | 1 |
 | [6122](error-codes.md#error-6122) | `EXCEEDING_USR_PLN_PRIVATE_LINKS_DM` | 400 (typical) | Same limit, reported to a non-super-admin caller. | 1 |
 | [7005](error-codes.md#error-7005) | `COMMON_INTERNAL_SERVER_ERROR` | 500 (typical) | Unexpected error on the Zoho Analytics server while processing an otherwise valid request. Not caused by the request payload. | 1 |
+| [7016](error-codes.md#error-7016) | `OBJECT_NAME_EMPTY` | 400 (typical) | title is an empty string or contains only whitespace. | 1 |
+| [7018](error-codes.md#error-7018) | `API_MALFORMED_URL` | 400 (typical) | The DashboardID is out of numeric range (too many digits). | 1 |
 | [7082](error-codes.md#error-7082) | - | 400 (typical) | An unexpected error occurred during the trash restore operation. | 2 |
 | [7089](error-codes.md#error-7089) | - | 400 (typical) | All the columns of the table cannot be hidden at the same time. | 2 |
 | [7092](error-codes.md#error-7092) | `DDL_LOCK_SINCE_IMPORT_IN_PROGRESS` | 400 (typical) | A DDL lock is active on the table. | 12 |
@@ -84,6 +86,7 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [7282](error-codes.md#error-7282) | - | 400 (typical) | A group with the same name already exists in this workspace. Group names must be unique within a workspace. | 2 |
 | [7301](error-codes.md#error-7301) | `SECURITY_NOT_PERMITTED` | 403 (observed) | The request is authenticated, but the user does not hold the role or view permission required for this operation on the requested resource. | 161 |
 | [7307](error-codes.md#error-7307) | `OWNER_CANNOT_SHARE_HIMSELF` | 400 (typical) | The sharer attempted to share a view to themselves. | 1 |
+| [7309](error-codes.md#error-7309) | `SECURITY_NEEDS_LOGIN` | 401 (typical) | The Authorization header is absent. | 2 |
 | [7319](error-codes.md#error-7319) | `OBJID_NOT_BELONGS_TO_DB` | 400 (typical) | The view does not belong to the specified workspace. | 48 |
 | [7320](error-codes.md#error-7320) | `CANNOT_SHARETO_SELF` | 400 (typical) | Same as above (alternate path). | 1 |
 | [7321](error-codes.md#error-7321) | `VIEW_ALREADY_SHARED` | 400 (typical) | The view is already shared with this user. | 1 |
@@ -99,6 +102,7 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [7338](error-codes.md#error-7338) | `BATCH_IMPORT_INVALID_KEY`, `GRPID_NOT_BELONGS_TO_DB` | 400 (observed) | The specified group-id does not belong to this workspace. | 7 |
 | [7340](error-codes.md#error-7340) | `BATCH_IMPORT_VIEWID_MISMATCH` | 400 (observed) | The batchKey belongs to a different table. | 1 |
 | [7351](error-codes.md#error-7351) | `SLIDESHOW_NOT_BELONGS_TO_DB` | 400 (observed) | The slideshow does not exist, or belongs to a different workspace. | 4 |
+| [7362](error-codes.md#error-7362) | `NO_SUCH_FOLDER_IN_DB` | 404 (typical) | The folderId does not exist in the workspace. | 1 |
 | [7367](error-codes.md#error-7367) | - | 400 (typical) | The lookup is used by one or more dependent views and the removal has been blocked. | 1 |
 | [7377](error-codes.md#error-7377) | - | 400 (typical) | An identical lookup relationship between the same child column and the same reference column is already defined. | 1 |
 | [7378](error-codes.md#error-7378) | - | 400 (typical) | No lookup relationship is defined on this column. | 1 |
@@ -130,9 +134,23 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [7447](error-codes.md#error-7447) | - | 400 (typical) | The result of the query would exceed the allowed row or column limit. | 2 |
 | [7467](error-codes.md#error-7467) | - | 400 (typical) | Formula columns are not supported on pipeline tables. | 3 |
 | [7478](error-codes.md#error-7478) | `MORE_THAN_MAX_COLUMN` | 400 (typical) | The number of columns exceeds the maximum allowed for a table. | 6 |
+| [7479](error-codes.md#error-7479) | `INVALID_LAYOUT_JSON` | 400 (typical) | A card is missing one or more of the required positional fields (type, width, height, left, top). | 1 |
+| [7480](error-codes.md#error-7480) | `INVALID_LAYOUT_JSON` | 400 (typical) | A card's dimensional or positional value violates boundary rules: any negative value; width or height ≤ 1; left + width > 80. | 1 |
+| [7481](error-codes.md#error-7481) | `INVALID_LAYOUT_JSON` | 400 (typical) | A VIEW card references a view that exists but the caller does not have permission to access. | 1 |
+| [7482](error-codes.md#error-7482) | `INVALID_LAYOUT_JSON` | 400 (typical) | Two or more cards overlap on the grid (fully or partially). | 1 |
+| [7483](error-codes.md#error-7483) | `INVALID_LAYOUT_JSON` | 400 (typical) | A non-VIEW card (HTML, TITLE, IMAGE, EMBED) is missing the content field, or content is null. | 1 |
+| [7485](error-codes.md#error-7485) | `INVALID_LAYOUT_JSON` | 400 (typical) | A card's type field contains an unrecognised string (e.g. "INVALID"). | 1 |
+| [7486](error-codes.md#error-7486) | `INVALID_LAYOUT_JSON` | 400 (typical) | Any positional field (type, width, height, left, top) is the wrong data type — e.g. type is null or an integer; width/height/left/top is a string or null instead of an integer. | 1 |
+| [7487](error-codes.md#error-7487) | `INVALID_CONFIG` | 400 (typical) | displayName or layout is absent, null, or empty. | 1 |
+| [7488](error-codes.md#error-7488) | `INVALID_PARAMS` | 400 (typical) | A settings field is set to an empty string (""). | 1 |
+| [7491](error-codes.md#error-7491) | `INVALID_THEME_PARAMS` | 400 (typical) | The type-specific sub-object required by themes.type is absent (e.g. solid missing when type="solid"); or the card property is absent entirely. | 1 |
+| [7492](error-codes.md#error-7492) | `INVALID_THEME_PARAMS` | 400 (typical) | A required field inside a type-specific sub-object is missing (e.g. gradient.startColor is absent when type="gradient"). | 1 |
+| [7493](error-codes.md#error-7493) | `INVALID_THEME_PARAMS` | 400 (typical) | A type-specific sub-object for a *different* theme type is also present (e.g. solid property exists when type="gradient"). | 1 |
 | [7496](error-codes.md#error-7496) | - | 400 (typical) | The maximum sub-folder nesting depth has been exceeded. | 1 |
 | [7500](error-codes.md#error-7500) | `UNAUTHORIZED_ORG_CANNOT_MAKEPUBLIC` | 400 (typical) | publicPermLevel: "3" requested but the caller does not belong to the workspace admin's business organization. | 1 |
+| [7507](error-codes.md#error-7507) | `MORE_THAN_MAX_LENGTH` | 400 (typical) | displayName exceeds the maximum allowed length (200 characters). | 1 |
 | [7509](error-codes.md#error-7509) | - | 400 (typical) | The reference column holds duplicate values and cannot serve as the reference side. | 1 |
+| [7510](error-codes.md#error-7510) | `DASH_API_INVALID_JSON_VALUE` | 400 (typical) | A theme sub-object (e.g. card, solid) is null. | 1 |
 | [7512](error-codes.md#error-7512) | `INVALID_DATE_FORMAT` | 400 (typical) | A date pattern could not be parsed. | 8 |
 | [7515](error-codes.md#error-7515) | `UNKNOWN_LOOKUP_VALUE` | 400 (typical) | A value for a lookup column does not exist in the parent table. | 2 |
 | [7531](error-codes.md#error-7531) | `PUBLIC_TO_ORG_NOT_SUPPORTED_IN_FREE` | 400 (typical) | publicPermLevel 2 or 3 is not supported on the Free plan. | 1 |
@@ -146,6 +164,9 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [7550](error-codes.md#error-7550) | - | 400 (typical) | The specified role name does not exist as a custom role in the organization. | 2 |
 | [7565](error-codes.md#error-7565) | `UNVERIFIED_EMAIL` | 400 (typical) | The calling user's primary email address is not verified. | 11 |
 | [7571](error-codes.md#error-7571) | `UNKNOWN_VIEWID_PASSED` | 400 (typical) | A tableCriteriaList[].viewId does not exist in this workspace. | 1 |
+| [7701](error-codes.md#error-7701) | `DROP_X_Y` | 400 (typical) | No X-axis or Y-axis column was provided for a chart report type. | 1 |
+| [7703](error-codes.md#error-7703) | `REMOVE_CLR_FIELD` | 400 (typical) | A colorAxis column is present alongside multiple Y-axis columns. | 1 |
+| [7727](error-codes.md#error-7727) | `Y_EXCEED_LIMIT` | 400 (typical) | More than 15 columns were placed on the Y-axis of a chart. | 1 |
 | [7801](error-codes.md#error-7801) | `MARGIN_VALUE_EXCEEDS` | 400 (typical) | A PDF margin is outside 0–1 inches. | 3 |
 | [7803](error-codes.md#error-7803) | `INVALID_DIMENSION` | 400 (typical) | width or height is outside the permitted image range. | 2 |
 | [7806](error-codes.md#error-7806) | `XLS_CELL_LIMIT_EXCEEDS` | 400 (typical) | The XLS export exceeds the per-sheet cell limit. | 1 |
@@ -171,6 +192,7 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [8003](error-codes.md#error-8003) | `ALL_SCH_RUNERROR` | 400 (typical) | The schedule could not be activated. | 1 |
 | [8004](error-codes.md#error-8004) | `ALL_SCH_PAUSEERROR` | 400 (typical) | The schedule could not be deactivated. | 1 |
 | [8005](error-codes.md#error-8005) | `SCH_NOT_IN_WS` | 400 (typical) | The schedule does not belong to the specified workspace. | 4 |
+| [8008](error-codes.md#error-8008) | `UNKNOWN_PARAMETER` | 400 (typical) | The behaviour key was supplied in a userFilter whose operation is "dateRange" or "relative", where behaviour is not applicable. | 1 |
 | [8009](error-codes.md#error-8009) | `MAIL_MULTIVIEW_MAXCOUNT_EXCEEEDED` | 400 (typical) | Too many views in one schedule. | 1 |
 | [8014](error-codes.md#error-8014) | `API_IMAGE_RESPONSE_NOT_POSSIBLE` | 400 (observed) | image was requested for a view that is not a chart. | 3 |
 | [8015](error-codes.md#error-8015) | `API_EXPORT_COLUMN_NOT_PRESENT` | 400 (observed) | A name in selectedColumns does not match any column in the view. | 3 |
@@ -179,6 +201,7 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [8021](error-codes.md#error-8021) | - | 400 (typical) | Invalid view type specified. | 3 |
 | [8023](error-codes.md#error-8023) | `OEM_OPERATION_NOT_ALLOWED` | 403 (observed) | The organization/workspace is not enabled for Embedded Analytics. | 3 |
 | [8024](error-codes.md#error-8024) | - | 400 (typical) | A cross-organization copy was attempted without a valid workspaceKey, or the key provided does not match the secret key of the source workspace. | 1 |
+| [8027](error-codes.md#error-8027) | `VIEWS_NOT_FOUND` | 404 (typical) | One or more VIEW-type cards reference a viewName that does not exist in the workspace; viewName is absent, null, or an integer; the layout has no VIEW-type card at all; or layout is an empty object {}. | 1 |
 | [8029](error-codes.md#error-8029) | `SHARE_INVALID_EMAIL_ADDRESS` | 400 (typical) | One or more emailIds entries is not a valid email address. | 1 |
 | [8030](error-codes.md#error-8030) | `EMAILEXPORT_DISABLED_IN_ORG` | 400 (observed) | Email export is disabled for this organization. | 2 |
 | [8031](error-codes.md#error-8031) | `UNTRUSTED_EMAILIDS`, `REMOVESHARE_API_PARAMS` | 400 (typical) | A recipient address is outside the organization's trusted domains. | 3 |
@@ -191,8 +214,11 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [8040](error-codes.md#error-8040) | - | 400 (typical) | One or more of the specified email addresses are not currently Workspace Admins of this workspace. | 1 |
 | [8046](error-codes.md#error-8046) | `INVALID_COLUMNS_SELECTED` | 400 (typical) | A name in selectedColumns is not present in the source data. | 4 |
 | [8050](error-codes.md#error-8050) | `INVALID_VALUE` | 400 (observed) | Invalid value provided. | 3 |
+| [8051](error-codes.md#error-8051) | `VALUE_NOT_PRESENT` | 400 (typical) | A required field is missing — e.g., title, reportType, axisColumns, or a mandatory field within an axis-column object (type, columnName, operation) or a filter object (filterType, values, operation, columnName, exclude). | 1 |
 | [8054](error-codes.md#error-8054) | `INVALID_FILTER_CRITERIA` | 400 (typical) | criteria could not be parsed. | 4 |
+| [8057](error-codes.md#error-8057) | `NOT_ALLOWED_BASEFIELD` | 400 (typical) | The specified column cannot be used as a baseField for a window function in this report. | 1 |
 | [8058](error-codes.md#error-8058) | - | 400 (typical) | The organization ID provided in the ZANALYTICS-DEST-ORGID header does not exist. | 3 |
+| [8059](error-codes.md#error-8059) | `UNRELATED_TABLE` | 400 (typical) | The tableName in a filter or axis-column entry does not belong to the workspace or is not joined to the base table. | 1 |
 | [8060](error-codes.md#error-8060) | `DOMAIN_NOT_EXIST` | 400 (typical) | The specified domainName does not exist. | 17 |
 | [8061](error-codes.md#error-8061) | `DOMAIN_DOES_NOT_BELONGS_TO_USER` | 400 (typical) | The specified domainName does not belong to the organization's Account Admin. | 17 |
 | [8062](error-codes.md#error-8062) | `ADD_ROW_REQUEST_STILL_IN_PROGRESS` | 400 (typical) | withCustomDomain is true but no custom domain is configured for this workspace. | 3 |
@@ -231,11 +257,18 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [8137](error-codes.md#error-8137) | `IMPORT_JOB_NOT_FOUND` | 400 (typical) | No import job exists with this ID. | 1 |
 | [8138](error-codes.md#error-8138) | `IMPORT_JOB_ACCESS_DENIED` | 403 (observed) | The job was created by a different user. | 1 |
 | [8139](error-codes.md#error-8139) | `PASTED_DATA_LIMIT_EXCEEDED`, `DATA` | 400 (typical) | The DATA parameter exceeds 10,000,000 characters. | 2 |
+| [8144](error-codes.md#error-8144) | `INVALID_GRAPH_TYPE` | 400 (typical) | The chartType value is not a recognised chart type. | 1 |
+| [8145](error-codes.md#error-8145) | `FOLDERID_CANNOT_BE_UPDATED` | 400 (typical) | folderId was included in the Update CONFIG. | 1 |
 | [8148](error-codes.md#error-8148) | `DECIMAL_AND_THOUSAND_SEPARATOR_SAME` | 400 (typical) | Separator configuration errors. | 6 |
 | [8149](error-codes.md#error-8149) | `DECIMAL_AND_THOUSAND_COLUMN_SEPARATOR_LEGNTH_VALIDATION` | 400 (typical) | A columnSeparators entry has fewer than two values. | 6 |
 | [8150](error-codes.md#error-8150) | `VIEW_NOT_SHARED_TO_GROUP` | 400 (typical) | The view is not currently shared with the specified group. | 2 |
 | [8152](error-codes.md#error-8152) | `INTERVAL_SHOULD_BE_120_OR_ABOVE` | 400 (observed) | autoRefresh is a positive value below 120 seconds. | 1 |
 | [8154](error-codes.md#error-8154) | `COLUMN_NOT_PRESENT_IN_TABLE` | 400 (typical) | A column in vudColumns / drillColumns (or in criteria) does not exist in the given table. | 4 |
+| [8162](error-codes.md#error-8162) | `RANGE_SIZE_NOT_SUPPORTED_FOR_THIS_OPERATION` | 400 (typical) | rangeSize was supplied as a string instead of a numeric double. | 1 |
+| [8166](error-codes.md#error-8166) | `INVALID OPERATION FOR THE COLUMN` | 400 (typical) | The operation is incompatible with the column's data type (e.g. "sum" on a date column, "year" on a numeric column, aggregate operation in a pivot row position). | 1 |
+| [8167](error-codes.md#error-8167) | `INVALID FILTER TYPE FOR THE GIVEN OPERATION` | 400 (typical) | The filterType is not valid for the column type + operation combination (e.g. "individualValues" on a date column with "actual" operation, "ranking" on a date column). | 1 |
+| [8168](error-codes.md#error-8168) | `INVALID CRITERIA FORMAT FOR THE COLUMN` | 400 (typical) | A filter values entry does not match the expected format for the given filterType (e.g. "not-a-range" for a "range" filter, malformed dateRange string). | 1 |
+| [8170](error-codes.md#error-8170) | `INVALID AXIS TYPE FOR THE REPORT` | 400 (typical) | The type in an axisColumns entry is not valid for the chosen reportType (e.g. "row" axis type in a "chart" report). | 1 |
 | [8173](error-codes.md#error-8173) | - | 400 (typical) | The number of columns sent in bulk mode exceeds the allowed limit. | 1 |
 | [8175](error-codes.md#error-8175) | `OEM_KEY_NOT_PRESENT` | 404 (observed) | No embed URL on this view matches the supplied rsConfig. | 1 |
 | [8176](error-codes.md#error-8176) | `OEM_VIEW_HOLD_NO_KEYS` | 404 (observed) | deleteAllUrls was requested but the view has no embed URLs. | 1 |
@@ -246,13 +279,19 @@ One row per error code. Follow the code link for the full entry with per-operati
 | [8182](error-codes.md#error-8182) | `SYNC_CANNOT_BE_INITIATED_FOR_CONNECTOR_WITH_MULTIPLE_SCHEDULES` | 403 (observed) | resetSort and sortOrder cannot be used together. | 2 |
 | [8183](error-codes.md#error-8183) | `SCHEDULE_ID_NOT_ASSOCIATED_WITH_CONNECTOR` | 400 (typical) | The syncIntervalId does not belong to this datasource. | 1 |
 | [8188](error-codes.md#error-8188) | `EXPORT_INVALID_PASSWORD` | 400 (typical) | password is blank or shorter than 6 characters. | 3 |
+| [8191](error-codes.md#error-8191) | `INCORRECT_DATE_VALUE` | 400 (typical) | A date filter value is invalid (e.g. applying a numeric range filter to a date column). | 1 |
 | [8241](error-codes.md#error-8241) | `SYSTEM_TAG_DATA_WARNING_V2_VALIDATION_CONFIRMATION` | 409 (typical) | The view carries a restricted DATAWARNING system tag. | 13 |
+| [8250](error-codes.md#error-8250) | `INVALID_UF_COMP_TYPE` | 400 (typical) | The compType is not applicable for the column category — e.g., "slider" used for a dimension column, or "singleSelect" used for a measure column, or "slider"/"singleSelect" used for a date column. | 1 |
 | [8252](error-codes.md#error-8252) | - | 400 (typical) | Invalid report type. | 2 |
+| [8253](error-codes.md#error-8253) | `REQUIRED PARAM IS MISSING` | 400 (typical) | A mandatory userFilter field is absent — typically compType (required for all operations except "dateRange") or filterType (required for measures and date actual/seasonal operations). | 1 |
 | [8504](error-codes.md#error-8504) | `LESS_THAN_MIN_OCCURANCE`, `CONFIG` | 400 (typical) | CONFIG was not sent, or a mandatory key is missing. | 13 |
 | [8507](error-codes.md#error-8507) | `MORE_THAN_MAX_LENGTH`, `CONFIG` | 400 (typical) | CONFIG exceeds 100,000 characters. | 6 |
 | [8509](error-codes.md#error-8509) | `PATTERN_NOT_MATCHED` | 400 (typical) | serviceName or databaseType is not one of the accepted values. | 1 |
 | [8516](error-codes.md#error-8516) | `UNABLE_TO_PARSE_DATA_TYPE` | 400 (typical) | A CONFIG value has the wrong JSON type. | 4 |
+| [8517](error-codes.md#error-8517) | `DATATYPE_NOT_MATCHED` | 400 (typical) | A boolean settings field is set to an integer (e.g. 1) or an invalid string (e.g. "yes" instead of "true"); or an allowExport sub-key uses an invalid value. | 2 |
+| [8534](error-codes.md#error-8534) | `JSON_PARSE_ERROR` | 400 (typical) | A theme sub-object (e.g. solid, card) is provided as an array instead of an object. | 2 |
 | [8535](error-codes.md#error-8535) | `INVALID_OAUTHTOKEN` | 401 (typical) | The OAuth access token is missing, expired, revoked, or does not carry the scope required by this operation. | 121 |
+| [8542](error-codes.md#error-8542) | `EXTRA_KEY_FOUND_IN_JSON` | 400 (typical) | The caller does not have update permission (non-admin token); or the DashboardID does not exist. | 2 |
 | [8544](error-codes.md#error-8544) | `OUT_OF_RANGE` | 400 (typical) | A schedule value is outside its declared range. | 1 |
 | [8547](error-codes.md#error-8547) | `ARRAY_SIZE_OUT_OF_RANGE` | 400 (typical) | selectedColumns is empty or holds more than 300 entries. | 4 |
 | [9102](error-codes.md#error-9102) | `LANGUAGE_NOT_SUPPORTED` | 400 (typical) | language is not one of the supported language names. | 1 |

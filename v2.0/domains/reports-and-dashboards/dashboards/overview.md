@@ -344,6 +344,8 @@ CONFIG={
 
 # Related
 
+- [Report and dashboard enumerations](../../../foundations/report-and-dashboard-enums.md) - the enumerated CONFIG vocabulary shared by this group.
+
 - [Reports & Dashboards](../overview.md) - parent domain.
 - [Foundations](../../../foundations/index.md) - authentication, conventions, error codes, roles, identifiers.
 - [Endpoint catalog](../../../endpoint-catalog.md) - every endpoint in one table.

@@ -1,6 +1,6 @@
 # Zoho Analytics REST API v2 - OKF bundle
 
-> Open Knowledge Format (OKF v0.2) bundle for the Zoho Analytics REST API v2: 168 endpoints across 10 domains, with the conventions, OAuth scopes, roles, identifiers and 278 error codes they share. Base URL https://analyticsapi.zoho.com, path prefix /restapi/v2, OAuth 2.0 with the Zoho-oauthtoken scheme, structured input in a single JSON parameter named CONFIG.
+> Open Knowledge Format (OKF v0.2) bundle for the Zoho Analytics REST API v2: 168 endpoints across 10 domains, with the conventions, OAuth scopes, roles, identifiers and 317 error codes they share. Base URL https://analyticsapi.zoho.com, path prefix /restapi/v2, OAuth 2.0 with the Zoho-oauthtoken scheme, structured input in a single JSON parameter named CONFIG.
 
 Read overview.md first, then how-to-use-this-bundle.md for the frontmatter contract and navigation rules. Links inside the bundle are relative to the document that contains them; resolve them against that document's URL under https://raw.githubusercontent.com/zoho/analytics-okf/main/v2. Paths beginning with a slash appear only in frontmatter (resource, sources, api.openapi.file) and are relative to the bundle root, which is https://raw.githubusercontent.com/zoho/analytics-okf/main/v2. This bundle covers API version v2; see the repository root llms.txt at https://raw.githubusercontent.com/zoho/analytics-okf/main/llms.txt for the index of all available versions.
 
@@ -17,6 +17,7 @@ Read overview.md first, then how-to-use-this-bundle.md for the frontmatter contr
 - [OAuth scopes](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/foundations/oauth-scopes.md): all 31 scopes and the operations each one covers.
 - [Custom roles](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/foundations/custom-roles.md): organization-defined roles, the three access levels, the permission catalogue, and how a role name is used by the API.
 - [Data centers](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/foundations/data-centers.md): API host and accounts host per region.
+- [Report and dashboard enumerations](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/foundations/report-and-dashboard-enums.md): chart types, axis types per report type, operations per column data type, dashboard card types and the layout grid rules.
 - [Request conventions](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/foundations/request-conventions.md): URL structure, headers, and how to encode the CONFIG parameter per HTTP method.
 - [Response envelope](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/foundations/response-envelope.md): the success and failure JSON shapes, the 204 no-body pattern, file responses.
 - [Error code catalog](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/foundations/error-codes.md): 278 codes with meaning, HTTP status, resolution and the operations that raise them.

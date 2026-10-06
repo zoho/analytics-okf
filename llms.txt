@@ -14,7 +14,7 @@ to `/v2/`. No directory moves from `/v2.0/` onward.
 
 ## Available versions
 
-- [v2.0 (latest, stable)](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/llms.txt): 168 endpoints across 10 domains and 33 groups, 278 error codes, 31 OAuth scopes, 8 workflow playbooks. Base URL https://analyticsapi.zoho.com, path prefix /restapi/v2, OAuth 2.0 with the Zoho-oauthtoken scheme.
+- [v2.0 (latest, stable)](https://raw.githubusercontent.com/zoho/analytics-okf/main/v2.0/llms.txt): 168 endpoints across 10 domains and 33 groups, 317 error codes, 31 OAuth scopes, 8 workflow playbooks. Base URL https://analyticsapi.zoho.com, path prefix /restapi/v2, OAuth 2.0 with the Zoho-oauthtoken scheme.
 
 ## Machine-readable version index
 
